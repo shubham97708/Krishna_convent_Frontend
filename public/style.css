@@ -1,0 +1,15 @@
+      .btnsecondary{
+          background-color: #d93c23;
+          border-color: #d93c23;
+      }
+      .first{
+          height: 100%;
+          min-width: 60px;
+          cursor: pointer;
+          background-color: rgb(217, 60, 35);
+          border-bottom-right-radius: 8px;
+          border-top-right-radius: 8px;
+          padding: 14px;
+          transition: background-color 0.15s ease 0s;
+      }
+      
