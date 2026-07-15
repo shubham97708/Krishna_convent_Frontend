@@ -15,12 +15,15 @@ const axios = require("axios");
 
 function Pcb_Marksheet(props) {
 
+	const hasMath = !isUndefined(props.location.res) && (props.location.res.optionalsubject || "").toLowerCase().includes("math");
+	const rowShift = hasMath ? 1.475 : 0;
 
 	const [getHindi, setHindi] = React.useState("")
 	const [getEnglish, setEnglish] = React.useState("")
 	const [getPhysics, setPhysics] = React.useState("")
 	const [getChemistry, setChemistry] = React.useState("")
 	const [getBiology, setBiology] = React.useState("")
+	const [getMaths, setMaths] = React.useState("")
 
 	const [getScience, setScience] = React.useState("")
 	const [getSanskrit, setSanskrit] = React.useState("")
@@ -37,6 +40,8 @@ function Pcb_Marksheet(props) {
 	const [getPcbHindiPractical, setPcbHindiPractical] = React.useState("")
 	const [getPcbEnglishTheory, setPcbEnglishTheory] = React.useState("")
 	const [getPcbEnglishPractical, setPcbEnglishPractical] = React.useState("")
+	const [getPcbMathsTheory, setPcbMathsTheory] = React.useState(0)
+	const [getPcbMathsPractical, setPcbMathsPractical] = React.useState(0)
 
 
 
@@ -180,6 +185,18 @@ function Pcb_Marksheet(props) {
 				setPcbBiologyPractical(props.location.res.biologyp)
 				setPcbBiologyTheory(props.location.res.biologyt)
 				strSupplementry = strSupplementry + " Biology ,"
+			}
+
+			if (hasMath) {
+				setPcbMathsPractical(props.location.res.mathsp)
+				setPcbMathsTheory(props.location.res.mathst)
+				if (props.location.res.mathst+props.location.res.mathsp >= 75 && props.location.res.mathst+props.location.res.mathsp <= 100) {
+					setMaths((props.location.res.mathst+props.location.res.mathsp)+" Dist")
+				} else if (props.location.res.mathst+props.location.res.mathsp >= 33 && props.location.res.mathst+props.location.res.mathsp <= 74) {
+					setMaths(props.location.res.mathst+props.location.res.mathsp)
+				} else {
+					setMaths((props.location.res.mathst+props.location.res.mathsp)+" F")
+				}
 			}
 
 
@@ -662,11 +679,19 @@ function Pcb_Marksheet(props) {
 						</div>
 
 
-						<div className="stl_01" style={{ left: "13.6758em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "13.6758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								100 &nbsp;
+								{100 + (hasMath ? 20 : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasMath && (
+							<div className="stl_01" style={{ left: "13.9758em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									20 &nbsp;
+								</span>
+							</div>
+						)}
 
 						<div className="stl_01" style={{ left: "19.682em", top: "31.9535em" }}>
 							<span className="stl_32 stl_11 stl_49">
@@ -707,11 +732,19 @@ function Pcb_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "20.682em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "20.682em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{getPcbEnglishPractical + getPcbHindiPractical + getPcbPhysicsPractical + getPcbChemistryPractical + getPcbBiologyPractical} &nbsp;
+								{getPcbEnglishPractical + getPcbHindiPractical + getPcbPhysicsPractical + getPcbChemistryPractical + getPcbBiologyPractical + (hasMath ? getPcbMathsPractical : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasMath && (
+							<div className="stl_01" style={{ left: "20.682em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									{getPcbMathsPractical} &nbsp;
+								</span>
+							</div>
+						)}
 
 
 
@@ -759,11 +792,19 @@ function Pcb_Marksheet(props) {
 						</div>
 
 
-						<div className="stl_01" style={{ left: "27.1758em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "27.1758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								400 &nbsp;
+								{400 + (hasMath ? 80 : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasMath && (
+							<div className="stl_01" style={{ left: "27.1758em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									80 &nbsp;
+								</span>
+							</div>
+						)}
 
 
 						<div className="stl_01" style={{ left: "32.682em", top: "31.9535em" }}>
@@ -804,11 +845,19 @@ function Pcb_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "33.682em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "33.682em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{getPcbEnglishTheory + getPcbHindiTheory + getPcbPhysicsTheory + getPcbChemistryTheory + getPcbBiologyTheory} &nbsp;
+								{getPcbEnglishTheory + getPcbHindiTheory + getPcbPhysicsTheory + getPcbChemistryTheory + getPcbBiologyTheory + (hasMath ? getPcbMathsTheory : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasMath && (
+							<div className="stl_01" style={{ left: "33.682em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									{getPcbMathsTheory} &nbsp;
+								</span>
+							</div>
+						)}
 
 						<div className="stl_01" style={{ left: "40.182em", top: "31.1535em" }}>
 							<span className="stl_32 stl_11 stl_49">
@@ -898,11 +947,25 @@ function Pcb_Marksheet(props) {
 							</span>
 						</div>
 
-					
+						{hasMath && (
+							<div className="stl_01" style={{ left: "40.8283em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_54">
+									{getMaths} &nbsp;
+								</span>
+							</div>
+						)}
 
-						<div className="stl_01" style={{ left: "40.8083em", top: "42.2952em" }}>
+						{hasMath && (
+							<div className="stl_01" style={{ left: "5.682em", top: "40.8402em" }}>
+								<span className="stl_52 stl_11 stl_53">
+									MATHS &nbsp;
+								</span>
+							</div>
+						)}
+
+						<div className="stl_01" style={{ left: "40.8083em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_55">
-								{getTotalmarks} &nbsp;
+								{getTotalmarks + (hasMath ? getPcbMathsTheory + getPcbMathsPractical : 0)} &nbsp;
 							</span>
 						</div>
 
@@ -931,7 +994,7 @@ function Pcb_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "6.182em", top: "42.297em" }}>
+						<div className="stl_01" style={{ left: "6.182em", top: `${42.297 + rowShift}em` }}>
 							<span className="stl_52 stl_11 stl_56" style={{ "word-spacing": "0.0028em" }}>
 								Total
 							</span>
@@ -939,62 +1002,62 @@ function Pcb_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "19.152em", top: "45.2328em" }}>
+						<div className="stl_01" style={{ left: "19.152em", top: `${45.2328 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_57" style={{ "word-spacing": "0.0012em" }}>
 								Co-Scholastic Areas
 							</span>
 
 						</div>
 
-						<div className="stl_01" style={{ left: "11.88em", top: "46.9952em" }}>
+						<div className="stl_01" style={{ left: "11.88em", top: `${46.9952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_23" style={{ "word-spacing": "0.0004em" }}>
 								PERCENTAGE &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.88em", top: "48.5652em" }}>
+						<div className="stl_01" style={{ left: "12.88em", top: `${48.5652 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_59" style={{ "word-spacing": "-0.0016em" }}>
 								DIVISION &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.98em", top: "50.2352em" }}>
+						<div className="stl_01" style={{ left: "12.98em", top: `${50.2352 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_60" style={{ "word-spacing": "-0.0033em" }}>
 								RANK &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.78em", top: "51.9077em" }}>
+						<div className="stl_01" style={{ left: "12.78em", top: `${51.9077 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_50">
 								RESULT &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "46.9028em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${46.9028 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getPercentage}%
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "48.5728em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${48.5728 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getDivision}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0783em", top: "50.2453em" }}>
+						<div className="stl_01" style={{ left: "37.0783em", top: `${50.2453 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getRank}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "51.9153em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${51.9153 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getResult}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "4.0583em", top: "53.6153em" }}>
+						<div className="stl_01" style={{ left: "4.0583em", top: `${53.6153 + rowShift}em` }}>
 
 							{getSupplementry == "" ? (<span className="stl_26 stl_11 stl_28">
 
@@ -1004,19 +1067,19 @@ function Pcb_Marksheet(props) {
 
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "55.2534em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${55.2534 + rowShift}em` }}>
 							<span className="stl_48 stl_11 stl_12" style={{ "word-spacing": "0.0015em" }}>
 								Class Teacher Remarks : &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "58.6237em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${58.6237 + rowShift}em` }}>
 							<span className="date stl_08 stl_27" style={{ "word-spacing": "-0.0012em" }}>
 								Date : {date_final}&nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "63.2734em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${63.2734 + rowShift}em` }}>
 							<span className="stl_61 stl_08 stl_62" style={{ "word-spacing": "-0.001em" }}>
 							Class Teacher &nbsp;
 							</span>
@@ -1029,7 +1092,7 @@ function Pcb_Marksheet(props) {
 						</div> */}
 
 
-						<div className="stl_01" style={{ left: "39.7583em", top: "63.2734em" }}>
+						<div className="stl_01" style={{ left: "39.7583em", top: `${63.2734 + rowShift}em` }}>
 							<span className="stl_61 stl_08 stl_28">
 								Principal &nbsp;
 							</span>

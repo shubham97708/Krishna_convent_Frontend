@@ -15,6 +15,8 @@ const axios = require("axios");
 
 function Commerce_Marksheet(props) {
 
+	const hasIt = !isUndefined(props.location.res) && (props.location.res.optionalsubject || "").toLowerCase().includes("computer application");
+	const rowShift = hasIt ? 1.475 : 0;
 
 	const [getHindi, setHindi] = React.useState("")
 	const [getEnglish, setEnglish] = React.useState("")
@@ -38,8 +40,8 @@ function Commerce_Marksheet(props) {
 	const [getCommerceEnglishTheory, setCommerceEnglishTheory] = React.useState("")
 	const [getCommerceEnglishPractical, setCommerceEnglishPractical] = React.useState("")
 	const [getIt, setIt] = React.useState("")
-	const [getCommerceItTheory, setCommerceItTheory] = React.useState("")
-	const [getCommerceItPractical, setCommerceItPractical] = React.useState("")
+	const [getCommerceItTheory, setCommerceItTheory] = React.useState(0)
+	const [getCommerceItPractical, setCommerceItPractical] = React.useState(0)
 
 
 
@@ -186,22 +188,16 @@ function Commerce_Marksheet(props) {
 			}
 
 
-			if (props.location.res.itt+props.location.res.itp >= 33 && props.location.res.itt+props.location.res.itp <= 74) {
-				setIt(props.location.res.itt+props.location.res.itp)
+			if (hasIt) {
 				setCommerceItTheory(props.location.res.itt)
 				setCommerceItPractical(props.location.res.itp)
-
-			} else if (props.location.res.itt+props.location.res.itp >= 75 && props.location.res.itt+props.location.res.itp <= 100) {
-
-				setIt((props.location.res.itt+props.location.res.itp)+" Dist")
-				setCommerceItTheory(props.location.res.itt)
-				setCommerceItPractical(props.location.res.itp)
-			} else {
-				setIt((props.location.res.itt+props.location.res.itp)+ " F")
-				setCommerceItTheory(props.location.res.itt)
-				setCommerceItPractical(props.location.res.itp)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " IT ,"
+				if (props.location.res.itt+props.location.res.itp >= 75 && props.location.res.itt+props.location.res.itp <= 100) {
+					setIt((props.location.res.itt+props.location.res.itp)+" Dist")
+				} else if (props.location.res.itt+props.location.res.itp >= 33 && props.location.res.itt+props.location.res.itp <= 74) {
+					setIt(props.location.res.itt+props.location.res.itp)
+				} else {
+					setIt((props.location.res.itt+props.location.res.itp)+ " F")
+				}
 			}
 
 
@@ -227,8 +223,8 @@ function Commerce_Marksheet(props) {
 
 			setSession(props.location.res.session+"-"+parseInt(props.location.res.session+1))
 
-			let totalmarks = props.location.res.hindit + props.location.res.hindip  + props.location.res.englisht + props.location.res.englishp + props.location.res.businesst+props.location.res.businessp + props.location.res.accountancyt+props.location.res.accountancyp + props.location.res.economicst+props.location.res.economicsp + props.location.res.itt+props.location.res.itp
-			let percentage = parseInt((totalmarks / 600) * 100)
+			let totalmarks = props.location.res.hindit + props.location.res.hindip  + props.location.res.englisht + props.location.res.englishp + props.location.res.businesst+props.location.res.businessp + props.location.res.accountancyt+props.location.res.accountancyp + props.location.res.economicst+props.location.res.economicsp
+			let percentage = parseInt((totalmarks / 500) * 100)
 
 			if (percentage >= 33 && percentage <= 49) {
 				setDivision("4th")
@@ -676,15 +672,17 @@ function Commerce_Marksheet(props) {
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "13.9758em", top: "40.8402em" }}>
-							<span className="stl_32 stl_11 stl_40">
-								30 &nbsp;
-							</span>
-						</div>
+						{hasIt && (
+							<div className="stl_01" style={{ left: "13.9758em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									30 &nbsp;
+								</span>
+							</div>
+						)}
 
-						<div className="stl_01" style={{ left: "13.6758em", top: "43.7702em" }}>
+						<div className="stl_01" style={{ left: "13.6758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								130 &nbsp;
+								{100 + (hasIt ? 30 : 0)} &nbsp;
 							</span>
 						</div>
 
@@ -725,16 +723,18 @@ function Commerce_Marksheet(props) {
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "20.682em", top: "40.8402em" }}>
-							<span className="stl_32 stl_11 stl_40">
-								{getCommerceItPractical} &nbsp;
-							</span>
-						</div>
+						{hasIt && (
+							<div className="stl_01" style={{ left: "20.682em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									{getCommerceItPractical} &nbsp;
+								</span>
+							</div>
+						)}
 
 
-						<div className="stl_01" style={{ left: "20.682em", top: "43.7702em" }}>
+						<div className="stl_01" style={{ left: "20.682em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{getCommerceEnglishPractical + getCommerceHindiPractical + getCommerceBusinessPractical + getCommerceAccountancyPractical + getCommerceEconomicsPractical + getCommerceItPractical} &nbsp;
+								{getCommerceEnglishPractical + getCommerceHindiPractical + getCommerceBusinessPractical + getCommerceAccountancyPractical + getCommerceEconomicsPractical + (hasIt ? getCommerceItPractical : 0)} &nbsp;
 							</span>
 						</div>
 
@@ -783,15 +783,17 @@ function Commerce_Marksheet(props) {
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "27.1758em", top: "40.8402em" }}>
-							<span className="stl_32 stl_11 stl_40">
-								70 &nbsp;
-							</span>
-						</div>
+						{hasIt && (
+							<div className="stl_01" style={{ left: "27.1758em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									70 &nbsp;
+								</span>
+							</div>
+						)}
 
-						<div className="stl_01" style={{ left: "27.1758em", top: "43.7702em" }}>
+						<div className="stl_01" style={{ left: "27.1758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								470 &nbsp;
+								{400 + (hasIt ? 70 : 0)} &nbsp;
 							</span>
 						</div>
 
@@ -832,16 +834,18 @@ function Commerce_Marksheet(props) {
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "33.682em", top: "40.8402em" }}>
-							<span className="stl_32 stl_11 stl_40">
-								{getCommerceItTheory} &nbsp;
-							</span>
-						</div>
+						{hasIt && (
+							<div className="stl_01" style={{ left: "33.682em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									{getCommerceItTheory} &nbsp;
+								</span>
+							</div>
+						)}
 
 
-						<div className="stl_01" style={{ left: "33.682em", top: "43.7702em" }}>
+						<div className="stl_01" style={{ left: "33.682em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{getCommerceEnglishTheory + getCommerceHindiTheory + getCommerceBusinessTheory + getCommerceAccountancyTheory + getCommerceEconomicsTheory + getCommerceItTheory} &nbsp;
+								{getCommerceEnglishTheory + getCommerceHindiTheory + getCommerceBusinessTheory + getCommerceAccountancyTheory + getCommerceEconomicsTheory + (hasIt ? getCommerceItTheory : 0)} &nbsp;
 							</span>
 						</div>
 
@@ -933,16 +937,18 @@ function Commerce_Marksheet(props) {
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "40.8283em", top: "40.8402em" }}>
-							<span className="stl_32 stl_11 stl_54">
-								{getIt} &nbsp;
-							</span>
-						</div>
+						{hasIt && (
+							<div className="stl_01" style={{ left: "40.8283em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_54">
+									{getIt} &nbsp;
+								</span>
+							</div>
+						)}
 
 
-						<div className="stl_01" style={{ left: "40.8083em", top: "43.7702em" }}>
+						<div className="stl_01" style={{ left: "40.8083em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_55">
-								{getTotalmarks} &nbsp;
+								{getTotalmarks + (hasIt ? getCommerceItTheory + getCommerceItPractical : 0)} &nbsp;
 							</span>
 						</div>
 
@@ -969,15 +975,17 @@ function Commerce_Marksheet(props) {
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "5.682em", top: "40.8402em" }}>
-							<span className="stl_52 stl_11 stl_53">
-								IT &nbsp;
-							</span>
-						</div>
+						{hasIt && (
+							<div className="stl_01" style={{ left: "5.682em", top: "40.8402em" }}>
+								<span className="stl_52 stl_11 stl_53">
+									IT &nbsp;
+								</span>
+							</div>
+						)}
 
 
 
-						<div className="stl_01" style={{ left: "6.182em", top: "43.7702em" }}>
+						<div className="stl_01" style={{ left: "6.182em", top: `${42.297 + rowShift}em` }}>
 							<span className="stl_52 stl_11 stl_56" style={{ "word-spacing": "0.0028em" }}>
 								Total
 							</span>
@@ -985,62 +993,62 @@ function Commerce_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "19.152em", top: "46.7078em" }}>
+						<div className="stl_01" style={{ left: "19.152em", top: `${45.2328 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_57" style={{ "word-spacing": "0.0012em" }}>
 								Co-Scholastic Areas
 							</span>
 
 						</div>
 
-						<div className="stl_01" style={{ left: "11.88em", top: "48.4702em" }}>
+						<div className="stl_01" style={{ left: "11.88em", top: `${46.9952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_23" style={{ "word-spacing": "0.0004em" }}>
 								PERCENTAGE &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.88em", top: "50.0402em" }}>
+						<div className="stl_01" style={{ left: "12.88em", top: `${48.5652 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_59" style={{ "word-spacing": "-0.0016em" }}>
 								DIVISION &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.98em", top: "51.7102em" }}>
+						<div className="stl_01" style={{ left: "12.98em", top: `${50.2352 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_60" style={{ "word-spacing": "-0.0033em" }}>
 								RANK &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.78em", top: "53.3827em" }}>
+						<div className="stl_01" style={{ left: "12.78em", top: `${51.9077 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_50">
 								RESULT &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "48.3778em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${46.9028 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getPercentage}%
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "50.0478em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${48.5728 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getDivision}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0783em", top: "51.7203em" }}>
+						<div className="stl_01" style={{ left: "37.0783em", top: `${50.2453 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getRank}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "53.3903em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${51.9153 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getResult}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "4.0583em", top: "55.0903em" }}>
+						<div className="stl_01" style={{ left: "4.0583em", top: `${53.6153 + rowShift}em` }}>
 
 							{getSupplementry == "" ? (<span className="stl_26 stl_11 stl_28">
 
@@ -1050,19 +1058,19 @@ function Commerce_Marksheet(props) {
 
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "56.7284em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${55.2534 + rowShift}em` }}>
 							<span className="stl_48 stl_11 stl_12" style={{ "word-spacing": "0.0015em" }}>
 								Class Teacher Remarks : &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "60.0987em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${58.6237 + rowShift}em` }}>
 							<span className="date stl_08 stl_27" style={{ "word-spacing": "-0.0012em" }}>
 								Date : {date_final}&nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "64.7484em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${63.2734 + rowShift}em` }}>
 							<span className="stl_61 stl_08 stl_62" style={{ "word-spacing": "-0.001em" }}>
 							Class Teacher &nbsp;
 							</span>
@@ -1075,7 +1083,7 @@ function Commerce_Marksheet(props) {
 						</div> */}
 
 
-						<div className="stl_01" style={{ left: "39.7583em", top: "64.7484em" }}>
+						<div className="stl_01" style={{ left: "39.7583em", top: `${63.2734 + rowShift}em` }}>
 							<span className="stl_61 stl_08 stl_28">
 								Principal &nbsp;
 							</span>

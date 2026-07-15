@@ -121,7 +121,24 @@ function Pcb(props) {
   const [getPcbHindiPractical, setPcbHindiPractical] = React.useState("")
   const [getPcbEnglishTheory, setPcbEnglishTheory] = React.useState("")
   const [getPcbEnglishPractical, setPcbEnglishPractical] = React.useState("")
+  const [getPcbMathsTheory, setPcbMathsTheory] = React.useState("")
+  const [getPcbMathsPractical, setPcbMathsPractical] = React.useState("")
 
+  const hasMath = (props.optionalsubject || "").toLowerCase().includes("math");
+
+  const onTheoryChange = (setter) => (event) => {
+    const val = event.target.value;
+    if (val === "" || (Number(val) >= 0 && Number(val) <= 80)) {
+      setter(val);
+    }
+  };
+
+  const onPracticalChange = (setter) => (event) => {
+    const val = event.target.value;
+    if (val === "" || (Number(val) >= 0 && Number(val) <= 20)) {
+      setter(val);
+    }
+  };
 
   const callalert = (data, status) => {
     if (status == "then") {
@@ -151,7 +168,8 @@ const HandleSubmitPcb = async (event) => {
         getPcbHindiTheory != "" &&
         getPcbHindiPractical != "" &&
         getPcbEnglishTheory != "" &&
-        getPcbEnglishPractical != ""         
+        getPcbEnglishPractical != "" &&
+        (!hasMath || (getPcbMathsTheory != "" && getPcbMathsPractical != ""))
       ) {
           let body={
             "studentid":props.getSubCategoryid2 ,
@@ -169,8 +187,10 @@ const HandleSubmitPcb = async (event) => {
             "hindit": getPcbHindiTheory,
             "hindip": getPcbHindiPractical,
             "englisht": getPcbEnglishTheory,
-            "englishp": getPcbEnglishPractical
-          }  
+            "englishp": getPcbEnglishPractical,
+            "mathst": hasMath ? getPcbMathsTheory : 0,
+            "mathsp": hasMath ? getPcbMathsPractical : 0
+          }
                     
         console.log(body)   
           axios.post(`${BaseUrl}/lockpostadd/AddPcbMarks`, body)
@@ -349,13 +369,45 @@ const HandleSubmitPcb = async (event) => {
                   value={getPcbEnglishPractical}
                   variant="outlined"
                   onChange={(event) => setPcbEnglishPractical(event.target.value)}
-                  
+
                   fullWidth
                 />
               </Grid>
-  
-            
-  
+
+              {hasMath && (
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="Maths-Theory (max 80)"
+                    label="Maths-Theory (max 80)"
+                    className={clsx(classes.textField, classes.dense)}
+                    margin="dense"
+                    style={{ marginLeft: -10 }}
+                    value={getPcbMathsTheory}
+                    variant="outlined"
+                    onChange={onTheoryChange(setPcbMathsTheory)}
+                    fullWidth
+                  />
+                </Grid>
+              )}
+
+              {hasMath && (
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="Maths-Practical (max 20)"
+                    label="Maths-Practical (max 20)"
+                    className={clsx(classes.textField, classes.dense)}
+                    margin="dense"
+                    style={{ marginLeft: -10 }}
+                    value={getPcbMathsPractical}
+                    variant="outlined"
+                    onChange={onPracticalChange(setPcbMathsPractical)}
+                    fullWidth
+                  />
+                </Grid>
+              )}
+
             </Grid>
             <div style={{ marginTop: 10 }} />
     

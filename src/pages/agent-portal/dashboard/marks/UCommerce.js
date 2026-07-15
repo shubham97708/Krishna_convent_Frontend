@@ -126,6 +126,11 @@ function UCommerce(props) {
   const [getEnglishPractical, setEnglishPractical] = React.useState("")
   const [getItTheory, setItTheory] = React.useState("")
   const [getItPractical, setItPractical] = React.useState("")
+  const [getOptionalSubject, setOptionalSubject] = React.useState("")
+
+  const hasIt = (getOptionalSubject || "")
+    .toLowerCase()
+    .includes("computer application");
 
   const onTheoryChange = (setter) => (event) => {
     const val = event.target.value;
@@ -180,7 +185,15 @@ setItPractical(res.data[0].itp)
         //callalert(err, "catch");
         console.log("From Drop Down",err)
       });
- 
+
+    axios.post(`${BaseUrl}/lockpostadd/getstudentbyOnlyid`, { id: props.getSubCategoryid2 })
+      .then((res) => {
+        setOptionalSubject(res.data[0].optionalsubject);
+      })
+      .catch((err) => {
+        console.log("From Drop Down (student optionalsubject)",err)
+      });
+
   };
 
 
@@ -223,8 +236,7 @@ setItPractical(res.data[0].itp)
         getHindiPractical != "" &&
         getEnglishTheory != "" &&
         getEnglishPractical != "" &&
-        getItTheory != "" &&
-        getItPractical != ""
+        (!hasIt || (getItTheory != "" && getItPractical != ""))
       ) {
           let body={
             "studentid":props.getSubCategoryid2 ,
@@ -243,8 +255,8 @@ setItPractical(res.data[0].itp)
             "hindip": getHindiPractical,
             "englisht": getEnglishTheory,
             "englishp": getEnglishPractical,
-            "itt": getItTheory,
-            "itp": getItPractical
+            "itt": hasIt ? getItTheory : 0,
+            "itp": hasIt ? getItPractical : 0
           }
                     
         console.log(body)   
@@ -429,35 +441,39 @@ setItPractical(res.data[0].itp)
                 />
               </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  id="outlined-basic"
-                  placeholder="IT-Theory (max 70)"
-                  label="IT-Theory (max 70)"
-                  className={clsx(classes.textField, classes.dense)}
-                  margin="dense"
-                  style={{ marginLeft: -10 }}
-                  value={getItTheory}
-                  variant="outlined"
-                  onChange={onTheoryChange(setItTheory)}
-                  fullWidth
-                />
-              </Grid>
+              {hasIt && (
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="IT-Theory (max 70)"
+                    label="IT-Theory (max 70)"
+                    className={clsx(classes.textField, classes.dense)}
+                    margin="dense"
+                    style={{ marginLeft: -10 }}
+                    value={getItTheory}
+                    variant="outlined"
+                    onChange={onTheoryChange(setItTheory)}
+                    fullWidth
+                  />
+                </Grid>
+              )}
 
-              <Grid item xs={12}>
-                <TextField
-                  id="outlined-basic"
-                  placeholder="IT-Practical (max 30)"
-                  label="IT-Practical (max 30)"
-                  className={clsx(classes.textField, classes.dense)}
-                  margin="dense"
-                  style={{ marginLeft: -10 }}
-                  value={getItPractical}
-                  variant="outlined"
-                  onChange={onPracticalChange(setItPractical)}
-                  fullWidth
-                />
-              </Grid>
+              {hasIt && (
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="IT-Practical (max 30)"
+                    label="IT-Practical (max 30)"
+                    className={clsx(classes.textField, classes.dense)}
+                    margin="dense"
+                    style={{ marginLeft: -10 }}
+                    value={getItPractical}
+                    variant="outlined"
+                    onChange={onPracticalChange(setItPractical)}
+                    fullWidth
+                  />
+                </Grid>
+              )}
 
 
 

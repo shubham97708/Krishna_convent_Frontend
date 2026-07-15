@@ -124,7 +124,24 @@ function Pcm(props) {
   const [getPcmHindiPractical, setPcmHindiPractical] = React.useState("")
   const [getPcmEnglishTheory, setPcmEnglishTheory] = React.useState("")
   const [getPcmEnglishPractical, setPcmEnglishPractical] = React.useState("")
+  const [getPcmBioTheory, setPcmBioTheory] = React.useState("")
+  const [getPcmBioPractical, setPcmBioPractical] = React.useState("")
 
+  const hasBio = (props.optionalsubject || "").toLowerCase().includes("bio");
+
+  const onTheoryChange = (setter) => (event) => {
+    const val = event.target.value;
+    if (val === "" || (Number(val) >= 0 && Number(val) <= 80)) {
+      setter(val);
+    }
+  };
+
+  const onPracticalChange = (setter) => (event) => {
+    const val = event.target.value;
+    if (val === "" || (Number(val) >= 0 && Number(val) <= 20)) {
+      setter(val);
+    }
+  };
 
   const callalert = (data, status) => {
     if (status == "then") {
@@ -154,7 +171,8 @@ function Pcm(props) {
         getPcmHindiTheory != "" &&
         getPcmHindiPractical != "" &&
         getPcmEnglishTheory != "" &&
-        getPcmEnglishPractical != ""         
+        getPcmEnglishPractical != "" &&
+        (!hasBio || (getPcmBioTheory != "" && getPcmBioPractical != ""))
       ) {
           let body={
             "studentid":props.getSubCategoryid2 ,
@@ -162,7 +180,7 @@ function Pcm(props) {
             "studentmedium": props.getSubCategoryid1 ,
             "examtype": props.getSubCategoryid3  ,
             "session": props.session  ,
-            
+
             "physicst":getPcmPhysicsTheory,
             "physicsp": getPcmPhysicsPractical,
             "chemistryt": getPcmChemistryTheory,
@@ -172,8 +190,10 @@ function Pcm(props) {
             "hindit": getPcmHindiTheory,
             "hindip": getPcmHindiPractical,
             "englisht": getPcmEnglishTheory,
-            "englishp": getPcmEnglishPractical
-          }  
+            "englishp": getPcmEnglishPractical,
+            "biot": hasBio ? getPcmBioTheory : 0,
+            "biop": hasBio ? getPcmBioPractical : 0
+          }
                     
         console.log(body)   
           axios.post(`${BaseUrl}/lockpostadd/AddPcmMarks`, body)
@@ -351,13 +371,45 @@ function Pcm(props) {
                   value={getPcmEnglishPractical}
                   variant="outlined"
                   onChange={(event) => setPcmEnglishPractical(event.target.value)}
-                  
+
                   fullWidth
                 />
               </Grid>
-  
-            
-  
+
+              {hasBio && (
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="Bio-Theory (max 80)"
+                    label="Bio-Theory (max 80)"
+                    className={clsx(classes.textField, classes.dense)}
+                    margin="dense"
+                    style={{ marginLeft: -10 }}
+                    value={getPcmBioTheory}
+                    variant="outlined"
+                    onChange={onTheoryChange(setPcmBioTheory)}
+                    fullWidth
+                  />
+                </Grid>
+              )}
+
+              {hasBio && (
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="Bio-Practical (max 20)"
+                    label="Bio-Practical (max 20)"
+                    className={clsx(classes.textField, classes.dense)}
+                    margin="dense"
+                    style={{ marginLeft: -10 }}
+                    value={getPcmBioPractical}
+                    variant="outlined"
+                    onChange={onPracticalChange(setPcmBioPractical)}
+                    fullWidth
+                  />
+                </Grid>
+              )}
+
             </Grid>
             <div style={{ marginTop: 10 }} />
     

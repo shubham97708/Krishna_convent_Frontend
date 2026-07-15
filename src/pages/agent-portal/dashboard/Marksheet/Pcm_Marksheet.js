@@ -15,12 +15,15 @@ const axios = require("axios");
 
 function Pcm_Marksheet(props) {
 
+	const hasBio = !isUndefined(props.location.res) && (props.location.res.optionalsubject || "").toLowerCase().includes("bio");
+	const rowShift = hasBio ? 1.475 : 0;
 
 	const [getHindi, setHindi] = React.useState("")
 	const [getEnglish, setEnglish] = React.useState("")
 	const [getPhysics, setPhysics] = React.useState("")
 	const [getChemistry, setChemistry] = React.useState("")
 	const [getMaths, setMaths] = React.useState("")
+	const [getBio, setBio] = React.useState("")
 
 	const [getScience, setScience] = React.useState("")
 	const [getSanskrit, setSanskrit] = React.useState("")
@@ -37,6 +40,8 @@ function Pcm_Marksheet(props) {
 	const [getPcmHindiPractical, setPcmHindiPractical] = React.useState("")
 	const [getPcmEnglishTheory, setPcmEnglishTheory] = React.useState("")
 	const [getPcmEnglishPractical, setPcmEnglishPractical] = React.useState("")
+	const [getPcmBioTheory, setPcmBioTheory] = React.useState(0)
+	const [getPcmBioPractical, setPcmBioPractical] = React.useState(0)
 
 
 
@@ -180,6 +185,18 @@ function Pcm_Marksheet(props) {
 				setPcmMathsPractical(props.location.res.mathsp)
 				setPcmMathsTheory(props.location.res.mathst)
 				strSupplementry = strSupplementry + " Maths ,"
+			}
+
+			if (hasBio) {
+				setPcmBioPractical(props.location.res.biop)
+				setPcmBioTheory(props.location.res.biot)
+				if (props.location.res.biot+props.location.res.biop >= 75 && props.location.res.biot+props.location.res.biop <= 100) {
+					setBio((props.location.res.biot+props.location.res.biop)+" Dist")
+				} else if (props.location.res.biot+props.location.res.biop >= 33 && props.location.res.biot+props.location.res.biop <= 74) {
+					setBio(props.location.res.biot+props.location.res.biop)
+				} else {
+					setBio((props.location.res.biot+props.location.res.biop)+" F")
+				}
 			}
 
 
@@ -656,11 +673,19 @@ function Pcm_Marksheet(props) {
 						</div>
 
 
-						<div className="stl_01" style={{ left: "13.6758em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "13.6758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								100 &nbsp;
+								{100 + (hasBio ? 20 : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasBio && (
+							<div className="stl_01" style={{ left: "13.9758em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									20 &nbsp;
+								</span>
+							</div>
+						)}
 
 						<div className="stl_01" style={{ left: "19.682em", top: "31.9535em" }}>
 							<span className="stl_32 stl_11 stl_49">
@@ -701,11 +726,19 @@ function Pcm_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "20.682em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "20.682em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{getPcmEnglishPractical + getPcmHindiPractical + getPcmPhysicsPractical + getPcmChemistryPractical + getPcmMathsPractical} &nbsp;
+								{getPcmEnglishPractical + getPcmHindiPractical + getPcmPhysicsPractical + getPcmChemistryPractical + getPcmMathsPractical + (hasBio ? getPcmBioPractical : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasBio && (
+							<div className="stl_01" style={{ left: "20.682em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									{getPcmBioPractical} &nbsp;
+								</span>
+							</div>
+						)}
 
 
 
@@ -753,11 +786,19 @@ function Pcm_Marksheet(props) {
 						</div>
 
 
-						<div className="stl_01" style={{ left: "27.1758em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "27.1758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								400 &nbsp;
+								{400 + (hasBio ? 80 : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasBio && (
+							<div className="stl_01" style={{ left: "27.1758em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									80 &nbsp;
+								</span>
+							</div>
+						)}
 
 
 						<div className="stl_01" style={{ left: "32.682em", top: "31.9535em" }}>
@@ -798,11 +839,19 @@ function Pcm_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "33.682em", top: "42.2952em" }}>
+						<div className="stl_01" style={{ left: "33.682em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{getPcmEnglishTheory + getPcmHindiTheory + getPcmPhysicsTheory + getPcmChemistryTheory + getPcmMathsTheory} &nbsp;
+								{getPcmEnglishTheory + getPcmHindiTheory + getPcmPhysicsTheory + getPcmChemistryTheory + getPcmMathsTheory + (hasBio ? getPcmBioTheory : 0)} &nbsp;
 							</span>
 						</div>
+
+						{hasBio && (
+							<div className="stl_01" style={{ left: "33.682em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_40">
+									{getPcmBioTheory} &nbsp;
+								</span>
+							</div>
+						)}
 
 						<div className="stl_01" style={{ left: "40.182em", top: "31.1535em" }}>
 							<span className="stl_32 stl_11 stl_49">
@@ -892,11 +941,25 @@ function Pcm_Marksheet(props) {
 							</span>
 						</div>
 
-					
+						{hasBio && (
+							<div className="stl_01" style={{ left: "40.8283em", top: "40.8402em" }}>
+								<span className="stl_32 stl_11 stl_54">
+									{getBio} &nbsp;
+								</span>
+							</div>
+						)}
 
-						<div className="stl_01" style={{ left: "40.8083em", top: "42.2952em" }}>
+						{hasBio && (
+							<div className="stl_01" style={{ left: "5.682em", top: "40.8402em" }}>
+								<span className="stl_52 stl_11 stl_53">
+									BIO &nbsp;
+								</span>
+							</div>
+						)}
+
+						<div className="stl_01" style={{ left: "40.8083em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_55">
-								{getTotalmarks} &nbsp;
+								{getTotalmarks + (hasBio ? getPcmBioTheory + getPcmBioPractical : 0)} &nbsp;
 							</span>
 						</div>
 
@@ -925,7 +988,7 @@ function Pcm_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "6.182em", top: "42.297em" }}>
+						<div className="stl_01" style={{ left: "6.182em", top: `${42.297 + rowShift}em` }}>
 							<span className="stl_52 stl_11 stl_56" style={{ "word-spacing": "0.0028em" }}>
 								Total
 							</span>
@@ -933,62 +996,62 @@ function Pcm_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "19.152em", top: "45.2328em" }}>
+						<div className="stl_01" style={{ left: "19.152em", top: `${45.2328 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_57" style={{ "word-spacing": "0.0012em" }}>
 								Co-Scholastic Areas
 							</span>
 
 						</div>
 
-						<div className="stl_01" style={{ left: "11.88em", top: "46.9952em" }}>
+						<div className="stl_01" style={{ left: "11.88em", top: `${46.9952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_23" style={{ "word-spacing": "0.0004em" }}>
 								PERCENTAGE &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.88em", top: "48.5652em" }}>
+						<div className="stl_01" style={{ left: "12.88em", top: `${48.5652 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_59" style={{ "word-spacing": "-0.0016em" }}>
 								DIVISION &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.98em", top: "50.2352em" }}>
+						<div className="stl_01" style={{ left: "12.98em", top: `${50.2352 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_60" style={{ "word-spacing": "-0.0033em" }}>
 								RANK &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.78em", top: "51.9077em" }}>
+						<div className="stl_01" style={{ left: "12.78em", top: `${51.9077 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_50">
 								RESULT &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "46.9028em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${46.9028 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getPercentage}%
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "48.5728em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${48.5728 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getDivision}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0783em", top: "50.2453em" }}>
+						<div className="stl_01" style={{ left: "37.0783em", top: `${50.2453 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getRank}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "37.0583em", top: "51.9153em" }}>
+						<div className="stl_01" style={{ left: "37.0583em", top: `${51.9153 + rowShift}em` }}>
 							<span className="stl_26 stl_11 stl_28">
 								{getResult}
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "4.0583em", top: "53.6153em" }}>
+						<div className="stl_01" style={{ left: "4.0583em", top: `${53.6153 + rowShift}em` }}>
 
 							{getSupplementry == "" ? (<span className="stl_26 stl_11 stl_28">
 
@@ -998,19 +1061,19 @@ function Pcm_Marksheet(props) {
 
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "55.2534em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${55.2534 + rowShift}em` }}>
 							<span className="stl_48 stl_11 stl_12" style={{ "word-spacing": "0.0015em" }}>
 								Class Teacher Remarks : &nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "58.6237em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${58.6237 + rowShift}em` }}>
 							<span className="date stl_08 stl_27" style={{ "word-spacing": "-0.0012em" }}>
 								Date : {date_final}&nbsp;
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "3.88em", top: "63.2734em" }}>
+						<div className="stl_01" style={{ left: "3.88em", top: `${63.2734 + rowShift}em` }}>
 							<span className="stl_61 stl_08 stl_62" style={{ "word-spacing": "-0.001em" }}>
 							Class Teacher &nbsp;
 							</span>
@@ -1023,7 +1086,7 @@ function Pcm_Marksheet(props) {
 						</div> */}
 
 
-						<div className="stl_01" style={{ left: "39.7583em", top: "63.2734em" }}>
+						<div className="stl_01" style={{ left: "39.7583em", top: `${63.2734 + rowShift}em` }}>
 							<span className="stl_61 stl_08 stl_28">
 								Principal &nbsp;
 							</span>
