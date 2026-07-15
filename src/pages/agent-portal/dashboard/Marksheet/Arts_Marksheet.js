@@ -386,9 +386,9 @@ function Arts_Marksheet(props) {
 							<span className="stl_32 stl_11 stl_33" style={{ "word-spacing": "-0.0042em" }}>
 								Admission No
 							</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "1.1147em" }}>
-								&nbsp;
-							</span>
+						</div>
+
+						<div className="stl_01" style={{ left: "12.2em", top: "19.531em" }}>
 							<span className="stl_32 stl_11 stl_29" style={{ "word-spacing": "0.4548em" }}>
 								: {getAdmissionno} &nbsp;
 							</span>
@@ -401,6 +401,12 @@ function Arts_Marksheet(props) {
 							</span>
 						</div>
 
+						<div className="stl_01" style={{ left: "37.3em", top: "19.531em" }}>
+							<span className="stl_32 stl_11 stl_40" style={{ "word-spacing": "0.4602em" }}>
+								: {getRollno} &nbsp;
+							</span>
+						</div>
+
 
 						<div className="stl_01" style={{ left: "31.0358em", top: "20.9535em" }}>
 							<span className="stl_32 stl_11 stl_35">
@@ -408,13 +414,20 @@ function Arts_Marksheet(props) {
 							</span>
 						</div>
 
+						<div className="stl_01" style={{ left: "37.3em", top: "20.9535em" }}>
+							<span className="stl_32 stl_11 stl_33" style={{ "word-spacing": "0.2257em" }}>
+								: {getDob} &nbsp;
+							</span>
+						</div>
+
 
 						<div className="stl_01" style={{ left: "31.0358em", top: "22.3835em" }}>
 							<span className="stl_32 stl_11 stl_21" style={{ "word-spacing": "-0.0026em" }}>
-								Adhar No.</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "0.2242em" }}>
-								&nbsp;
+								Adhar No.
 							</span>
+						</div>
+
+						<div className="stl_01" style={{ left: "37.3em", top: "22.3835em" }}>
 							<span className="stl_32 stl_11 stl_36" style={{ "word-spacing": "0.2183em" }}>
 								: {getAdharno} &nbsp;
 							</span>
@@ -423,40 +436,26 @@ function Arts_Marksheet(props) {
 
 						<div className="stl_01" style={{ left: "31.0358em", top: "23.8035em" }}>
 							<span className="stl_32 stl_11 stl_37" style={{ "word-spacing": "-0.0004em" }}>
-								SSSM-ID No. :
+								SSSM-ID No.
 							</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "0.2162em" }}>
-								&nbsp;
-							</span>
+						</div>
+
+						<div className="stl_01" style={{ left: "37.3em", top: "23.8035em" }}>
 							<span className="stl_32 stl_11 stl_38" style={{ "word-spacing": "0.0086em" }}>
-								{getSssmidno} &nbsp;
+								: {getSssmidno} &nbsp;
 							</span>
 						</div>
 
 
 						<div className="stl_01" style={{ left: "31.0358em", top: "25.1035em" }}>
 							<span className="stl_32 stl_11 stl_37" style={{ "word-spacing": "-0.0004em" }}>
-							Enrollment :
+							Enrollment
 							</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "0.2162em" }}>
-								&nbsp;
-							</span>
+						</div>
+
+						<div className="stl_01" style={{ left: "37.3em", top: "25.1035em" }}>
 							<span className="stl_32 stl_11 stl_38" style={{ "word-spacing": "0.0086em" }}>
-								{getEnrollment} &nbsp;
-							</span>
-						</div>
-
-
-						<div className="stl_01" style={{ left: "36.8183em", top: "19.531em" }}>
-							<span className="stl_32 stl_11 stl_40" style={{ "word-spacing": "0.4602em" }}>
-								: {getRollno} &nbsp;
-							</span>
-						</div>
-
-
-						<div className="stl_01" style={{ left: "36.8483em", top: "20.9535em" }}>
-							<span className="stl_32 stl_11 stl_33" style={{ "word-spacing": "0.2257em" }}>
-								: {getDob} &nbsp;
+								: {getEnrollment} &nbsp;
 							</span>
 						</div>
 
@@ -465,17 +464,11 @@ function Arts_Marksheet(props) {
 							<span className="stl_32 stl_11 stl_27" style={{ "word-spacing": "-0.0161em" }}>
 								Student Name
 							</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "0.886em" }}>
-								&nbsp;
-							</span>
-							<span className="stl_32 stl_11 stl_35" style={{ "word-spacing": "0.4428em" }}>
-								:
-							</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "-0.0114em" }}>
-								&nbsp;
-							</span>
+						</div>
+
+						<div className="stl_01" style={{ left: "12.2em", top: "20.9535em" }}>
 							<span className="stl_32 stl_11 stl_33" style={{ "word-spacing": "0.0009em" }}>
-								{getName} &nbsp;
+								: {getName} &nbsp;
 							</span>
 						</div>
 
@@ -489,8 +482,9 @@ function Arts_Marksheet(props) {
 							<span className="stl_32 stl_11 stl_20" style={{ "word-spacing": "0.002em" }}>
 								s Name
 							</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "0.4411em" }}>
-								&nbsp;</span>
+						</div>
+
+						<div className="stl_01" style={{ left: "12.2em", top: "22.3835em" }}>
 							<span className="stl_32 stl_11 stl_44" style={{ "word-spacing": "0.4295em" }}>
 								: Smt.
 							</span>
@@ -513,9 +507,9 @@ function Arts_Marksheet(props) {
 							<span className="stl_32 stl_11 stl_20" style={{ "word-spacing": "0.002em" }}>
 								s Name
 							</span>
-							<span className="stl_32 stl_11 stl_28" style={{ "word-spacing": "0.8855em" }}>
-								&nbsp;
-							</span>
+						</div>
+
+						<div className="stl_01" style={{ left: "12.2em", top: "23.8035em" }}>
 							<span className="stl_32 stl_11 stl_47" style={{ "word-spacing": "0.4425em" }}>
 								: Shri.
 							</span>
@@ -534,7 +528,7 @@ function Arts_Marksheet(props) {
 							</span>
 						</div>
 
-						<div className="stl_01" style={{ left: "12.1417em", top: "25.2335em" }}>
+						<div className="stl_01" style={{ left: "12.2em", top: "25.2335em" }}>
 							<span className="stl_32 stl_11 stl_33" style={{ "word-spacing": "0.4479em" }}>
 								: {getAddress}
 							</span>
