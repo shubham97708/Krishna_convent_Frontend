@@ -392,14 +392,21 @@ function PostAdd(props) {
     ],
   };
 
+  const MAX_OPTIONAL_SUBJECTS = 3;
+
   const [getOptionalSubjects, setOptionalSubjects] = React.useState([]);
 
   const onOptionalSubjectToggle = (subject) => {
-    setOptionalSubjects((prev) =>
-      prev.includes(subject)
-        ? prev.filter((s) => s !== subject)
-        : [...prev, subject]
-    );
+    setOptionalSubjects((prev) => {
+      if (prev.includes(subject)) {
+        return prev.filter((s) => s !== subject);
+      }
+      if (prev.length >= MAX_OPTIONAL_SUBJECTS) {
+        swal("Limit Reached", `You can select maximum ${MAX_OPTIONAL_SUBJECTS} optional subjects`, "warning");
+        return prev;
+      }
+      return [...prev, subject];
+    });
   };
 
 
@@ -890,21 +897,25 @@ console.log("class data  ==  ",getSubCategoryid)
                 gutterBottom
                 style={{ color: "blue" }}
               >
-                <h2>Optional Subject</h2>
+                <h2>Optional Subject (Select up to {MAX_OPTIONAL_SUBJECTS})</h2>
               </Typography>
               <FormGroup row>
-                {OPTIONAL_SUBJECTS_BY_STREAM[getSubCategoryid2].map((subject) => (
-                  <FormControlLabel
-                    key={subject}
-                    control={
-                      <Checkbox
-                        checked={getOptionalSubjects.includes(subject)}
-                        onChange={() => onOptionalSubjectToggle(subject)}
-                      />
-                    }
-                    label={subject}
-                  />
-                ))}
+                {OPTIONAL_SUBJECTS_BY_STREAM[getSubCategoryid2].map((subject) => {
+                  const isChecked = getOptionalSubjects.includes(subject);
+                  return (
+                    <FormControlLabel
+                      key={subject}
+                      control={
+                        <Checkbox
+                          checked={isChecked}
+                          disabled={!isChecked && getOptionalSubjects.length >= MAX_OPTIONAL_SUBJECTS}
+                          onChange={() => onOptionalSubjectToggle(subject)}
+                        />
+                      }
+                      label={subject}
+                    />
+                  );
+                })}
               </FormGroup>
             </React.Fragment>
           )}
