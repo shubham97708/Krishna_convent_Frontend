@@ -16,7 +16,11 @@ const axios = require("axios");
 function Pcm_Marksheet(props) {
 
 	const hasBio = !isUndefined(props.location.res) && (props.location.res.optionalsubject || "").toLowerCase().includes("bio");
-	const rowShift = hasBio ? 1.475 : 0;
+	// Total (and everything below it) sit a fixed 2-row gap below the last core
+	// subject in the original template -- that gap already has room for exactly
+	// one extra subject row, so when Bio is shown it only needs a normal
+	// 1-row nudge to follow it directly, not another full row-gap on top.
+	const rowShift = hasBio ? 0.02 : 0;
 
 	const [getHindi, setHindi] = React.useState("")
 	const [getEnglish, setEnglish] = React.useState("")
