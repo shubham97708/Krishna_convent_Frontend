@@ -97,105 +97,54 @@ function Pcm_Marksheet(props) {
 			let countSupplementry = 0
 			let strSupplementry = ""
 
-			if (props.location.res.hindit + props.location.res.hindip >= 33 && props.location.res.hindit + props.location.res.hindip <= 74) {
-				setHindi(props.location.res.hindit + props.location.res.hindip)
-				setPcmHindiTheory(props.location.res.hindit)
-				setPcmHindiPractical(props.location.res.hindip)
-			} else if (props.location.res.hindit + props.location.res.hindip>= 75 && props.location.res.hindit + props.location.res.hindip <= 100) {
+			// MPBSE rule: a subject is only a pass if BOTH the theory mark meets its
+			// own minimum (26/80 or 23/70) AND the practical/internal mark meets its
+			// own minimum (7/20 or 10/30) -- a high combined total cannot cover for
+			// failing one component. Distinction (>=75%) is still based on the
+			// combined total once the subject has passed both components.
+			const bandSubject = (theory, practical, theoryMin, practicalMin, setter, label) => {
+				const total = theory + practical;
+				if (theory < theoryMin || practical < practicalMin) {
+					setter(total + " F");
+					countSupplementry++;
+					strSupplementry = strSupplementry + " " + label + " ,";
+				} else if (total >= 75) {
+					setter(total + " Dist");
+				} else {
+					setter(total);
+				}
+			};
 
-				setHindi((props.location.res.hindit + props.location.res.hindip) + " Dist")
-				setPcmHindiTheory(props.location.res.hindit)
-				setPcmHindiPractical(props.location.res.hindip)
-			} else {
-				setHindi((props.location.res.hindit + props.location.res.hindip) + " F")
-				setPcmHindiTheory(props.location.res.hindit)
-				setPcmHindiPractical(props.location.res.hindip)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " Hindi ,"
-			}
+			setPcmHindiTheory(props.location.res.hindit)
+			setPcmHindiPractical(props.location.res.hindip)
+			bandSubject(props.location.res.hindit, props.location.res.hindip, 26, 7, setHindi, "Hindi")
 
+			setPcmEnglishTheory(props.location.res.englisht)
+			setPcmEnglishPractical(props.location.res.englishp)
+			bandSubject(props.location.res.englisht, props.location.res.englishp, 26, 7, setEnglish, "English")
 
-			if (props.location.res.englisht + props.location.res.englishp >= 33 && props.location.res.englisht + props.location.res.englishp <= 74) {	
-				setEnglish(props.location.res.englisht + props.location.res.englishp)
-				setPcmEnglishPractical(props.location.res.englishp)
-				setPcmEnglishTheory(props.location.res.englisht)
+			setPcmPhysicsTheory(props.location.res.physicst)
+			setPcmPhysicsPractical(props.location.res.physicsp)
+			bandSubject(props.location.res.physicst, props.location.res.physicsp, 23, 10, setPhysics, "Physics")
 
-			} else if (props.location.res.englisht + props.location.res.englishp >= 75 && props.location.res.englisht + props.location.res.englishp <= 100) {
-				setEnglish((props.location.res.englisht + props.location.res.englishp)+" Dist")
-				setPcmEnglishPractical(props.location.res.englishp)
-				setPcmEnglishTheory(props.location.res.englisht)
-			} else {
-				setEnglish((props.location.res.englisht + props.location.res.englishp)+" F")
-				setPcmEnglishPractical(props.location.res.englishp)
-				setPcmEnglishTheory(props.location.res.englisht)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " English ,"
-			}
+			setPcmChemistryTheory(props.location.res.chemistryt)
+			setPcmChemistryPractical(props.location.res.chemistryp)
+			bandSubject(props.location.res.chemistryt, props.location.res.chemistryp, 23, 10, setChemistry, "Chemistry")
 
-
-			if (props.location.res.physicst+props.location.res.physicsp >= 33 && props.location.res.physicst+props.location.res.physicsp <= 74) {
-				setPhysics(props.location.res.physicst+props.location.res.physicsp)
-				setPcmPhysicsTheory(props.location.res.physicst)
-				setPcmPhysicsPractical(props.location.res.physicsp)
-
-			} else if (props.location.res.physicst+props.location.res.physicsp >= 75 && props.location.res.physicst+props.location.res.physicsp<= 100) {
-				setPhysics((props.location.res.physicst+props.location.res.physicsp)+ " Dist")
-				setPcmPhysicsTheory(props.location.res.physicst)
-				setPcmPhysicsPractical(props.location.res.physicsp)
-			} else {
-
-				setPhysics((props.location.res.physicst+props.location.res.physicsp)+ " F")
-				setPcmPhysicsTheory(props.location.res.physicst)
-				setPcmPhysicsPractical(props.location.res.physicsp)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " Physics ,"
-			}
-
-
-			if (props.location.res.chemistryt+props.location.res.chemistryp >= 33 && props.location.res.chemistryt+props.location.res.chemistryp <= 74) {
-				setChemistry(props.location.res.chemistryt+props.location.res.chemistryp)
-				setPcmChemistryPractical(props.location.res.chemistryp)
-				setPcmChemistryTheory(props.location.res.chemistryt)
-			} else if (props.location.res.chemistryt+props.location.res.chemistryp >= 75 && props.location.res.chemistryt+props.location.res.chemistryp <= 100) {
-				setChemistry((props.location.res.chemistryt+props.location.res.chemistryp)+" Dist")
-				setPcmChemistryPractical(props.location.res.chemistryp)
-				setPcmChemistryTheory(props.location.res.chemistryt)
-			} else {
-				setChemistry((props.location.res.chemistryt+props.location.res.chemistryp)+" F")
-				setPcmChemistryPractical(props.location.res.chemistryp)
-				setPcmChemistryTheory(props.location.res.chemistryt)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " Chemistry ,"
-			}
-
-
-
-			if (props.location.res.mathst+props.location.res.mathsp >= 33 && props.location.res.mathst+props.location.res.mathsp <= 74) {
-				setMaths(props.location.res.mathst+props.location.res.mathsp)
-				setPcmMathsPractical(props.location.res.mathsp)
-				setPcmMathsTheory(props.location.res.mathst)
-
-			} else if (props.location.res.mathst+props.location.res.mathsp >= 75 && props.location.res.mathst+props.location.res.mathsp <= 100) {
-
-				setMaths((props.location.res.mathst+props.location.res.mathsp)+" Dist")
-				setPcmMathsPractical(props.location.res.mathsp)
-				setPcmMathsTheory(props.location.res.mathst)
-			} else {
-				setMaths((props.location.res.mathst+props.location.res.mathsp)+ " F")
-				setPcmMathsPractical(props.location.res.mathsp)
-				setPcmMathsTheory(props.location.res.mathst)
-				strSupplementry = strSupplementry + " Maths ,"
-			}
+			setPcmMathsTheory(props.location.res.mathst)
+			setPcmMathsPractical(props.location.res.mathsp)
+			bandSubject(props.location.res.mathst, props.location.res.mathsp, 26, 7, setMaths, "Maths")
 
 			if (hasBio) {
-				setPcmBioPractical(props.location.res.biop)
 				setPcmBioTheory(props.location.res.biot)
-				if (props.location.res.biot+props.location.res.biop >= 75 && props.location.res.biot+props.location.res.biop <= 100) {
-					setBio((props.location.res.biot+props.location.res.biop)+" Dist")
-				} else if (props.location.res.biot+props.location.res.biop >= 33 && props.location.res.biot+props.location.res.biop <= 74) {
-					setBio(props.location.res.biot+props.location.res.biop)
+				setPcmBioPractical(props.location.res.biop)
+				const bioTotal = props.location.res.biot + props.location.res.biop;
+				if (props.location.res.biot < 23 || props.location.res.biop < 10) {
+					setBio(bioTotal + " F")
+				} else if (bioTotal >= 75) {
+					setBio(bioTotal + " Dist")
 				} else {
-					setBio((props.location.res.biot+props.location.res.biop)+" F")
+					setBio(bioTotal)
 				}
 			}
 
@@ -657,12 +606,12 @@ function Pcm_Marksheet(props) {
 
 						<div className="stl_01" style={{ left: "13.9758em", top: "36.4352em" }}>
 							<span className="stl_32 stl_11 stl_40">
-								20 &nbsp;
+								30 &nbsp;
 							</span>
 						</div>
 						<div className="stl_01" style={{ left: "13.9758em", top: "37.8952em" }}>
 							<span className="stl_32 stl_11 stl_40">
-								20 &nbsp;
+								30 &nbsp;
 							</span>
 						</div>
 
@@ -675,14 +624,14 @@ function Pcm_Marksheet(props) {
 
 						<div className="stl_01" style={{ left: "13.6758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{100 + (hasBio ? 20 : 0)} &nbsp;
+								{120 + (hasBio ? 30 : 0)} &nbsp;
 							</span>
 						</div>
 
 						{hasBio && (
 							<div className="stl_01" style={{ left: "13.9758em", top: "40.8402em" }}>
 								<span className="stl_32 stl_11 stl_40">
-									20 &nbsp;
+									30 &nbsp;
 								</span>
 							</div>
 						)}
@@ -770,12 +719,12 @@ function Pcm_Marksheet(props) {
 
 						<div className="stl_01" style={{ left: "27.1758em", top: "36.4352em" }}>
 							<span className="stl_32 stl_11 stl_40">
-								80 &nbsp;
+								70 &nbsp;
 							</span>
 						</div>
 						<div className="stl_01" style={{ left: "27.1758em", top: "37.8952em" }}>
 							<span className="stl_32 stl_11 stl_40">
-								80 &nbsp;
+								70 &nbsp;
 							</span>
 						</div>
 
@@ -788,14 +737,14 @@ function Pcm_Marksheet(props) {
 
 						<div className="stl_01" style={{ left: "27.1758em", top: `${42.2952 + rowShift}em` }}>
 							<span className="stl_32 stl_11 stl_40">
-								{400 + (hasBio ? 80 : 0)} &nbsp;
+								{380 + (hasBio ? 70 : 0)} &nbsp;
 							</span>
 						</div>
 
 						{hasBio && (
 							<div className="stl_01" style={{ left: "27.1758em", top: "40.8402em" }}>
 								<span className="stl_32 stl_11 stl_40">
-									80 &nbsp;
+									70 &nbsp;
 								</span>
 							</div>
 						)}

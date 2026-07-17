@@ -376,7 +376,7 @@ function PostAdd(props) {
   const OPTIONAL_SUBJECTS_BY_STREAM = {
     pcm: ["Bio"],
     pcb: ["Math"],
-    commerce: ["Computer Application"],
+    commerce: ["Informatics Practices"],
     arts: [
       "History",
       "Political Science",
@@ -396,10 +396,22 @@ function PostAdd(props) {
 
   const [getOptionalSubjects, setOptionalSubjects] = React.useState([]);
 
+  // Agriculture is actually 3 separate 100-mark papers (Elements of Science and
+  // Mathematics, Crop Production and Horticulture, Elements of Animal Husbandry
+  // and Poultry Farming), so on MP board it's taken instead of -- not alongside
+  // -- the other individual electives; picking it fills the whole 3-elective
+  // quota by itself.
   const onOptionalSubjectToggle = (subject) => {
     setOptionalSubjects((prev) => {
       if (prev.includes(subject)) {
         return prev.filter((s) => s !== subject);
+      }
+      if (subject === "Agriculture") {
+        return ["Agriculture"];
+      }
+      if (prev.includes("Agriculture")) {
+        swal("Not Allowed", "Agriculture already fills all 3 optional subjects. Remove it first to pick individual electives.", "warning");
+        return prev;
       }
       if (prev.length >= MAX_OPTIONAL_SUBJECTS) {
         swal("Limit Reached", `You can select maximum ${MAX_OPTIONAL_SUBJECTS} optional subjects`, "warning");

@@ -15,7 +15,7 @@ const axios = require("axios");
 
 function Commerce_Marksheet(props) {
 
-	const hasIt = !isUndefined(props.location.res) && (props.location.res.optionalsubject || "").toLowerCase().includes("computer application");
+	const hasIt = !isUndefined(props.location.res) && (props.location.res.optionalsubject || "").toLowerCase().includes("informatics practices");
 	const rowShift = hasIt ? 1.475 : 0;
 
 	const [getHindi, setHindi] = React.useState("")
@@ -97,106 +97,54 @@ function Commerce_Marksheet(props) {
 			let countSupplementry = 0
 			let strSupplementry = ""
 
-			if (props.location.res.hindit + props.location.res.hindip >= 33 && props.location.res.hindit + props.location.res.hindip <= 74) {
-				setHindi(props.location.res.hindit + props.location.res.hindip)
-				setCommerceHindiTheory(props.location.res.hindit)
-				setCommerceHindiPractical(props.location.res.hindip)
-			} else if (props.location.res.hindit + props.location.res.hindip>= 75 && props.location.res.hindit + props.location.res.hindip <= 100) {
+			// MPBSE rule: a subject is only a pass if BOTH the theory mark meets its
+			// own minimum (26/80 or 23/70) AND the practical/internal mark meets its
+			// own minimum (7/20 or 10/30) -- a high combined total cannot cover for
+			// failing one component. Distinction (>=75%) is still based on the
+			// combined total once the subject has passed both components.
+			const bandSubject = (theory, practical, theoryMin, practicalMin, setter, label) => {
+				const total = theory + practical;
+				if (theory < theoryMin || practical < practicalMin) {
+					setter(total + " F");
+					countSupplementry++;
+					strSupplementry = strSupplementry + " " + label + " ,";
+				} else if (total >= 75) {
+					setter(total + " Dist");
+				} else {
+					setter(total);
+				}
+			};
 
-				setHindi((props.location.res.hindit + props.location.res.hindip) + " Dist")
-				setCommerceHindiTheory(props.location.res.hindit)
-				setCommerceHindiPractical(props.location.res.hindip)
-			} else {
-				setHindi((props.location.res.hindit + props.location.res.hindip) + " F")
-				setCommerceHindiTheory(props.location.res.hindit)
-				setCommerceHindiPractical(props.location.res.hindip)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " Hindi ,"
-			}
+			setCommerceHindiTheory(props.location.res.hindit)
+			setCommerceHindiPractical(props.location.res.hindip)
+			bandSubject(props.location.res.hindit, props.location.res.hindip, 26, 7, setHindi, "Hindi")
 
+			setCommerceEnglishTheory(props.location.res.englisht)
+			setCommerceEnglishPractical(props.location.res.englishp)
+			bandSubject(props.location.res.englisht, props.location.res.englishp, 26, 7, setEnglish, "English")
 
-			if (props.location.res.englisht + props.location.res.englishp >= 33 && props.location.res.englisht + props.location.res.englishp <= 74) {	
-				setEnglish(props.location.res.englisht + props.location.res.englishp)
-				setCommerceEnglishPractical(props.location.res.englishp)
-				setCommerceEnglishTheory(props.location.res.englisht)
+			setCommerceBusinessTheory(props.location.res.businesst)
+			setCommerceBusinessPractical(props.location.res.businessp)
+			bandSubject(props.location.res.businesst, props.location.res.businessp, 26, 7, setBusiness, "Business")
 
-			} else if (props.location.res.englisht + props.location.res.englishp >= 75 && props.location.res.englisht + props.location.res.englishp <= 100) {
-				setEnglish((props.location.res.englisht + props.location.res.englishp)+" Dist")
-				setCommerceEnglishPractical(props.location.res.englishp)
-				setCommerceEnglishTheory(props.location.res.englisht)
-			} else {
-				setEnglish((props.location.res.englisht + props.location.res.englishp)+" F")
-				setCommerceEnglishPractical(props.location.res.englishp)
-				setCommerceEnglishTheory(props.location.res.englisht)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " English ,"
-			}
+			setCommerceAccountancyTheory(props.location.res.accountancyt)
+			setCommerceAccountancyPractical(props.location.res.accountancyp)
+			bandSubject(props.location.res.accountancyt, props.location.res.accountancyp, 26, 7, setAccountancy, "Accountancy")
 
-
-			if (props.location.res.businesst+props.location.res.businessp >= 33 && props.location.res.businesst+props.location.res.businessp <= 74) {
-				setBusiness(props.location.res.businesst+props.location.res.businessp)
-				setCommerceBusinessTheory(props.location.res.businesst)
-				setCommerceBusinessPractical(props.location.res.businessp)
-
-			} else if (props.location.res.businesst+props.location.res.businessp >= 75 && props.location.res.businesst+props.location.res.businessp<= 100) {
-				setBusiness((props.location.res.businesst+props.location.res.businessp)+ " Dist")
-				setCommerceBusinessTheory(props.location.res.businesst)
-				setCommerceBusinessPractical(props.location.res.businessp)
-			} else {
-
-				setBusiness((props.location.res.businesst+props.location.res.businessp)+ " F")
-				setCommerceBusinessTheory(props.location.res.businesst)
-				setCommerceBusinessPractical(props.location.res.businessp)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " Business ,"
-			}
-
-
-			if (props.location.res.accountancyt+props.location.res.accountancyp >= 33 && props.location.res.accountancyt+props.location.res.accountancyp <= 74) {
-				setAccountancy(props.location.res.accountancyt+props.location.res.accountancyp)
-				setCommerceAccountancyPractical(props.location.res.accountancyp)
-				setCommerceAccountancyTheory(props.location.res.accountancyt)
-			} else if (props.location.res.accountancyt+props.location.res.accountancyp >= 75 && props.location.res.accountancyt+props.location.res.accountancyp <= 100) {
-				setAccountancy((props.location.res.accountancyt+props.location.res.accountancyp)+" Dist")
-				setCommerceAccountancyPractical(props.location.res.accountancyp)
-				setCommerceAccountancyTheory(props.location.res.accountancyt)
-			} else {
-				setAccountancy((props.location.res.accountancyt+props.location.res.accountancyp)+" F")
-				setCommerceAccountancyPractical(props.location.res.accountancyp)
-				setCommerceAccountancyTheory(props.location.res.accountancyt)
-				countSupplementry++;
-				strSupplementry = strSupplementry + " Accountancy ,"
-			}
-
-
-
-			if (props.location.res.economicst+props.location.res.economicsp >= 33 && props.location.res.economicst+props.location.res.economicsp <= 74) {
-				setEconomics(props.location.res.economicst+props.location.res.economicsp)
-				setCommerceEconomicsPractical(props.location.res.economicsp)
-				setCommerceEconomicsTheory(props.location.res.economicst)
-
-			} else if (props.location.res.economicst+props.location.res.economicsp >= 75 && props.location.res.economicst+props.location.res.economicsp <= 100) {
-
-				setEconomics((props.location.res.economicst+props.location.res.economicsp)+" Dist")
-				setCommerceEconomicsPractical(props.location.res.economicsp)
-				setCommerceEconomicsTheory(props.location.res.economicst)
-			} else {
-				setEconomics((props.location.res.economicst+props.location.res.economicsp)+ " F")
-				setCommerceEconomicsPractical(props.location.res.economicsp)
-				setCommerceEconomicsTheory(props.location.res.economicst)
-				strSupplementry = strSupplementry + " Economics ,"
-			}
-
+			setCommerceEconomicsTheory(props.location.res.economicst)
+			setCommerceEconomicsPractical(props.location.res.economicsp)
+			bandSubject(props.location.res.economicst, props.location.res.economicsp, 26, 7, setEconomics, "Economics")
 
 			if (hasIt) {
 				setCommerceItTheory(props.location.res.itt)
 				setCommerceItPractical(props.location.res.itp)
-				if (props.location.res.itt+props.location.res.itp >= 75 && props.location.res.itt+props.location.res.itp <= 100) {
-					setIt((props.location.res.itt+props.location.res.itp)+" Dist")
-				} else if (props.location.res.itt+props.location.res.itp >= 33 && props.location.res.itt+props.location.res.itp <= 74) {
-					setIt(props.location.res.itt+props.location.res.itp)
+				const itTotal = props.location.res.itt + props.location.res.itp;
+				if (props.location.res.itt < 23 || props.location.res.itp < 10) {
+					setIt(itTotal + " F")
+				} else if (itTotal >= 75) {
+					setIt(itTotal + " Dist")
 				} else {
-					setIt((props.location.res.itt+props.location.res.itp)+ " F")
+					setIt(itTotal)
 				}
 			}
 

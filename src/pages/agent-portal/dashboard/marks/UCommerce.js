@@ -130,7 +130,7 @@ function UCommerce(props) {
 
   const hasIt = (getOptionalSubject || "")
     .toLowerCase()
-    .includes("computer application");
+    .includes("informatics practices");
 
   const onTheoryChange = (setter) => (event) => {
     const val = event.target.value;

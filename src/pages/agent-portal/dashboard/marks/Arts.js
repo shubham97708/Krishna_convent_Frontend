@@ -48,26 +48,43 @@ const useStyles = makeStyles((theme) => ({
 
 // Elective subjects a student can pick on the Add Student form (checkboxes) --
 // only the ones the student actually selected are shown here / on the marksheet.
-// Geography, Psychology and Agriculture have a practical component (Theory max 70
-// + Practical max 30, per MP board rules); the rest are Theory-only (max 100).
+// Per MPBSE's real marks scheme (verified against the school's own marks-scheme
+// sheet + mpbse.nic.in): History, Political Science, Economics and Sociology are
+// Theory(80)+Internal(20)=100; Geography, Indian Music, Dancing, Drawing and
+// Designing, Psychology, and Home Science/Anatomy/Physiology and Hygiene are
+// Theory(70)+Practical(30)=100. All of them have a practical/internal component
+// -- none are theory-only.
 const ELECTIVE_SUBJECTS = [
-  { label: "History", theoryField: "historyt" },
-  { label: "Political Science", theoryField: "polscit" },
-  { label: "Geography", theoryField: "geographyt", practicalField: "geographyp" },
-  { label: "Economics", theoryField: "economicst" },
-  { label: "Indian Music", theoryField: "musict" },
-  { label: "Dancing", theoryField: "dancingt" },
-  { label: "Drawing and Designing", theoryField: "drawingt" },
-  { label: "Psychology", theoryField: "psychologyt", practicalField: "psychologyp" },
-  { label: "Home Science, Anatomy, Physiology and Hygiene", theoryField: "homesciencet" },
-  { label: "Sociology", theoryField: "sociologyt" },
-  { label: "Agriculture", theoryField: "agriculturet", practicalField: "agriculturep" },
+  { label: "History", theoryField: "historyt", practicalField: "historyp", maxTheory: 80, maxPractical: 20 },
+  { label: "Political Science", theoryField: "polscit", practicalField: "polscip", maxTheory: 80, maxPractical: 20 },
+  { label: "Geography", theoryField: "geographyt", practicalField: "geographyp", maxTheory: 70, maxPractical: 30 },
+  { label: "Economics", theoryField: "economicst", practicalField: "economicsp", maxTheory: 80, maxPractical: 20 },
+  { label: "Indian Music", theoryField: "musict", practicalField: "musicp", maxTheory: 70, maxPractical: 30 },
+  { label: "Dancing", theoryField: "dancingt", practicalField: "dancingp", maxTheory: 70, maxPractical: 30 },
+  { label: "Drawing and Designing", theoryField: "drawingt", practicalField: "drawingp", maxTheory: 70, maxPractical: 30 },
+  { label: "Psychology", theoryField: "psychologyt", practicalField: "psychologyp", maxTheory: 70, maxPractical: 30 },
+  { label: "Home Science, Anatomy, Physiology and Hygiene", theoryField: "homesciencet", practicalField: "homesciencep", maxTheory: 70, maxPractical: 30 },
+  { label: "Sociology", theoryField: "sociologyt", practicalField: "sociologyp", maxTheory: 80, maxPractical: 20 },
+];
+
+// Agriculture is not one subject on MP Board -- it's a group of 3 separate
+// 100-mark papers, each Theory(70)+Practical(30): Elements of Science and
+// Mathematics, Crop Production and Horticulture, Elements of Animal Husbandry
+// and Poultry Farming. Picking "Agriculture" as an elective means all 3.
+const AGRICULTURE_PAPERS = [
+  { label: "Agriculture: Elements of Science and Mathematics", theoryField: "agriscit", practicalField: "agriscip", maxTheory: 70, maxPractical: 30 },
+  { label: "Agriculture: Crop Production and Horticulture", theoryField: "agricropt", practicalField: "agricropp", maxTheory: 70, maxPractical: 30 },
+  { label: "Agriculture: Elements of Animal Husbandry and Poultry Farming", theoryField: "agrianimalt", practicalField: "agrianimalp", maxTheory: 70, maxPractical: 30 },
 ];
 
 function getSelectedElectives(optionalSubjectCsv) {
   if (!optionalSubjectCsv) return [];
   const chosen = optionalSubjectCsv.split(",").map((s) => s.trim().toLowerCase());
-  return ELECTIVE_SUBJECTS.filter((subj) => chosen.includes(subj.label.toLowerCase()));
+  const result = ELECTIVE_SUBJECTS.filter((subj) => chosen.includes(subj.label.toLowerCase()));
+  if (chosen.includes("agriculture")) {
+    result.push(...AGRICULTURE_PAPERS);
+  }
+  return result;
 }
 
 
@@ -92,23 +109,9 @@ function Arts(props) {
     setElectiveMarks((prev) => ({ ...prev, [theoryField]: { ...prev[theoryField], practical: value } }));
   };
 
-  const onTheoryChange = (setter) => (event) => {
+  const onBoundedChange = (setter, max) => (event) => {
     const val = event.target.value;
-    if (val === "" || (Number(val) >= 0 && Number(val) <= 70)) {
-      setter(val);
-    }
-  };
-
-  const onPracticalChange = (setter) => (event) => {
-    const val = event.target.value;
-    if (val === "" || (Number(val) >= 0 && Number(val) <= 30)) {
-      setter(val);
-    }
-  };
-
-  const onFullTheoryChange = (setter) => (event) => {
-    const val = event.target.value;
-    if (val === "" || (Number(val) >= 0 && Number(val) <= 100)) {
+    if (val === "" || (Number(val) >= 0 && Number(val) <= max)) {
       setter(val);
     }
   };
@@ -134,7 +137,7 @@ function Arts(props) {
       const allElectivesFilled = selectedElectives.every((subj) => {
         const marks = electiveMarks[subj.theoryField] || {};
         if (marks.theory === undefined || marks.theory === "") return false;
-        if (subj.practicalField && (marks.practical === undefined || marks.practical === "")) return false;
+        if (marks.practical === undefined || marks.practical === "") return false;
         return true;
       });
 
@@ -157,27 +160,37 @@ function Arts(props) {
             "englisht": getEnglishTheory,
             "englishp": getEnglishPractical,
             "historyt": 0,
+            "historyp": 0,
             "polscit": 0,
+            "polscip": 0,
             "geographyt": 0,
             "geographyp": 0,
             "economicst": 0,
+            "economicsp": 0,
             "musict": 0,
+            "musicp": 0,
             "dancingt": 0,
+            "dancingp": 0,
             "drawingt": 0,
+            "drawingp": 0,
             "psychologyt": 0,
             "psychologyp": 0,
             "homesciencet": 0,
+            "homesciencep": 0,
             "sociologyt": 0,
-            "agriculturet": 0,
-            "agriculturep": 0,
+            "sociologyp": 0,
+            "agriscit": 0,
+            "agriscip": 0,
+            "agricropt": 0,
+            "agricropp": 0,
+            "agrianimalt": 0,
+            "agrianimalp": 0,
           }
 
           selectedElectives.forEach((subj) => {
             const marks = electiveMarks[subj.theoryField] || {};
             body[subj.theoryField] = marks.theory;
-            if (subj.practicalField) {
-              body[subj.practicalField] = marks.practical;
-            }
+            body[subj.practicalField] = marks.practical;
           });
 
         console.log(body)
@@ -279,38 +292,32 @@ function Arts(props) {
                   <Grid item xs={12}>
                     <TextField
                       id="outlined-basic"
-                      placeholder={`${subj.label}-Theory (max ${subj.practicalField ? 70 : 100})`}
-                      label={`${subj.label}-Theory (max ${subj.practicalField ? 70 : 100})`}
+                      placeholder={`${subj.label}-Theory (max ${subj.maxTheory})`}
+                      label={`${subj.label}-Theory (max ${subj.maxTheory})`}
                       className={clsx(classes.textField, classes.dense)}
                       margin="dense"
                       style={{ marginLeft: -10 }}
                       value={(electiveMarks[subj.theoryField] || {}).theory || ""}
                       variant="outlined"
-                      onChange={
-                        subj.practicalField
-                          ? onTheoryChange(setElectiveTheory(subj.theoryField))
-                          : onFullTheoryChange(setElectiveTheory(subj.theoryField))
-                      }
+                      onChange={onBoundedChange(setElectiveTheory(subj.theoryField), subj.maxTheory)}
                       fullWidth
                     />
                   </Grid>
 
-                  {subj.practicalField && (
-                    <Grid item xs={12}>
-                      <TextField
-                        id="outlined-basic"
-                        placeholder={`${subj.label}-Practical (max 30)`}
-                        label={`${subj.label}-Practical (max 30)`}
-                        className={clsx(classes.textField, classes.dense)}
-                        margin="dense"
-                        style={{ marginLeft: -10 }}
-                        value={(electiveMarks[subj.theoryField] || {}).practical || ""}
-                        variant="outlined"
-                        onChange={onPracticalChange(setElectivePractical(subj.theoryField))}
-                        fullWidth
-                      />
-                    </Grid>
-                  )}
+                  <Grid item xs={12}>
+                    <TextField
+                      id="outlined-basic"
+                      placeholder={`${subj.label}-Practical (max ${subj.maxPractical})`}
+                      label={`${subj.label}-Practical (max ${subj.maxPractical})`}
+                      className={clsx(classes.textField, classes.dense)}
+                      margin="dense"
+                      style={{ marginLeft: -10 }}
+                      value={(electiveMarks[subj.theoryField] || {}).practical || ""}
+                      variant="outlined"
+                      onChange={onBoundedChange(setElectivePractical(subj.theoryField), subj.maxPractical)}
+                      fullWidth
+                    />
+                  </Grid>
                 </React.Fragment>
               ))}
 

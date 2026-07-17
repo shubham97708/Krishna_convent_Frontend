@@ -141,7 +141,7 @@ function Commerce(props) {
 
   const hasIt = (props.optionalsubject || "")
     .toLowerCase()
-    .includes("computer application");
+    .includes("informatics practices");
 
   const onTheoryChange = (setter) => (event) => {
     const val = event.target.value;

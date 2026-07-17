@@ -131,14 +131,14 @@ function Pcm(props) {
 
   const onTheoryChange = (setter) => (event) => {
     const val = event.target.value;
-    if (val === "" || (Number(val) >= 0 && Number(val) <= 80)) {
+    if (val === "" || (Number(val) >= 0 && Number(val) <= 70)) {
       setter(val);
     }
   };
 
   const onPracticalChange = (setter) => (event) => {
     const val = event.target.value;
-    if (val === "" || (Number(val) >= 0 && Number(val) <= 20)) {
+    if (val === "" || (Number(val) >= 0 && Number(val) <= 30)) {
       setter(val);
     }
   };
@@ -380,8 +380,8 @@ function Pcm(props) {
                 <Grid item xs={12}>
                   <TextField
                     id="outlined-basic"
-                    placeholder="Bio-Theory (max 80)"
-                    label="Bio-Theory (max 80)"
+                    placeholder="Bio-Theory (max 70)"
+                    label="Bio-Theory (max 70)"
                     className={clsx(classes.textField, classes.dense)}
                     margin="dense"
                     style={{ marginLeft: -10 }}
@@ -397,8 +397,8 @@ function Pcm(props) {
                 <Grid item xs={12}>
                   <TextField
                     id="outlined-basic"
-                    placeholder="Bio-Practical (max 20)"
-                    label="Bio-Practical (max 20)"
+                    placeholder="Bio-Practical (max 30)"
+                    label="Bio-Practical (max 30)"
                     className={clsx(classes.textField, classes.dense)}
                     margin="dense"
                     style={{ marginLeft: -10 }}

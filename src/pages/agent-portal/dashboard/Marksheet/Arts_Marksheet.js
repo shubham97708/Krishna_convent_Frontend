@@ -12,33 +12,60 @@ import { isUndefined } from "@syncfusion/ej2-base";
 import PrintBackButton from "./PrintBackButton";
 const axios = require("axios");
 
-// Same elective list/field-mapping as marks/Arts.js and marks/UArts.js -- only
-// the subjects a student actually picked on the Add Student form are printed
-// here (MP board Arts students take exactly Hindi + English + 3 electives).
+// Same elective list/field-mapping as marks/Arts.js and marks/UArts.js. Per
+// MPBSE's real marks scheme (verified against the school's own marks-scheme
+// sheet + mpbse.nic.in): History, Political Science, Economics and Sociology
+// are Theory(80)+Internal(20)=100; Geography, Indian Music, Dancing, Drawing
+// and Designing, Psychology, and Home Science/Anatomy/Physiology and Hygiene
+// are Theory(70)+Practical(30)=100. Only the subjects a student actually
+// picked on the Add Student form are printed here (MP board Arts students
+// take exactly Hindi + English + 3 electives).
 const ELECTIVE_SUBJECTS = [
-	{ label: "History", theoryField: "historyt" },
-	{ label: "Political Science", theoryField: "polscit" },
-	{ label: "Geography", theoryField: "geographyt", practicalField: "geographyp" },
-	{ label: "Economics", theoryField: "economicst" },
-	{ label: "Indian Music", theoryField: "musict" },
-	{ label: "Dancing", theoryField: "dancingt" },
-	{ label: "Drawing and Designing", theoryField: "drawingt" },
-	{ label: "Psychology", theoryField: "psychologyt", practicalField: "psychologyp" },
-	{ label: "Home Science", theoryField: "homesciencet" },
-	{ label: "Sociology", theoryField: "sociologyt" },
-	{ label: "Agriculture", theoryField: "agriculturet", practicalField: "agriculturep" },
+	{ label: "History", theoryField: "historyt", practicalField: "historyp", maxTheory: 80, maxPractical: 20 },
+	{ label: "Political Science", theoryField: "polscit", practicalField: "polscip", maxTheory: 80, maxPractical: 20 },
+	{ label: "Geography", theoryField: "geographyt", practicalField: "geographyp", maxTheory: 70, maxPractical: 30 },
+	{ label: "Economics", theoryField: "economicst", practicalField: "economicsp", maxTheory: 80, maxPractical: 20 },
+	{ label: "Indian Music", theoryField: "musict", practicalField: "musicp", maxTheory: 70, maxPractical: 30 },
+	{ label: "Dancing", theoryField: "dancingt", practicalField: "dancingp", maxTheory: 70, maxPractical: 30 },
+	{ label: "Drawing and Designing", theoryField: "drawingt", practicalField: "drawingp", maxTheory: 70, maxPractical: 30 },
+	{ label: "Psychology", theoryField: "psychologyt", practicalField: "psychologyp", maxTheory: 70, maxPractical: 30 },
+	{ label: "Home Science, Anatomy, Physiology and Hygiene", theoryField: "homesciencet", practicalField: "homesciencep", maxTheory: 70, maxPractical: 30 },
+	{ label: "Sociology", theoryField: "sociologyt", practicalField: "sociologyp", maxTheory: 80, maxPractical: 20 },
+];
+
+// Agriculture is not one subject on MP Board -- it's a group of 3 separate
+// 100-mark papers, each Theory(70)+Practical(30). Picking "Agriculture" as an
+// elective (on Add Student) means all 3; PostAdd.js treats Agriculture as
+// mutually exclusive with any other elective so this never exceeds the 3
+// elective-row slots this marksheet has room for.
+const AGRICULTURE_PAPERS = [
+	{ label: "Agri-Science", theoryField: "agriscit", practicalField: "agriscip", maxTheory: 70, maxPractical: 30 },
+	{ label: "Agri-Crop", theoryField: "agricropt", practicalField: "agricropp", maxTheory: 70, maxPractical: 30 },
+	{ label: "Agri-Animal", theoryField: "agrianimalt", practicalField: "agrianimalp", maxTheory: 70, maxPractical: 30 },
 ];
 
 function getSelectedElectives(optionalSubjectCsv) {
 	if (!optionalSubjectCsv) return [];
 	const chosen = optionalSubjectCsv.split(",").map((s) => s.trim().toLowerCase());
-	return ELECTIVE_SUBJECTS.filter((subj) => chosen.includes(subj.label.toLowerCase()));
+	const result = ELECTIVE_SUBJECTS.filter((subj) => chosen.includes(subj.label.toLowerCase()));
+	if (chosen.includes("agriculture")) {
+		result.push(...AGRICULTURE_PAPERS);
+	}
+	return result;
 }
 
-function gradeFor(total) {
-	if (total >= 33 && total <= 74) return total;
-	if (total >= 75 && total <= 100) return total + " Dist";
-	return total + " F";
+// MPBSE rule: a subject is only a pass if BOTH the theory mark meets its own
+// minimum (26/80 or 23/70) AND the practical mark meets its own minimum
+// (7/20 or 10/30) -- a high combined total cannot cover for failing one
+// component. Distinction (>=75%) is still based on the combined total once
+// the subject has passed both components.
+function gradeFor(theory, practical, theoryMax) {
+	const total = theory + practical;
+	const theoryMin = theoryMax === 80 ? 26 : 23;
+	const practicalMin = theoryMax === 80 ? 7 : 10;
+	if (theory < theoryMin || practical < practicalMin) return total + " F";
+	if (total >= 75) return total + " Dist";
+	return total;
 }
 
 
@@ -91,51 +118,55 @@ function Arts_Marksheet(props) {
 			let countSupplementry = 0
 			let strSupplementry = ""
 
-			if (res.hindit + res.hindip >= 33 && res.hindit + res.hindip <= 74) {
-				setHindi(res.hindit + res.hindip)
-			} else if (res.hindit + res.hindip >= 75 && res.hindit + res.hindip <= 100) {
-				setHindi((res.hindit + res.hindip) + " Dist")
-			} else {
+			if (res.hindit < 26 || res.hindip < 7) {
 				setHindi((res.hindit + res.hindip) + " F")
 				countSupplementry++;
 				strSupplementry = strSupplementry + " Hindi ,"
+			} else if (res.hindit + res.hindip >= 75) {
+				setHindi((res.hindit + res.hindip) + " Dist")
+			} else {
+				setHindi(res.hindit + res.hindip)
 			}
 			setArtsHindiTheory(res.hindit)
 			setArtsHindiPractical(res.hindip)
 
-			if (res.englisht + res.englishp >= 33 && res.englisht + res.englishp <= 74) {
-				setEnglish(res.englisht + res.englishp)
-			} else if (res.englisht + res.englishp >= 75 && res.englisht + res.englishp <= 100) {
-				setEnglish((res.englisht + res.englishp) + " Dist")
-			} else {
+			if (res.englisht < 26 || res.englishp < 7) {
 				setEnglish((res.englisht + res.englishp) + " F")
 				countSupplementry++;
 				strSupplementry = strSupplementry + " English ,"
+			} else if (res.englisht + res.englishp >= 75) {
+				setEnglish((res.englisht + res.englishp) + " Dist")
+			} else {
+				setEnglish(res.englisht + res.englishp)
 			}
 			setArtsEnglishTheory(res.englisht)
 			setArtsEnglishPractical(res.englishp)
 
 			// Only the student's own selected electives (from optionalsubject) are
 			// printed -- up to the first 3 (2 languages + 3 electives = 5 subjects
-			// total, matching MP board's Arts scheme of studies).
+			// total, matching MP board's Arts scheme of studies). Agriculture
+			// expands to 3 rows but is mutually exclusive with any other elective
+			// (enforced on Add Student), so this never exceeds 3 rows.
 			const selected = getSelectedElectives(res.optionalsubject).slice(0, 3);
 			let electiveTotal = 0;
 			const rows = selected.map((subj) => {
 				const theory = res[subj.theoryField] || 0;
-				const practical = subj.practicalField ? (res[subj.practicalField] || 0) : 0;
+				const practical = res[subj.practicalField] || 0;
 				const total = theory + practical;
 				electiveTotal += total;
-				if (!(total >= 33 && total <= 100)) {
+				const theoryMin = subj.maxTheory === 80 ? 26 : 23;
+				const practicalMin = subj.maxTheory === 80 ? 7 : 10;
+				if (theory < theoryMin || practical < practicalMin) {
 					countSupplementry++;
 					strSupplementry = strSupplementry + " " + subj.label + " ,"
 				}
 				return {
 					label: subj.label,
 					theory,
-					practical: subj.practicalField ? practical : "-",
-					theoryMax: subj.practicalField ? 70 : 100,
-					practicalMax: subj.practicalField ? 30 : "-",
-					grade: gradeFor(total),
+					practical,
+					theoryMax: subj.maxTheory,
+					practicalMax: subj.maxPractical,
+					grade: gradeFor(theory, practical, subj.maxTheory),
 				};
 			});
 			setElectiveRows(rows);
