@@ -74,46 +74,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Elective subjects a student can pick on the Add Student form (checkboxes) --
-// only the ones the student actually selected are shown here / on the marksheet.
-// Per MPBSE's real marks scheme (verified against the school's own marks-scheme
-// sheet + mpbse.nic.in): History, Political Science, Economics and Sociology are
-// Theory(80)+Internal(20)=100; Geography, Indian Music, Dancing, Drawing and
-// Designing, Psychology, and Home Science/Anatomy/Physiology and Hygiene are
-// Theory(70)+Practical(30)=100. All of them have a practical/internal component
-// -- none are theory-only.
-const ELECTIVE_SUBJECTS = [
-  { label: "History", theoryField: "historyt", practicalField: "historyp", maxTheory: 80, maxPractical: 20 },
-  { label: "Political Science", theoryField: "polscit", practicalField: "polscip", maxTheory: 80, maxPractical: 20 },
-  { label: "Geography", theoryField: "geographyt", practicalField: "geographyp", maxTheory: 70, maxPractical: 30 },
-  { label: "Economics", theoryField: "economicst", practicalField: "economicsp", maxTheory: 80, maxPractical: 20 },
-  { label: "Indian Music", theoryField: "musict", practicalField: "musicp", maxTheory: 70, maxPractical: 30 },
-  { label: "Dancing", theoryField: "dancingt", practicalField: "dancingp", maxTheory: 70, maxPractical: 30 },
-  { label: "Drawing and Designing", theoryField: "drawingt", practicalField: "drawingp", maxTheory: 70, maxPractical: 30 },
-  { label: "Psychology", theoryField: "psychologyt", practicalField: "psychologyp", maxTheory: 70, maxPractical: 30 },
-  { label: "Home Science, Anatomy, Physiology and Hygiene", theoryField: "homesciencet", practicalField: "homesciencep", maxTheory: 70, maxPractical: 30 },
-  { label: "Sociology", theoryField: "sociologyt", practicalField: "sociologyp", maxTheory: 80, maxPractical: 20 },
-];
-
-// Agriculture is not one subject on MP Board -- it's a group of 3 separate
-// 100-mark papers, each Theory(70)+Practical(30): Elements of Science and
-// Mathematics, Crop Production and Horticulture, Elements of Animal Husbandry
-// and Poultry Farming. Picking "Agriculture" as an elective means all 3.
+// Keep in sync with marks/Agriculture.js -- same 3 fixed papers.
 const AGRICULTURE_PAPERS = [
   { label: "Agriculture: Elements of Science and Mathematics", theoryField: "agriscit", practicalField: "agriscip", maxTheory: 70, maxPractical: 30 },
   { label: "Agriculture: Crop Production and Horticulture", theoryField: "agricropt", practicalField: "agricropp", maxTheory: 70, maxPractical: 30 },
   { label: "Agriculture: Elements of Animal Husbandry and Poultry Farming", theoryField: "agrianimalt", practicalField: "agrianimalp", maxTheory: 70, maxPractical: 30 },
 ];
-
-function getSelectedElectives(optionalSubjectCsv) {
-  if (!optionalSubjectCsv) return [];
-  const chosen = optionalSubjectCsv.split(",").map((s) => s.trim().toLowerCase());
-  const result = ELECTIVE_SUBJECTS.filter((subj) => chosen.includes(subj.label.toLowerCase()));
-  if (chosen.includes("agriculture")) {
-    result.push(...AGRICULTURE_PAPERS);
-  }
-  return result;
-}
 
 function SectionHeader({ classes, icon, title }) {
   return (
@@ -125,18 +91,15 @@ function SectionHeader({ classes, icon, title }) {
 }
 
 
-function Arts(props) {
+function UAgriculture(props) {
 
     const classes = useStyles();
 
-  const selectedElectives = getSelectedElectives(props.optionalsubject);
-
+    const [getId, setId] = React.useState("")
   const [getHindiTheory, setHindiTheory] = React.useState("")
   const [getHindiPractical, setHindiPractical] = React.useState("")
   const [getEnglishTheory, setEnglishTheory] = React.useState("")
   const [getEnglishPractical, setEnglishPractical] = React.useState("")
-
-  // one { theory, practical } value pair per possible elective field, keyed by theoryField
   const [electiveMarks, setElectiveMarks] = React.useState({});
 
   const setElectiveTheory = (theoryField) => (value) => {
@@ -154,6 +117,49 @@ function Arts(props) {
   };
 
 
+  const readAllRecords =  () => {
+
+    let body={
+      id:props.getSubCategoryid2,
+      class:props.getSubCategoryid,
+      medium:props.getSubCategoryid1,
+      examtype:props.getSubCategoryid3,
+      stream:props.stream
+    }
+
+    axios.post(`${BaseUrl}/lockpostadd/getStudentArtsMarks`, body)
+      .then((res) => {
+        console.log("From Drop Down",res.data)
+
+        const record = res.data[0];
+        setId(record.id)
+        setHindiTheory(record.hindit)
+        setHindiPractical(record.hindip)
+        setEnglishTheory(record.englisht)
+        setEnglishPractical(record.englishp)
+
+        const marks = {};
+        AGRICULTURE_PAPERS.forEach((subj) => {
+          marks[subj.theoryField] = {
+            theory: record[subj.theoryField],
+            practical: record[subj.practicalField],
+          };
+        });
+        setElectiveMarks(marks);
+      })
+      .catch((err) => {
+        console.log("From Drop Down",err)
+      });
+
+  };
+
+
+  useEffect(function () {
+     readAllRecords();
+   }, []);
+
+
+
   const callalert = (data, status) => {
     if (status == "then") {
       if (data.status == 200) {
@@ -169,9 +175,9 @@ function Arts(props) {
     }
   };
 
-  const HandleSubmitArts = async (event) => {
+  const HandleSubmitAgriculture = async (event) => {
 
-      const allElectivesFilled = selectedElectives.every((subj) => {
+      const allPapersFilled = AGRICULTURE_PAPERS.every((subj) => {
         const marks = electiveMarks[subj.theoryField] || {};
         if (marks.theory === undefined || marks.theory === "") return false;
         if (marks.practical === undefined || marks.practical === "") return false;
@@ -183,15 +189,15 @@ function Arts(props) {
         getHindiPractical != "" &&
         getEnglishTheory != "" &&
         getEnglishPractical != "" &&
-        allElectivesFilled
+        allPapersFilled
       ) {
           let body={
             "studentid":props.getSubCategoryid2 ,
             "studentclass": props.getSubCategoryid ,
             "studentmedium": props.getSubCategoryid1 ,
             "examtype": props.getSubCategoryid3,
-            "session": props.session  ,
 
+            "id":getId,
             "hindit": getHindiTheory,
             "hindip": getHindiPractical,
             "englisht": getEnglishTheory,
@@ -224,14 +230,14 @@ function Arts(props) {
             "agrianimalp": 0,
           }
 
-          selectedElectives.forEach((subj) => {
+          AGRICULTURE_PAPERS.forEach((subj) => {
             const marks = electiveMarks[subj.theoryField] || {};
-            body[subj.theoryField] = marks.theory;
-            body[subj.practicalField] = marks.practical;
+            if (marks.theory !== undefined) body[subj.theoryField] = marks.theory;
+            if (marks.practical !== undefined) body[subj.practicalField] = marks.practical;
           });
 
         console.log(body)
-          axios.post(`${BaseUrl}/lockpostadd/AddArtsMarks`, body)
+          axios.post(`${BaseUrl}/lockpostadd/UpdateArtsMarks`, body)
             .then((res) => {
              callalert(res, "then");
             })
@@ -247,7 +253,7 @@ function Arts(props) {
   return (
     <div className={classes.page}>
     <Paper className={classes.sectionCard}>
-    <SectionHeader classes={classes} icon={<AssignmentIcon className={classes.sectionIcon} />} title={<>Enter Arts Marks</>} />
+    <SectionHeader classes={classes} icon={<AssignmentIcon className={classes.sectionIcon} />} title={<>Update {props.getSubCategoryid3} Agriculture Marks</>} />
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -306,15 +312,7 @@ function Arts(props) {
                 />
               </Grid>
 
-              {selectedElectives.length === 0 && (
-                <Grid item xs={12} sm={6}>
-                  <Typography style={{ color: "red" }}>
-                    This student has no optional subjects saved (from Add Student). Only Hindi/English can be entered.
-                  </Typography>
-                </Grid>
-              )}
-
-              {selectedElectives.map((subj) => (
+              {AGRICULTURE_PAPERS.map((subj) => (
                 <React.Fragment key={subj.theoryField}>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -354,7 +352,7 @@ function Arts(props) {
                 variant="contained"
                 component="span"
                 className={classes.button}
-                onClick={(event) => HandleSubmitArts(event)}
+                onClick={(event) => HandleSubmitAgriculture(event)}
               >
                 Submit
               </Button>
@@ -363,4 +361,4 @@ function Arts(props) {
     </div>
   )
   }
-export default Arts;
+export default UAgriculture;

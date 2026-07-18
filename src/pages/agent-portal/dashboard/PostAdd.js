@@ -20,7 +20,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Container from "@material-ui/core/Container";
-import Activities from "./Activities";
 import PostAddd from "./PostAdd";
 import Checkbox from "@material-ui/core/Checkbox";
 import Gmap from "./Map/index";
@@ -40,30 +39,49 @@ import { AutoComplete } from "@progress/kendo-react-dropdowns";
 import { Card } from "@material-ui/core";
 import BaseUrl from "../../../services/BaseUrl";
 import ShowStudents from "./showStudent/ShowStudents";
+import SchoolIcon from "@material-ui/icons/School";
+import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 const axios = require("axios");
 
 //import Map from './Map/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // background:'#fff5cc',
     padding: "20px",
     align: "center",
-    //marginLeft:'200px',
-    //marginRight:'200px',
     marginTop: "2px",
     width: "100%",
-    // border:"0.5px solid green",
-
-    // '& > *': {
-    //   margin: theme.spacing(1),
-    // },
+  },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: theme.spacing(3),
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing(2.5),
+    paddingBottom: theme.spacing(1.2),
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: theme.spacing(1.2),
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    // marginBottom:'-10px',
-    marginTop: "10px",
+    marginTop: "6px",
   },
   dense: {
     marginTop: 19,
@@ -82,16 +100,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "-10px",
   },
   button: {
-    // margin: theme.spacing(1),
     marginTop: "2%",
-    width: "100%",
-    backgroundColor: "blue",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "2vh",
+    minWidth: 220,
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    fontSize: "1rem",
+    background: "linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(21, 101, 192, 0.35)",
     "&:hover": {
-      color: "black",
-      fontStyle: "bold",
+      background: "linear-gradient(90deg, #0d47a1 0%, #1565c0 100%)",
     },
   },
 
@@ -118,10 +139,13 @@ const useStyles = makeStyles((theme) => ({
   resize: {
     height: "10%",
   },
-  ///////////////////////////////
-
-  input: {
-    display: "none",
+  photoPreview: {
+    width: 110,
+    height: 110,
+    borderRadius: 14,
+    objectFit: "cover",
+    border: "2px solid #e3ecfb",
+    backgroundColor: "#f4f6fa",
   },
   small: {
     width: theme.spacing(3),
@@ -133,6 +157,15 @@ const useStyles = makeStyles((theme) => ({
   },
   img: { width: 145, height: 130, padding: 5 },
 }));
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 function PostAdd(props) {
   const classes = useStyles();
@@ -371,8 +404,14 @@ function PostAdd(props) {
       value: "arts",
       label: "Arts",
     },
+    {
+      value: "agriculture",
+      label: "Agriculture",
+    },
   ]);
 
+  // Agriculture is its own MP Board stream (English, Hindi + 3 fixed papers),
+  // not an Arts elective, so it has no entry here / no optional-subject UI.
   const OPTIONAL_SUBJECTS_BY_STREAM = {
     pcm: ["Bio"],
     pcb: ["Math"],
@@ -388,7 +427,6 @@ function PostAdd(props) {
       "Psychology",
       "Home Science, Anatomy, Physiology and Hygiene",
       "Sociology",
-      "Agriculture",
     ],
   };
 
@@ -396,22 +434,10 @@ function PostAdd(props) {
 
   const [getOptionalSubjects, setOptionalSubjects] = React.useState([]);
 
-  // Agriculture is actually 3 separate 100-mark papers (Elements of Science and
-  // Mathematics, Crop Production and Horticulture, Elements of Animal Husbandry
-  // and Poultry Farming), so on MP board it's taken instead of -- not alongside
-  // -- the other individual electives; picking it fills the whole 3-elective
-  // quota by itself.
   const onOptionalSubjectToggle = (subject) => {
     setOptionalSubjects((prev) => {
       if (prev.includes(subject)) {
         return prev.filter((s) => s !== subject);
-      }
-      if (subject === "Agriculture") {
-        return ["Agriculture"];
-      }
-      if (prev.includes("Agriculture")) {
-        swal("Not Allowed", "Agriculture already fills all 3 optional subjects. Remove it first to pick individual electives.", "warning");
-        return prev;
       }
       if (prev.length >= MAX_OPTIONAL_SUBJECTS) {
         swal("Limit Reached", `You can select maximum ${MAX_OPTIONAL_SUBJECTS} optional subjects`, "warning");
@@ -795,121 +821,70 @@ console.log("class data  ==  ",getSubCategoryid)
 
 
   return (
-      <Container style={{ paddingLeft: 5, paddingRight: 5, maxWidth: "100%" }}>
-        <Paper className={classes.root}>
-         
-          
-          
+      <div className={classes.page}>
 
-        <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Session</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategorySession}
-                  name="Category"
-                  options={getSession}
-                  onChange={(e) => onSubCategorySessionChange(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-              </Grid>
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<SchoolIcon className={classes.sectionIcon} />} title="Academic Details" />
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Session</InputLabel>
+              <Select
+                value={getSubCategorySession}
+                name="Category"
+                options={getSession}
+                onChange={(e) => onSubCategorySessionChange(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
 
-
-
-
-
-
-
-          
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Class</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategory}
-                  name="Category"
-                  options={getSCList}
-                  onChange={(e) => onSubCategoryChange(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-              </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Class</InputLabel>
+              <Select
+                value={getSubCategory}
+                name="Category"
+                options={getSCList}
+                onChange={(e) => onSubCategoryChange(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
 
-
-          <div style={{ marginTop: 10 }} />
-          <div style={{ marginTop: 10 }} />
-
-
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Subject</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategory2}
-                  name="Category"
-                  options={getSCList2}
-                  onChange={(e) => onSubCategoryChange2(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                  isDisabled={getSubject ? true : null}
-                />
-              </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Subject / Stream</InputLabel>
+              <Select
+                value={getSubCategory2}
+                name="Category"
+                options={getSCList2}
+                onChange={(e) => onSubCategoryChange2(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+                isDisabled={getSubject ? true : null}
+              />
             </Grid>
-          </React.Fragment>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Medium</InputLabel>
+              <Select
+                value={getSubCategory1}
+                name="Category"
+                options={getSCList1}
+                onChange={(e) => onSubCategoryChange1(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
+            </Grid>
+          </Grid>
 
           {OPTIONAL_SUBJECTS_BY_STREAM[getSubCategoryid2] && (
             <React.Fragment>
-              <Typography
-                variant="button"
-                display="block"
-                gutterBottom
-                style={{ color: "blue" }}
-              >
-                <h2>Optional Subject (Select up to {MAX_OPTIONAL_SUBJECTS})</h2>
+              <Typography style={{ color: "#1565c0", fontWeight: 600, marginTop: 20, marginBottom: 4 }}>
+                Optional Subject (Select up to {MAX_OPTIONAL_SUBJECTS})
               </Typography>
               <FormGroup row>
                 {OPTIONAL_SUBJECTS_BY_STREAM[getSubCategoryid2].map((subject) => {
@@ -931,116 +906,52 @@ console.log("class data  ==  ",getSubCategoryid)
               </FormGroup>
             </React.Fragment>
           )}
+        </Paper>
 
-          <div style={{ marginTop: 10 }} />
-          <div style={{ marginTop: 10 }} />
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<PhotoCameraIcon className={classes.sectionIcon} />} title="Student Photo (Size 539x360)" />
 
-
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Medium</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategory1}
-                  name="Category"
-                  options={getSCList1}
-                  onChange={(e) => onSubCategoryChange1(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-              </Grid>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item>
+              <img src={getsingleimage.icon} alt={""} className={classes.photoPreview} />
             </Grid>
-          </React.Fragment>
-
-
-
-
-          <div style={{ marginTop: 10 }} />
-          
-   
-
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Add Student Picture  Size(539x360)</h2>
-          </Typography>
-
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} style={{ marginLeft: -10 }}>
-              <div className={classes.root}>
-                <input
-                  // accept="image/*"
-                  accept="image/x-png,image/jpeg,image/jpg"
-                  className={classes.input1}
-                  id="contained-button-file1"
-                  type="file"
-                  onChange={(event) =>
-                    setsingleimage({
-                      icon: URL.createObjectURL(event.target.files[0]),
-                      file: event.target.files[0],
-                    })
-                  }
-                />
-                <label htmlFor="contained-button-file1">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ backgroundColor: "blue" }}
-                    component="span"
-                  >
-                    Upload
-                  </Button>
-                </label>
-              </div>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                <GridListTile key={1} cols={1}>
-                  <img src={getsingleimage.icon} alt={""} />
-                </GridListTile>
-              </GridList>
+            <Grid item>
+              <input
+                accept="image/x-png,image/jpeg,image/jpg"
+                className={classes.input1}
+                id="contained-button-file1"
+                type="file"
+                onChange={(event) =>
+                  setsingleimage({
+                    icon: URL.createObjectURL(event.target.files[0]),
+                    file: event.target.files[0],
+                  })
+                }
+              />
+              <label htmlFor="contained-button-file1">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ backgroundColor: "blue" }}
+                  component="span"
+                >
+                  Upload
+                </Button>
+              </label>
             </Grid>
           </Grid>
+        </Paper>
 
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<AssignmentIndIcon className={classes.sectionIcon} />} title="Student Details" />
 
-
-
-
-          <div style={{ marginTop: 10 }} />
-      
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Detail's</h2>
-          </Typography>
-
-          <Grid container xs={12} spacing={3}>
-            <Grid item xs={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-dense"
                 placeholder="Student-Name"
                 label="Student-Name"
-                style={{ marginLeft: -10 }}
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
                 variant="outlined"
                 value={getTitle}
@@ -1049,15 +960,13 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="Father Name"
                 label="Father Name"
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getaddressm}
                 variant="outlined"
                 onChange={(event) => setaddressm(event.target.value)}
@@ -1065,31 +974,27 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="Mother Name"
                 label="Mother Name"
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getMothername}
                 variant="outlined"
                 onChange={(event) => setMothername(event.target.value)}
                 fullWidth
               />
             </Grid>
-            
-   
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="Roll No."
                 label="Roll No."
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getRollno}
                 variant="outlined"
                 onChange={(event) => setRollno(event.target.value)}
@@ -1097,18 +1002,13 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-          
-
-
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="Admission No."
                 label="Admission No."
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={geAdmissionno}
                 variant="outlined"
                 onChange={(event) => seAdmissionno(event.target.value)}
@@ -1116,59 +1016,43 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="DOB"
                 label="DOB"
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getDob}
                 variant="outlined"
                 onChange={(event) => setDob(event.target.value)}
                 fullWidth
               />
-            </Grid>    
+            </Grid>
 
-
-
-         
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
+            <Grid item xs={12} sm={6}>
+              <InputLabel shrink>Gender</InputLabel>
+              <Select
                 placeholder="Gender"
                 label="Gender"
                 variant="outlined"
-                  value={getGenderCategory}
-                  name="Category"
-                  options={getGenderList}
-                  onChange={(e) => onGenderCategoryChange(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                 // isDisabled={getSubject ? true : null}
-                />
-              </Grid>
+                value={getGenderCategory}
+                name="Category"
+                options={getGenderList}
+                onChange={(e) => onGenderCategoryChange(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
 
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="Adhar No."
                 label="Adhar No."
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getAdharno}
                 variant="outlined"
                 onChange={(event) => setAdharno(event.target.value)}
@@ -1176,15 +1060,13 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="SSSM-ID No."
                 label="SSSM-ID No."
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getSssmidno}
                 variant="outlined"
                 onChange={(event) => setSssmidno(event.target.value)}
@@ -1192,14 +1074,13 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="Enrollment"
                 label="Enrollment"
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getEnrollment}
                 variant="outlined"
                 onChange={(event) => setEnrollment(event.target.value)}
@@ -1207,14 +1088,13 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="outlined-basic"
                 placeholder="Mobile No"
                 label="Mobile No"
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getMobileno}
                 variant="outlined"
                 onChange={(event) => setMobileno(event.target.value)}
@@ -1222,49 +1102,31 @@ console.log("class data  ==  ",getSubCategoryid)
               />
             </Grid>
 
-          
             <Grid item xs={12}>
               <TextField
                 id="outlined-basic"
                 placeholder="Address"
                 label="Address"
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
-                style={{ marginLeft: -10 }}
                 value={getAddress}
                 variant="outlined"
                 onChange={(event) => setAddress(event.target.value)}
                 fullWidth
               />
             </Grid>
-
-
-
-
-
-
           </Grid>
-         
 
-
-
-        
-          <div style={{ marginTop: 10 }} />
-  
-        
-
-
-          <Grid item xs={12} align="center">
+          <Grid item xs={12} align="center" style={{ marginTop: 24 }}>
             <Button
               variant="contained"
               component="span"
               className={classes.button}
               onClick={(event) => handleSubmit(event)}
             >
-              Submit 
+              Submit
             </Button>
           </Grid>
-    
 
           {gif ? (
             <Grid item xs={12} align="center">
@@ -1282,7 +1144,7 @@ console.log("class data  ==  ",getSubCategoryid)
             <Typography>{/* {getMessage} */}</Typography>
           </Grid>
         </Paper>
-      </Container>
+      </div>
   );
 }
 export default PostAdd;

@@ -13,47 +13,16 @@ import { setPrintDocumentTitle } from "./printDocumentTitle";
 import PrintBackButton from "./PrintBackButton";
 const axios = require("axios");
 
-// Same elective list/field-mapping as marks/Arts.js and marks/UArts.js. Per
-// MPBSE's real marks scheme (verified against the school's own marks-scheme
-// sheet + mpbse.nic.in): History, Political Science, Economics and Sociology
-// are Theory(80)+Internal(20)=100; Geography, Indian Music, Dancing, Drawing
-// and Designing, Psychology, and Home Science/Anatomy/Physiology and Hygiene
-// are Theory(70)+Practical(30)=100. Only the subjects a student actually
-// picked on the Add Student form are printed here (MP board Arts students
-// take exactly Hindi + English + 3 electives).
-const ELECTIVE_SUBJECTS = [
-	{ label: "History", theoryField: "historyt", practicalField: "historyp", maxTheory: 80, maxPractical: 20 },
-	{ label: "Political Science", theoryField: "polscit", practicalField: "polscip", maxTheory: 80, maxPractical: 20 },
-	{ label: "Geography", theoryField: "geographyt", practicalField: "geographyp", maxTheory: 70, maxPractical: 30 },
-	{ label: "Economics", theoryField: "economicst", practicalField: "economicsp", maxTheory: 80, maxPractical: 20 },
-	{ label: "Indian Music", theoryField: "musict", practicalField: "musicp", maxTheory: 70, maxPractical: 30 },
-	{ label: "Dancing", theoryField: "dancingt", practicalField: "dancingp", maxTheory: 70, maxPractical: 30 },
-	{ label: "Drawing and Designing", theoryField: "drawingt", practicalField: "drawingp", maxTheory: 70, maxPractical: 30 },
-	{ label: "Psychology", theoryField: "psychologyt", practicalField: "psychologyp", maxTheory: 70, maxPractical: 30 },
-	{ label: "Home Science, Anatomy, Physiology and Hygiene", theoryField: "homesciencet", practicalField: "homesciencep", maxTheory: 70, maxPractical: 30 },
-	{ label: "Sociology", theoryField: "sociologyt", practicalField: "sociologyp", maxTheory: 80, maxPractical: 20 },
-];
-
-// Agriculture is not one subject on MP Board -- it's a group of 3 separate
-// 100-mark papers, each Theory(70)+Practical(30). Picking "Agriculture" as an
-// elective (on Add Student) means all 3; PostAdd.js treats Agriculture as
-// mutually exclusive with any other elective so this never exceeds the 3
-// elective-row slots this marksheet has room for.
+// Agriculture is its own MP Board stream (not an Arts elective): English,
+// Hindi, plus 3 fixed Theory(70)+Practical(30) papers -- Elements of Science
+// and Mathematics, Crop Production and Horticulture, Elements of Animal
+// Husbandry and Poultry Farming. All 5 subjects are mandatory and always
+// shown (unlike Arts, there is no optional-subject selection here).
 const AGRICULTURE_PAPERS = [
 	{ label: "Agri-Science", theoryField: "agriscit", practicalField: "agriscip", maxTheory: 70, maxPractical: 30 },
 	{ label: "Agri-Crop", theoryField: "agricropt", practicalField: "agricropp", maxTheory: 70, maxPractical: 30 },
 	{ label: "Agri-Animal", theoryField: "agrianimalt", practicalField: "agrianimalp", maxTheory: 70, maxPractical: 30 },
 ];
-
-function getSelectedElectives(optionalSubjectCsv) {
-	if (!optionalSubjectCsv) return [];
-	const chosen = optionalSubjectCsv.split(",").map((s) => s.trim().toLowerCase());
-	const result = ELECTIVE_SUBJECTS.filter((subj) => chosen.includes(subj.label.toLowerCase()));
-	if (chosen.includes("agriculture")) {
-		result.push(...AGRICULTURE_PAPERS);
-	}
-	return result;
-}
 
 // MPBSE rule: a subject is only a pass if BOTH the theory mark meets its own
 // minimum (26/80 or 23/70) AND the practical mark meets its own minimum
@@ -70,7 +39,7 @@ function gradeFor(theory, practical, theoryMax) {
 }
 
 
-function Arts_Marksheet(props) {
+function Agriculture_Marksheet(props) {
 
 
 	const [getHindi, setHindi] = React.useState("")
@@ -81,8 +50,7 @@ function Arts_Marksheet(props) {
 	const [getArtsEnglishTheory, setArtsEnglishTheory] = React.useState("")
 	const [getArtsEnglishPractical, setArtsEnglishPractical] = React.useState("")
 
-	// up to 3 elective "slots" printed in fixed row positions, matching the
-	// other streams' 3-elective layout (Commerce: Business/Accountancy/Economics)
+	// always exactly the 3 fixed Agriculture papers, in fixed row positions
 	const [electiveRows, setElectiveRows] = React.useState([]);
 
 
@@ -144,21 +112,15 @@ function Arts_Marksheet(props) {
 			setArtsEnglishTheory(res.englisht)
 			setArtsEnglishPractical(res.englishp)
 
-			// Only the student's own selected electives (from optionalsubject) are
-			// printed -- up to the first 3 (2 languages + 3 electives = 5 subjects
-			// total, matching MP board's Arts scheme of studies). Agriculture
-			// expands to 3 rows but is mutually exclusive with any other elective
-			// (enforced on Add Student), so this never exceeds 3 rows.
-			const selected = getSelectedElectives(res.optionalsubject).slice(0, 3);
+			// the 3 Agriculture papers are always all shown (2 languages + 3
+			// papers = 5 subjects total, matching MP board's Agriculture scheme)
 			let electiveTotal = 0;
-			const rows = selected.map((subj) => {
+			const rows = AGRICULTURE_PAPERS.map((subj) => {
 				const theory = res[subj.theoryField] || 0;
 				const practical = res[subj.practicalField] || 0;
 				const total = theory + practical;
 				electiveTotal += total;
-				const theoryMin = subj.maxTheory === 80 ? 26 : 23;
-				const practicalMin = subj.maxTheory === 80 ? 7 : 10;
-				if (theory < theoryMin || practical < practicalMin) {
+				if (theory < 23 || practical < 10) {
 					countSupplementry++;
 					strSupplementry = strSupplementry + " " + subj.label + " ,"
 				}
@@ -192,7 +154,7 @@ function Arts_Marksheet(props) {
 			setSession(res.session + "-" + parseInt(res.session + 1))
 
 			let totalmarks = res.hindit + res.hindip + res.englisht + res.englishp + electiveTotal
-			let maxTotal = 100 * (2 + selected.length)
+			let maxTotal = 100 * (2 + AGRICULTURE_PAPERS.length)
 			let percentage = parseInt((totalmarks / maxTotal) * 100)
 
 			if (percentage >= 33 && percentage <= 49) {
@@ -280,7 +242,7 @@ function Arts_Marksheet(props) {
 	let date_final = day + '-' + month + '-' + year;
 
 	// fixed row y-positions, matching the other stream marksheets exactly --
-	// row 1/2 = English/Hindi (always present), rows 3-5 = up to 3 electives
+	// row 1/2 = English/Hindi (always present), rows 3-5 = the 3 Agri papers
 	const rowTops = ["33.4654em", "34.9635em", "36.4352em", "37.8952em", "39.3652em"];
 
 
@@ -596,7 +558,7 @@ function Arts_Marksheet(props) {
 							</span>
 						</div>
 
-						{/* Assignment(Practical) Max column -- 20 for languages, 30/blank for electives per subject */}
+						{/* Assignment(Practical) Max column -- 20 for languages, 30 for the 3 Agri papers */}
 						<div className="stl_01" style={{ left: "13.9758em", top: rowTops[0] }}>
 							<span className="stl_32 stl_11 stl_40">20 &nbsp;</span>
 						</div>
@@ -611,7 +573,7 @@ function Arts_Marksheet(props) {
 
 						<div className="stl_01" style={{ left: "13.6758em", top: "42.2952em" }}>
 							<span className="stl_32 stl_11 stl_40">
-								{20 * 2 + electiveRows.reduce((sum, r) => sum + (r.practicalMax === "-" ? 0 : r.practicalMax), 0)} &nbsp;
+								{20 * 2 + electiveRows.reduce((sum, r) => sum + r.practicalMax, 0)} &nbsp;
 							</span>
 						</div>
 
@@ -636,7 +598,7 @@ function Arts_Marksheet(props) {
 
 						<div className="stl_01" style={{ left: "20.682em", top: "42.2952em" }}>
 							<span className="stl_32 stl_11 stl_40">
-								{getArtsEnglishPractical + getArtsHindiPractical + electiveRows.reduce((sum, r) => sum + (r.practical === "-" ? 0 : r.practical), 0)} &nbsp;
+								{getArtsEnglishPractical + getArtsHindiPractical + electiveRows.reduce((sum, r) => sum + r.practical, 0)} &nbsp;
 							</span>
 						</div>
 
@@ -653,7 +615,7 @@ function Arts_Marksheet(props) {
 							</span>
 						</div>
 
-						{/* Theory Max column -- 80 for languages, 70/100 for electives per subject */}
+						{/* Theory Max column -- 80 for languages, 70 for the 3 Agri papers */}
 						<div className="stl_01" style={{ left: "27.1758em", top: rowTops[0] }}>
 							<span className="stl_32 stl_11 stl_40">80 &nbsp;</span>
 						</div>
@@ -704,7 +666,7 @@ function Arts_Marksheet(props) {
 						</div>
 
 
-						{/* Subject name labels -- English/Hindi fixed, electives dynamic */}
+						{/* Subject name labels -- English/Hindi fixed, 3 Agri papers fixed */}
 						<div className="stl_01" style={{ left: "5.882em", top: "33.4654em" }}>
 							<span className="stl_52 stl_11 stl_49">
 								ENGLISH &nbsp;
@@ -850,4 +812,4 @@ function Arts_Marksheet(props) {
 
 
 
-export default Arts_Marksheet;
+export default Agriculture_Marksheet;

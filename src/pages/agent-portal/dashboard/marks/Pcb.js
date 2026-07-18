@@ -8,9 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import { getData, postData } from "../../../../services/FetchServices";
 import TextField from "@material-ui/core/TextField";
 import BaseUrl from "../../../../services/BaseUrl";
-import Activities from "../Activities";
 import swal from "sweetalert";
 import ShowStudents from "../showStudent/ShowStudents";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 const axios = require("axios");
 
 
@@ -30,10 +30,7 @@ const useStyles = makeStyles((theme) => ({
     // },
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    // marginBottom:'-10px',
-    marginTop: "10px",
+    marginTop: "6px",
   },
   dense: {
     marginTop: 19,
@@ -52,16 +49,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "-10px",
   },
   button: {
-    // margin: theme.spacing(1),
     marginTop: "2%",
-    width: "100%",
-    backgroundColor: "blue",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "2vh",
+    minWidth: 220,
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    fontSize: "1rem",
+    background: "linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(21, 101, 192, 0.35)",
     "&:hover": {
-      color: "black",
-      fontStyle: "bold",
+      background: "linear-gradient(90deg, #0d47a1 0%, #1565c0 100%)",
     },
   },
 
@@ -102,9 +102,42 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
   img: { width: 145, height: 130, padding: 5 },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: 24,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
+  },
 }));
 
-
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 function Pcb(props) {
     const classes = useStyles();
@@ -207,24 +240,17 @@ const HandleSubmitPcb = async (event) => {
 
 
   return (
-    <div>
-    <Typography
-              variant="button"
-              display="block"
-              gutterBottom
-              style={{ color: "blue" }}
-            >
-              <h2>Enter PCB Marks</h2>
-            </Typography>
+    <div className={classes.page}>
+    <Paper className={classes.sectionCard}>
+    <SectionHeader classes={classes} icon={<AssignmentIcon className={classes.sectionIcon} />} title={<>Enter PCB Marks</>} />
   
-            <Grid container xs={12} spacing={3}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-dense"
                   placeholder="Physics-Theory"
                   label="Physics-Theory"
-                  style={{ marginLeft: -10 }}
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
                   variant="outlined"
                   value={getPcbPhysicsTheory}
@@ -234,14 +260,13 @@ const HandleSubmitPcb = async (event) => {
               </Grid>
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Physics-Practical"
                   label="Physics-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbPhysicsPractical}
                   variant="outlined"
                   onChange={(event) => setPcbPhysicsPractical(event.target.value)}
@@ -249,14 +274,13 @@ const HandleSubmitPcb = async (event) => {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Chemistry-Theory"
                   label="Chemistry-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbChemistryTheory}
                   variant="outlined"
                   onChange={(event) => setPcbChemistryTheory(event.target.value)}
@@ -265,14 +289,13 @@ const HandleSubmitPcb = async (event) => {
               </Grid>
       
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Chemistry-Practical"
                   label="Chemistry-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbChemistryPractical}
                   variant="outlined"
                   onChange={(event) => setPcbChemistryPractical(event.target.value)}
@@ -280,14 +303,13 @@ const HandleSubmitPcb = async (event) => {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Biology-Theory"
                   label="Biology-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbBiologyTheory}
                   variant="outlined"
                   onChange={(event) => setPcbBiologyTheory(event.target.value)}
@@ -296,14 +318,13 @@ const HandleSubmitPcb = async (event) => {
               </Grid>
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Biology-Practical"
                   label="Biology-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbBiologyPractical}
                   variant="outlined"
                   onChange={(event) => setPcbBiologyPractical(event.target.value)}
@@ -312,14 +333,13 @@ const HandleSubmitPcb = async (event) => {
               </Grid>    
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Hindi-Theory"
                   label="Hindi-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbHindiTheory}
                   variant="outlined"
                   onChange={(event) => setPcbHindiTheory(event.target.value)}
@@ -328,14 +348,13 @@ const HandleSubmitPcb = async (event) => {
               </Grid>
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Hindi-Practical"
                   label="Hindi-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbHindiPractical}
                   variant="outlined"
                   onChange={(event) => setPcbHindiPractical(event.target.value)}
@@ -343,14 +362,13 @@ const HandleSubmitPcb = async (event) => {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Theory"
                   label="English-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbEnglishTheory}
                   variant="outlined"
                   onChange={(event) => setPcbEnglishTheory(event.target.value)}
@@ -358,14 +376,13 @@ const HandleSubmitPcb = async (event) => {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Practical"
                   label="English-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcbEnglishPractical}
                   variant="outlined"
                   onChange={(event) => setPcbEnglishPractical(event.target.value)}
@@ -375,14 +392,13 @@ const HandleSubmitPcb = async (event) => {
               </Grid>
 
               {hasMath && (
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     id="outlined-basic"
                     placeholder="Maths-Theory (max 80)"
                     label="Maths-Theory (max 80)"
-                    className={clsx(classes.textField, classes.dense)}
+                    className={classes.textField}
                     margin="dense"
-                    style={{ marginLeft: -10 }}
                     value={getPcbMathsTheory}
                     variant="outlined"
                     onChange={onTheoryChange(setPcbMathsTheory)}
@@ -392,14 +408,13 @@ const HandleSubmitPcb = async (event) => {
               )}
 
               {hasMath && (
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     id="outlined-basic"
                     placeholder="Maths-Practical (max 20)"
                     label="Maths-Practical (max 20)"
-                    className={clsx(classes.textField, classes.dense)}
+                    className={classes.textField}
                     margin="dense"
-                    style={{ marginLeft: -10 }}
                     value={getPcbMathsPractical}
                     variant="outlined"
                     onChange={onPracticalChange(setPcbMathsPractical)}
@@ -411,7 +426,7 @@ const HandleSubmitPcb = async (event) => {
             </Grid>
             <div style={{ marginTop: 10 }} />
     
-            <Grid item xs={12} align="center">
+            <Grid item xs={12} align="center" style={{ marginTop: 24 }}>
               <Button
                 variant="contained"
                 component="span"
@@ -422,7 +437,8 @@ const HandleSubmitPcb = async (event) => {
               </Button>
             </Grid>
 
-            </div>
+            </Paper>
+    </div>
   )
   }
 export default Pcb;

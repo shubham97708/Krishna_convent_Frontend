@@ -1,0 +1,261 @@
+.cc-outer {
+  width: 297mm;
+  height: 210mm;
+  margin: 10mm auto;
+  position: relative;
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+/* Colorful corner blocks */
+.cc-corner {
+  position: absolute;
+  width: 130mm;
+  height: 130mm;
+}
+
+.cc-corner-tl {
+  top: -55mm;
+  left: -55mm;
+  background: #17c3b2;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.cc-corner-tr {
+  top: -55mm;
+  right: -55mm;
+  background: #f2994a;
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
+}
+
+.cc-corner-bl {
+  bottom: -55mm;
+  left: -55mm;
+  background: #ff3d68;
+  clip-path: polygon(0 100%, 100% 100%, 0 0);
+}
+
+.cc-corner-br {
+  bottom: -55mm;
+  right: -55mm;
+  background: #7b5cf5;
+  clip-path: polygon(100% 100%, 0 100%, 100% 0);
+}
+
+.cc-accent-bl {
+  position: absolute;
+  bottom: -8mm;
+  left: 28mm;
+  width: 70mm;
+  height: 24mm;
+  background: #6fcf5a;
+  transform: skewX(-24deg);
+}
+
+.cc-accent-br {
+  position: absolute;
+  bottom: -8mm;
+  right: 28mm;
+  width: 70mm;
+  height: 24mm;
+  background: #6fcf5a;
+  transform: skewX(24deg);
+}
+
+.cc-card {
+  position: absolute;
+  top: 14mm;
+  left: 14mm;
+  right: 14mm;
+  bottom: 14mm;
+  background: #ffffff;
+  border: 2px solid #14213d;
+  box-sizing: border-box;
+  padding: 6mm 16mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Georgia", "Times New Roman", Times, serif;
+  color: #1a1a1a;
+}
+
+.cc-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 130mm;
+  height: 130mm;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cc-card > *:not(.cc-watermark) {
+  position: relative;
+  z-index: 1;
+}
+
+.cc-emblem {
+  width: 24mm;
+  height: 24mm;
+  border-radius: 50%;
+  object-fit: contain;
+  margin-top: 1mm;
+}
+
+.cc-meta-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: #37474f;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.cc-header-text {
+  text-align: center;
+  margin-top: 1mm;
+}
+
+.cc-school-name {
+  font-size: 19px;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: 0.4px;
+}
+
+.cc-school-sub {
+  font-size: 11px;
+  margin: 2px 0 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.cc-school-address {
+  font-size: 11px;
+  margin: 1px 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.cc-ribbon-wrap {
+  display: flex;
+  align-items: stretch;
+  width: 78%;
+  margin: 3mm 0 4mm;
+}
+
+.cc-ribbon-tail {
+  width: 8mm;
+  background: #6b3fd4;
+}
+
+.cc-ribbon-tail-left {
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+}
+
+.cc-ribbon-tail-right {
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+}
+
+.cc-ribbon-main {
+  flex: 1;
+  background: #8b5cf6;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 7px 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.cc-body {
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: justify;
+  max-width: 220mm;
+}
+
+.cc-fill {
+  font-weight: bold;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+
+.cc-footer {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 3mm;
+}
+
+.cc-footer-block {
+  min-width: 55mm;
+}
+
+.cc-footer-date {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.cc-footer-right {
+  text-align: right;
+}
+
+.cc-footer-line {
+  border-top: 1px solid #1a1a1a;
+  margin-top: 5mm;
+  padding-top: 3px;
+  width: 45mm;
+}
+
+.cc-footer-right .cc-footer-line {
+  margin-left: auto;
+}
+
+.cc-footer-caption {
+  font-size: 11px;
+  color: #1e63c9;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media print {
+  /* Everything else that print needs (forcing color-adjust, resetting
+     leaked global body/html styles, requesting landscape @page, hiding
+     stray overlays) is injected as a scoped <style> tag by
+     CharacterCertificate.js only while this page is mounted -- see
+     printCertificateStyles.js. @page and bare html/body rules can't be
+     scoped by a CSS selector, so keeping them in this static, globally
+     bundled stylesheet was leaking landscape orientation into every other
+     print template (TC, Marksheet) in the app. */
+  .cc-outer {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    box-shadow: none;
+    overflow: hidden;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+    break-after: avoid;
+    break-inside: avoid;
+  }
+}

@@ -8,9 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import { getData, postData } from "../../../../services/FetchServices";
 import TextField from "@material-ui/core/TextField";
 import BaseUrl from "../../../../services/BaseUrl";
-import Activities from "../Activities";
 import swal from "sweetalert";
 import ShowStudents from "../showStudent/ShowStudents";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 
 
 const axios = require("axios");
@@ -25,24 +25,52 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginTop: "10px",
+    marginTop: "6px",
   },
   dense: {
     marginTop: 19,
   },
   button: {
     marginTop: "2%",
-    width: "100%",
-    backgroundColor: "blue",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "2vh",
+    minWidth: 220,
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    fontSize: "1rem",
+    background: "linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(21, 101, 192, 0.35)",
     "&:hover": {
-      color: "black",
-      fontStyle: "bold",
+      background: "linear-gradient(90deg, #0d47a1 0%, #1565c0 100%)",
     },
+  },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: 24,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
   },
 }));
 
@@ -77,6 +105,15 @@ function getSelectedElectives(optionalSubjectCsv) {
     result.push(...AGRICULTURE_PAPERS);
   }
   return result;
+}
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
 }
 
 
@@ -249,24 +286,17 @@ function UArts(props) {
 
 
   return (
-    <div>
-    <Typography
-              variant="button"
-              display="block"
-              gutterBottom
-              style={{ color: "blue" }}
-            >
-              <h2>Update {props.getSubCategoryid3} Arts Marks</h2>
-            </Typography>
+    <div className={classes.page}>
+    <Paper className={classes.sectionCard}>
+    <SectionHeader classes={classes} icon={<AssignmentIcon className={classes.sectionIcon} />} title={<>Update {props.getSubCategoryid3} Arts Marks</>} />
 
-            <Grid container xs={12} spacing={3}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-dense"
                   placeholder="Hindi-Theory"
                   label="Hindi-Theory"
-                  style={{ marginLeft: -10 }}
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
                   variant="outlined"
                   value={getHindiTheory}
@@ -275,14 +305,13 @@ function UArts(props) {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Hindi-Practical"
                   label="Hindi-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getHindiPractical}
                   variant="outlined"
                   onChange={(event) => setHindiPractical(event.target.value)}
@@ -290,14 +319,13 @@ function UArts(props) {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Theory"
                   label="English-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getEnglishTheory}
                   variant="outlined"
                   onChange={(event) => setEnglishTheory(event.target.value)}
@@ -305,14 +333,13 @@ function UArts(props) {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Practical"
                   label="English-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getEnglishPractical}
                   variant="outlined"
                   onChange={(event) => setEnglishPractical(event.target.value)}
@@ -322,14 +349,13 @@ function UArts(props) {
 
               {selectedElectives.map((subj) => (
                 <React.Fragment key={subj.theoryField}>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       id="outlined-basic"
                       placeholder={`${subj.label}-Theory (max ${subj.maxTheory})`}
                       label={`${subj.label}-Theory (max ${subj.maxTheory})`}
-                      className={clsx(classes.textField, classes.dense)}
+                      className={classes.textField}
                       margin="dense"
-                      style={{ marginLeft: -10 }}
                       value={(electiveMarks[subj.theoryField] || {}).theory || ""}
                       variant="outlined"
                       onChange={onBoundedChange(setElectiveTheory(subj.theoryField), subj.maxTheory)}
@@ -337,14 +363,13 @@ function UArts(props) {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       id="outlined-basic"
                       placeholder={`${subj.label}-Practical (max ${subj.maxPractical})`}
                       label={`${subj.label}-Practical (max ${subj.maxPractical})`}
-                      className={clsx(classes.textField, classes.dense)}
+                      className={classes.textField}
                       margin="dense"
-                      style={{ marginLeft: -10 }}
                       value={(electiveMarks[subj.theoryField] || {}).practical || ""}
                       variant="outlined"
                       onChange={onBoundedChange(setElectivePractical(subj.theoryField), subj.maxPractical)}
@@ -357,7 +382,7 @@ function UArts(props) {
             </Grid>
             <div style={{ marginTop: 10 }} />
 
-            <Grid item xs={12} align="center">
+            <Grid item xs={12} align="center" style={{ marginTop: 24 }}>
               <Button
                 variant="contained"
                 component="span"
@@ -367,7 +392,8 @@ function UArts(props) {
                 Submit
               </Button>
             </Grid>
-            </div>
+            </Paper>
+    </div>
   )
   }
 export default UArts;

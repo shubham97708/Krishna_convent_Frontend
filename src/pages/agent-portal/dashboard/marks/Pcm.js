@@ -8,9 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import { getData, postData } from "../../../../services/FetchServices";
 import TextField from "@material-ui/core/TextField";
 import BaseUrl from "../../../../services/BaseUrl";
-import Activities from "../Activities";
 import swal from "sweetalert";
 import ShowStudents from "../showStudent/ShowStudents";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 
 
 const axios = require("axios");
@@ -33,10 +33,7 @@ const useStyles = makeStyles((theme) => ({
     // },
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    // marginBottom:'-10px',
-    marginTop: "10px",
+    marginTop: "6px",
   },
   dense: {
     marginTop: 19,
@@ -55,16 +52,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "-10px",
   },
   button: {
-    // margin: theme.spacing(1),
     marginTop: "2%",
-    width: "100%",
-    backgroundColor: "blue",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "2vh",
+    minWidth: 220,
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    fontSize: "1rem",
+    background: "linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(21, 101, 192, 0.35)",
     "&:hover": {
-      color: "black",
-      fontStyle: "bold",
+      background: "linear-gradient(90deg, #0d47a1 0%, #1565c0 100%)",
     },
   },
 
@@ -105,8 +105,43 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
   img: { width: 145, height: 130, padding: 5 },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: 24,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
+  },
 }));
 
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 
 function Pcm(props) {
@@ -210,23 +245,16 @@ function Pcm(props) {
 
 
   return (
-    <div>
-    <Typography
-              variant="button"
-              display="block"
-              gutterBottom
-              style={{ color: "blue" }}
-            >
-              <h2>Enter PCM Of {props.getSubCategoryid3 } Marks</h2>
-            </Typography>
-            <Grid container xs={12} spacing={3}>
-              <Grid item xs={12}>
+    <div className={classes.page}>
+    <Paper className={classes.sectionCard}>
+    <SectionHeader classes={classes} icon={<AssignmentIcon className={classes.sectionIcon} />} title={<>Enter PCM Of {props.getSubCategoryid3 } Marks</>} />
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-dense"
                   placeholder="Physics-Theory"
                   label="Physics-Theory"
-                  style={{ marginLeft: -10 }}
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
                   variant="outlined"
                   value={getPcmPhysicsTheory}
@@ -234,157 +262,141 @@ function Pcm(props) {
                   fullWidth
                 />
               </Grid>
-  
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Physics-Practical"
                   label="Physics-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmPhysicsPractical}
                   variant="outlined"
                   onChange={(event) => setPcmPhysicsPractical(event.target.value)}
                   fullWidth
                 />
               </Grid>
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Chemistry-Theory"
                   label="Chemistry-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmChemistryTheory}
                   variant="outlined"
                   onChange={(event) => setPcmChemistryTheory(event.target.value)}
                   fullWidth
                 />
               </Grid>
-      
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Chemistry-Practical"
                   label="Chemistry-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmChemistryPractical}
                   variant="outlined"
                   onChange={(event) => setPcmChemistryPractical(event.target.value)}
                   fullWidth
                 />
               </Grid>
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Maths-Theory"
                   label="Maths-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmMathsTheory}
                   variant="outlined"
                   onChange={(event) => setPcmMathsTheory(event.target.value)}
                   fullWidth
                 />
               </Grid>
-  
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Maths-Practical"
                   label="Maths-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmMathsPractical}
                   variant="outlined"
                   onChange={(event) => setPcmMathsPractical(event.target.value)}
                   fullWidth
                 />
-              </Grid>    
-  
-  
-              <Grid item xs={12}>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Hindi-Theory"
                   label="Hindi-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmHindiTheory}
                   variant="outlined"
                   onChange={(event) => setPcmHindiTheory(event.target.value)}
                   fullWidth
                 />
               </Grid>
-  
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Hindi-Practical"
                   label="Hindi-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmHindiPractical}
                   variant="outlined"
                   onChange={(event) => setPcmHindiPractical(event.target.value)}
                   fullWidth
                 />
               </Grid>
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Theory"
                   label="English-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmEnglishTheory}
                   variant="outlined"
                   onChange={(event) => setPcmEnglishTheory(event.target.value)}
                   fullWidth
                 />
               </Grid>
-  
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Practical"
                   label="English-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getPcmEnglishPractical}
                   variant="outlined"
                   onChange={(event) => setPcmEnglishPractical(event.target.value)}
-
                   fullWidth
                 />
               </Grid>
 
               {hasBio && (
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     id="outlined-basic"
                     placeholder="Bio-Theory (max 70)"
                     label="Bio-Theory (max 70)"
-                    className={clsx(classes.textField, classes.dense)}
+                    className={classes.textField}
                     margin="dense"
-                    style={{ marginLeft: -10 }}
                     value={getPcmBioTheory}
                     variant="outlined"
                     onChange={onTheoryChange(setPcmBioTheory)}
@@ -394,14 +406,13 @@ function Pcm(props) {
               )}
 
               {hasBio && (
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     id="outlined-basic"
                     placeholder="Bio-Practical (max 30)"
                     label="Bio-Practical (max 30)"
-                    className={clsx(classes.textField, classes.dense)}
+                    className={classes.textField}
                     margin="dense"
-                    style={{ marginLeft: -10 }}
                     value={getPcmBioPractical}
                     variant="outlined"
                     onChange={onPracticalChange(setPcmBioPractical)}
@@ -411,9 +422,8 @@ function Pcm(props) {
               )}
 
             </Grid>
-            <div style={{ marginTop: 10 }} />
-    
-            <Grid item xs={12} align="center">
+
+            <Grid item xs={12} align="center" style={{ marginTop: 24 }}>
               <Button
                 variant="contained"
                 component="span"
@@ -423,7 +433,8 @@ function Pcm(props) {
                 Submit PCM
               </Button>
             </Grid>
-            </div>
+            </Paper>
+    </div>
   )
   }
 export default Pcm;

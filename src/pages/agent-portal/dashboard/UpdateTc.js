@@ -20,7 +20,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Container from "@material-ui/core/Container";
-import Activities from "./Activities";
 import PostAddd from "./PostAdd";
 import Checkbox from "@material-ui/core/Checkbox";
 import Gmap from "./Map/index";

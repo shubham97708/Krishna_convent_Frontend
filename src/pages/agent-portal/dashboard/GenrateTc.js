@@ -20,7 +20,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Container from "@material-ui/core/Container";
-import Activities from "./Activities";
 import PostAddd from "./PostAdd";
 import Checkbox from "@material-ui/core/Checkbox";
 import Gmap from "./Map/index";
@@ -43,6 +42,9 @@ import NumberFormat from "react-number-format";
 import { Progress } from "react-sweet-progress";
 import "react-sweet-progress/lib/style.css";
 import ShowStudents from "./showStudent/ShowStudents";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import SchoolIcon from "@material-ui/icons/School";
+import DescriptionIcon from "@material-ui/icons/Description";
 import { AutoComplete } from "@progress/kendo-react-dropdowns";
 import { Card } from "@material-ui/core";
 import BaseUrl from "../../../services/BaseUrl";
@@ -66,10 +68,7 @@ const useStyles = makeStyles((theme) => ({
     // },
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    // marginBottom:'-10px',
-    marginTop: "10px",
+    marginTop: "6px",
   },
   dense: {
     marginTop: 19,
@@ -88,16 +87,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "-10px",
   },
   button: {
-    // margin: theme.spacing(1),
     marginTop: "2%",
-    width: "100%",
-    backgroundColor: "blue",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "2vh",
+    minWidth: 220,
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    fontSize: "1rem",
+    background: "linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(21, 101, 192, 0.35)",
     "&:hover": {
-      color: "black",
-      fontStyle: "bold",
+      background: "linear-gradient(90deg, #0d47a1 0%, #1565c0 100%)",
     },
   },
 
@@ -138,7 +140,43 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
   img: { width: 145, height: 130, padding: 5 },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 24,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
+  },
 }));
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 function GenrateTc(props) {
   const classes = useStyles();
@@ -831,24 +869,14 @@ function GenrateTc(props) {
   const percentage = 66;
 
   return (
-    <Container style={{ paddingLeft: 5, paddingRight: 5, maxWidth: "100%" }}>
-      <Paper className={classes.root}>
-        <Typography
-          variant="button"
-          display="block"
-          gutterBottom
-          style={{ color: "blue" }}
-        >
-          <h2>Select Session</h2>
-        </Typography>
-        <React.Fragment>
-          <Grid
-            container
-            xs={24}
-            spacing={1}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
-            <Grid item xs={12}>
+      <div className={classes.page}>
+
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<SchoolIcon className={classes.sectionIcon} />} title="Select Student" />
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Session</InputLabel>
               <Select
                 value={getSubCategorySession}
                 name="Category"
@@ -859,25 +887,9 @@ function GenrateTc(props) {
                 isClearable={true}
               />
             </Grid>
-          </Grid>
-        </React.Fragment>
 
-        <Typography
-          variant="button"
-          display="block"
-          gutterBottom
-          style={{ color: "blue" }}
-        >
-          <h2>Select Class</h2>
-        </Typography>
-        <React.Fragment>
-          <Grid
-            container
-            xs={24}
-            spacing={1}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Class</InputLabel>
               <Select
                 value={getSubCategory}
                 name="Category"
@@ -888,27 +900,9 @@ function GenrateTc(props) {
                 isClearable={true}
               />
             </Grid>
-          </Grid>
-        </React.Fragment>
 
-        <div style={{ marginTop: 30 }} />
-
-        <Typography
-          variant="button"
-          display="block"
-          gutterBottom
-          style={{ color: "blue" }}
-        >
-          <h2>Select Medium</h2>
-        </Typography>
-        <React.Fragment>
-          <Grid
-            container
-            xs={24}
-            spacing={1}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Medium</InputLabel>
               <Select
                 value={getSubCategory1}
                 name="Category"
@@ -919,27 +913,9 @@ function GenrateTc(props) {
                 isClearable={true}
               />
             </Grid>
-          </Grid>
-        </React.Fragment>
 
-        <div style={{ marginTop: 30 }} />
-
-        <Typography
-          variant="button"
-          display="block"
-          gutterBottom
-          style={{ color: "blue" }}
-        >
-          <h2>Select Student</h2>
-        </Typography>
-        <React.Fragment>
-          <Grid
-            container
-            xs={24}
-            spacing={1}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Student</InputLabel>
               <Select
                 value={getSubCategory2}
                 name="Category"
@@ -951,455 +927,434 @@ function GenrateTc(props) {
               />
             </Grid>
           </Grid>
-        </React.Fragment>
+        </Paper>
 
-        <div style={{ marginTop: 30 }} />
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<AssignmentIndIcon className={classes.sectionIcon} />} title="Student Information (Read-only)" />
 
-        {/* 
-                <Typography
-                    variant="button"
-                    display="block"
-                    gutterBottom
-                    style={{ color: "blue" }}
-                >
-                    <h2>Select Exam</h2>
-                </Typography>
-                <React.Fragment>
-                    <Grid
-                        container
-                        xs={24}
-                        spacing={1}
-                        style={{ paddingLeft: 0, paddingRight: 0 }}
-                    >
-                        <Grid item xs={12}>
-                            <Select
-                                value={getSubCategory3}
-                                name="Category"
-                                options={getSCList3}
-                                onChange={(e) => onSubCategoryChange3(e)}
-                                className="basic-multi-select"
-                                classNamePrefix="Sub-Category"
-                                isClearable={true}
-                            />
-                        </Grid>
-                    </Grid>
-                </React.Fragment> */}
-
-        <Grid item xs={12} sm={6}>
-          <GridList cellHeight={160} className={classes.gridList} cols={3}>
-            <GridListTile key={1} cols={1}>
-              <img src={`${BaseUrl}/images/${getsingleimage.icon}`} alt={""} />
-            </GridListTile>
-          </GridList>
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Name"
-            label="Name"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getName}
-            variant="outlined"
-            // onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Father-Name"
-            label="Father-Name"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getFathername}
-            variant="outlined"
-            // onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Mother-Name"
-            label="Mother-Name"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getMothername}
-            variant="outlined"
-            //  onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Gender"
-            label="Gender"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getGender}
-            variant="outlined"
-            //onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="DOB"
-            label="DOB"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getDob}
-            variant="outlined"
-            // onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Class"
-            label="Class"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getClass}
-            variant="outlined"
-            //   onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Stream"
-            label="Stream"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getStream}
-            variant="outlined"
-            //   onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Address"
-            label="Address"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getAddress}
-            variant="outlined"
-            //   onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="SSDM-ID No."
-            label="SSSM-ID No."
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getSssmidno}
-            variant="outlined"
-            //   onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Admission-No"
-            label="Admission-No"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getAdmissionNo}
-            variant="outlined"
-            //   onChange={(event) => setAdharno(event.target.value)}
-            isDisabled={true}
-            fullWidth
-          />
-        </Grid>
-
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <GridList cellHeight={160} className={classes.gridList} cols={3}>
+            <GridListTile key={1} cols={1}>
+              <img src={`${BaseUrl}/images/${getsingleimage.icon}`} alt={""} />
+            </GridListTile>
+          </GridList>
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Name"
+            label="Name"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getName}
+            variant="outlined"
+            // onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Father-Name"
+            label="Father-Name"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getFathername}
+            variant="outlined"
+            // onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Mother-Name"
+            label="Mother-Name"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getMothername}
+            variant="outlined"
+            //  onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Gender"
+            label="Gender"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getGender}
+            variant="outlined"
+            //onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="DOB"
+            label="DOB"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getDob}
+            variant="outlined"
+            // onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Class"
+            label="Class"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getClass}
+            variant="outlined"
+            //   onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Stream"
+            label="Stream"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getStream}
+            variant="outlined"
+            //   onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Address"
+            label="Address"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getAddress}
+            variant="outlined"
+            //   onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="SSDM-ID No."
+            label="SSSM-ID No."
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getSssmidno}
+            variant="outlined"
+            //   onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Admission-No"
+            label="Admission-No"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getAdmissionNo}
+            variant="outlined"
+            //   onChange={(event) => setAdharno(event.target.value)}
+            isDisabled={true}
+            fullWidth
+          />
+        </Grid>
+
         {/* ///////////////////////////////////////// */}
-        <div style={{ marginTop: 100 }} />
+        </Grid>
+        </Paper>
 
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Nationality"
-            label="Nationality"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getNationality}
-            variant="outlined"
-            onChange={(event) => setNationality(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Religion"
-            label="Religion"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getReligion}
-            variant="outlined"
-            onChange={(event) => setReligion(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Category"
-            label="Category"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getCasteCategory}
-            variant="outlined"
-            onChange={(event) => setCasteCategory(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Caste"
-            label="Caste"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getCaste}
-            variant="outlined"
-            onChange={(event) => setCaste(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="In Which Standard The Pupil Admitted To The School"
-            label="In Which Standard The Pupil Admitted To The School"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getAdmittedClass}
-            variant="outlined"
-            onChange={(event) => setAdmittedClass(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Standard In Which The Pupil Was Studying At The Time Of Leaving The School"
-            label="Standard In Which The Pupil Was Studying At The Time Of Leaving The School"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getClassOption}
-            variant="outlined"
-            onChange={(event) => setClassOption(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Promotion To The Higher  Class"
-            label="Promotion To The Higher  Class"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getPromotion}
-            variant="outlined"
-            onChange={(event) => setPromotion(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="School Board Annual Examination LastTaken With Result"
-            label="School Board Annual Examination LastTaken With Result"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getSchoolBoardResult}
-            variant="outlined"
-            onChange={(event) => setSchoolBoardResult(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Total Number Of Working Days"
-            label="Total Number Of Working Days"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getTotalWorkingDays}
-            variant="outlined"
-            onChange={(event) => setTotalWorkingDays(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Total Number Of School Days Attended"
-            label="Total Number Of School Days Attended"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getTotalDaysAttended}
-            variant="outlined"
-            onChange={(event) => setTotalDaysAttended(event.target.value)}
-            fullWidth
-          />
-        </Grid>
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<DescriptionIcon className={classes.sectionIcon} />} title="Transfer Certificate Details" />
 
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Date Of Application For Certificate"
-            label="Date Of Application For Certificate"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getDateOfApplication}
-            variant="outlined"
-            onChange={(event) => setDateOfApplication(event.target.value)}
-            fullWidth
-          />
+          <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Nationality"
+            label="Nationality"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getNationality}
+            variant="outlined"
+            onChange={(event) => setNationality(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Religion"
+            label="Religion"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getReligion}
+            variant="outlined"
+            onChange={(event) => setReligion(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Category"
+            label="Category"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getCasteCategory}
+            variant="outlined"
+            onChange={(event) => setCasteCategory(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Caste"
+            label="Caste"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getCaste}
+            variant="outlined"
+            onChange={(event) => setCaste(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="In Which Standard The Pupil Admitted To The School"
+            label="In Which Standard The Pupil Admitted To The School"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getAdmittedClass}
+            variant="outlined"
+            onChange={(event) => setAdmittedClass(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Standard In Which The Pupil Was Studying At The Time Of Leaving The School"
+            label="Standard In Which The Pupil Was Studying At The Time Of Leaving The School"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getClassOption}
+            variant="outlined"
+            onChange={(event) => setClassOption(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Promotion To The Higher  Class"
+            label="Promotion To The Higher  Class"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getPromotion}
+            variant="outlined"
+            onChange={(event) => setPromotion(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="School Board Annual Examination LastTaken With Result"
+            label="School Board Annual Examination LastTaken With Result"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getSchoolBoardResult}
+            variant="outlined"
+            onChange={(event) => setSchoolBoardResult(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Total Number Of Working Days"
+            label="Total Number Of Working Days"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getTotalWorkingDays}
+            variant="outlined"
+            onChange={(event) => setTotalWorkingDays(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Total Number Of School Days Attended"
+            label="Total Number Of School Days Attended"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getTotalDaysAttended}
+            variant="outlined"
+            onChange={(event) => setTotalDaysAttended(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Date Of Application For Certificate"
+            label="Date Of Application For Certificate"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getDateOfApplication}
+            variant="outlined"
+            onChange={(event) => setDateOfApplication(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Date Of Issue Of Certificate"
+            label="Date Of Issue Of Certificate"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getDateOfIssueCertificate}
+            variant="outlined"
+            onChange={(event) => setDateOfIssueCertificate(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Reason For Leaving School"
+            label="Reason For Leaving School"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getReasonLeaving}
+            variant="outlined"
+            onChange={(event) => setReasonLeaving(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Other Remakrks"
+            label="Other Remakrks"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getOtherRemark}
+            variant="outlined"
+            onChange={(event) => setOtherRemark(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Domicile of MP"
+            label="Domicile of MP"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getDomicile}
+            variant="outlined"
+            onChange={(event) => setDomicile(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="outlined-basic"
+            placeholder="Admission Date"
+            label="Admission Date"
+            className={classes.textField}
+            margin="dense"
+            style={{ marginLeft: -10 }}
+            value={getAdmissionDate}
+            variant="outlined"
+            onChange={(event) => setAdmissionDate(event.target.value)}
+            fullWidth
+          />
+        </Grid>
+
+        <div style={{ marginTop: 30 }} />
+
+          </Grid>
+
+          <Grid item xs={12} align="center">
+          <Button
+            variant="contained"
+            component="span"
+            className={classes.button}
+            onClick={(event) => HandleSubmitPcm(event)}
+          >
+            Submit TC
+          </Button>
         </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Date Of Issue Of Certificate"
-            label="Date Of Issue Of Certificate"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getDateOfIssueCertificate}
-            variant="outlined"
-            onChange={(event) => setDateOfIssueCertificate(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Reason For Leaving School"
-            label="Reason For Leaving School"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getReasonLeaving}
-            variant="outlined"
-            onChange={(event) => setReasonLeaving(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Other Remakrks"
-            label="Other Remakrks"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getOtherRemark}
-            variant="outlined"
-            onChange={(event) => setOtherRemark(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Domicile of MP"
-            label="Domicile of MP"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getDomicile}
-            variant="outlined"
-            onChange={(event) => setDomicile(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            placeholder="Admission Date"
-            label="Admission Date"
-            className={clsx(classes.textField, classes.dense)}
-            margin="dense"
-            style={{ marginLeft: -10 }}
-            value={getAdmissionDate}
-            variant="outlined"
-            onChange={(event) => setAdmissionDate(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-
-        <div style={{ marginTop: 30 }} />
-
-        <Grid item xs={12} align="center">
-          <Button
-            variant="contained"
-            component="span"
-            className={classes.button}
-            onClick={(event) => HandleSubmitPcm(event)}
-          >
-            Submit TC
-          </Button>
-        </Grid>
-
+        </Paper>
         {getResultpcm ? (
           <Pcm
             history={props.history}
@@ -1484,8 +1439,7 @@ function GenrateTc(props) {
           {ProgresDialog()}
           <Typography>{/* {getMessage} */}</Typography>
         </Grid>
-      </Paper>
-    </Container>
+      </div>
   );
 }
 

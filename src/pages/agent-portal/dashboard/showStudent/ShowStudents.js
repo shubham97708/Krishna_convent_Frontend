@@ -36,11 +36,12 @@ import swal from "sweetalert";
 import FormGroup from "@material-ui/core/FormGroup";
 import Pagination from "pagination-react-hooks";
 
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import PrintIcon from "@material-ui/icons/Print";
+import PeopleIcon from "@material-ui/icons/People";
 import UpdateTc from '../UpdateTc'
+import UpdateCharacterCertificate from '../UpdateCharacterCertificate'
 
 import EditStudent from "./EditStudent"
 
@@ -63,6 +64,7 @@ import UPcm from "../marks/UPcm"
 import UPcb from "../marks/UPcb"
 import UCommerce from "../marks/UCommerce"
 import UArts from "../marks/UArts"
+import UAgriculture from "../marks/UAgriculture"
 import UPrimary from "../marks/UPrimary"
 import USecondary from "../marks/USecondary"
 import USrSecondary from "../marks/USrSecondary"
@@ -79,7 +81,36 @@ const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
   card:{
-    marginTop:"20px"
+    marginTop:"20px",
+    borderRadius: 16,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 24,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
   },
 
 
@@ -171,7 +202,153 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
   img: { width: 145, height: 130, padding: 5 },
+  photoWrap: {
+    width: 140,
+    height: 140,
+    borderRadius: 14,
+    objectFit: "cover",
+    border: "3px solid #e3ecfb",
+    boxShadow: "0 4px 12px rgba(20, 40, 90, 0.12)",
+  },
+  studentName: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.25rem",
+    marginBottom: 4,
+  },
+  chipRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 14,
+  },
+  chip: {
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "3px 12px",
+    borderRadius: 20,
+    fontSize: "0.78rem",
+    fontWeight: 600,
+    backgroundColor: "#e3ecfb",
+    color: "#1565c0",
+  },
+  infoRow: {
+    display: "flex",
+    alignItems: "baseline",
+    marginBottom: 7,
+  },
+  infoLabel: {
+    color: "#90a4ae",
+    fontSize: "0.8rem",
+    minWidth: 118,
+    flexShrink: 0,
+  },
+  infoValue: {
+    color: "#1a2b4c",
+    fontSize: "0.92rem",
+    fontWeight: 600,
+    wordBreak: "break-word",
+  },
+  examRow: {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+    marginBottom: 10,
+    gap: 10,
+  },
+  examLabel: {
+    minWidth: 90,
+    fontSize: "0.85rem",
+    fontWeight: 700,
+    color: "#37474f",
+  },
+  statusDone: {
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "3px 12px",
+    borderRadius: 20,
+    fontSize: "0.75rem",
+    fontWeight: 700,
+    backgroundColor: "#e3f6e8",
+    color: "#1e8e3e",
+  },
+  statusPending: {
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "3px 12px",
+    borderRadius: 20,
+    fontSize: "0.75rem",
+    fontWeight: 700,
+    backgroundColor: "#fdeaea",
+    color: "#c62828",
+  },
+  addressBlock: {
+    marginTop: 12,
+    padding: "10px 14px",
+    borderRadius: 10,
+    backgroundColor: "#f4f6fa",
+    fontSize: "0.88rem",
+    color: "#37474f",
+  },
+  cardDivider: {
+    margin: "16px 0 14px",
+    border: "none",
+    borderTop: "1px solid #e3ecfb",
+  },
+  editBtn: {
+    color: "#1565c0",
+    borderColor: "#1565c0",
+    borderRadius: 8,
+    textTransform: "none",
+    fontWeight: 600,
+    marginRight: 8,
+    marginBottom: 6,
+  },
+  deleteBtn: {
+    color: "#c62828",
+    borderColor: "#c62828",
+    borderRadius: 8,
+    textTransform: "none",
+    fontWeight: 600,
+    marginRight: 8,
+    marginBottom: 6,
+  },
+  viewBtn: {
+    color: "#1e8e3e",
+    borderColor: "#1e8e3e",
+    borderRadius: 8,
+    textTransform: "none",
+    fontWeight: 600,
+    marginRight: 8,
+    marginBottom: 6,
+  },
+  examActionBtn: {
+    color: "#1565c0",
+    textTransform: "none",
+    fontWeight: 600,
+    fontSize: "0.78rem",
+    padding: "2px 8px",
+    minWidth: "auto",
+  },
 }));
+
+function InfoRow({ classes, label, value }) {
+  return (
+    <div className={classes.infoRow}>
+      <span className={classes.infoLabel}>{label}</span>
+      <span className={classes.infoValue}>{value}</span>
+    </div>
+  );
+}
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 function ShowStudents(props) {
   const classes = useStyles();
@@ -205,6 +382,54 @@ function ShowStudents(props) {
   const [getMobileno, setMobileno] = React.useState("");
   const [getAddress, setAddress] = React.useState("");
   const [getDataList, setDataList] = React.useState([]);
+
+  const [getSearchText, setSearchText] = React.useState("");
+  const [getGenderFilter, setGenderFilter] = React.useState("");
+  const [getTcCcFilter, setTcCcFilter] = React.useState("");
+  const [getMarksFilter, setMarksFilter] = React.useState("");
+
+  const genderFilterOptions = [
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+  ];
+
+  const tcCcFilterOptions = [
+    { value: "tc_not_generated", label: "TC Not Generated" },
+    { value: "tc_generated", label: "TC Generated" },
+    { value: "cc_not_generated", label: "CC Not Generated" },
+    { value: "cc_generated", label: "CC Generated" },
+  ];
+
+  const marksFilterOptions = [
+    { value: "quarterly_pending", label: "Quarterly Pending" },
+    { value: "halfyearly_pending", label: "Halfyearly Pending" },
+    { value: "annually_pending", label: "Annually Pending" },
+    { value: "any_pending", label: "Any Exam Pending" },
+  ];
+
+  const getFilteredDataList = () => {
+    if (getDataList == "" || !Array.isArray(getDataList)) return [];
+    return getDataList.filter((item) => {
+      if (getSearchText) {
+        const q = getSearchText.toLowerCase();
+        const matches =
+          (item.name && String(item.name).toLowerCase().includes(q)) ||
+          (item.rollno && String(item.rollno).toLowerCase().includes(q)) ||
+          (item.admissionno && String(item.admissionno).toLowerCase().includes(q));
+        if (!matches) return false;
+      }
+      if (getGenderFilter && item.gender !== getGenderFilter) return false;
+      if (getTcCcFilter === "tc_not_generated" && item.tc) return false;
+      if (getTcCcFilter === "tc_generated" && !item.tc) return false;
+      if (getTcCcFilter === "cc_not_generated" && item.charactercertificate) return false;
+      if (getTcCcFilter === "cc_generated" && !item.charactercertificate) return false;
+      if (getMarksFilter === "quarterly_pending" && item.quarterly) return false;
+      if (getMarksFilter === "halfyearly_pending" && item.halfyearly) return false;
+      if (getMarksFilter === "annually_pending" && item.annually) return false;
+      if (getMarksFilter === "any_pending" && item.quarterly && item.halfyearly && item.annually) return false;
+      return true;
+    });
+  };
 
   const [getTrue, setTrue] = useState(false);
   const [getSubCategoryidSession, setSubCategoryidSession] = React.useState("");
@@ -383,6 +608,10 @@ function ShowStudents(props) {
     {
       value: "arts",
       label: "Arts",
+    },
+    {
+      value: "agriculture",
+      label: "Agriculture",
     }
 
   ]);
@@ -691,6 +920,44 @@ const handleEditTc = (id) => {
     }
   }
 
+const handleEditCharacterCertificate = (id) => {
+  let body = {
+    Studentid: id,
+  };
+
+    axios.post(`${BaseUrl}/lockpostadd/GetCharacterCertificateForUpdate`, body)
+      .then((res) => {
+
+        props.changeView(<UpdateCharacterCertificate
+          history={props.history}
+          changeView={props.changeView}
+          res={res}
+
+          />);
+
+      })
+      .catch((err) => {
+
+        console.log("From Drop Down", err)
+      });
+
+  }
+
+
+  const handleSubmitCharacterCertificate = (id) => {
+    let body = {
+      Studentid: id,
+    };
+
+    axios.post(`${BaseUrl}/lockpostadd/GetStudentOrCharacterCertificate`, body)
+      .then((res) => {
+        props.history.push({ pathname: '/CharacterCertificate', 'res': res.data[0] })
+      })
+      .catch((err) => {
+        console.log("From Drop Down", err)
+      });
+  }
+
 /////////////////////////////////////////////////////////////
 
   const handleSubmitPrint = (id, Sclass, medium, examtype, stream, examtype_table_id) => {
@@ -784,6 +1051,18 @@ const handleEditTc = (id) => {
           .then((res) => {
             console.log("From Drop Down", res)
             props.history.push({pathname:'/ArtsMarksheet','res':res.data[0]})
+          })
+          .catch((err) => {
+
+            console.log("From Drop Down", err)
+          });
+
+      } if (stream == "agriculture") {
+
+        axios.post(`${BaseUrl}/lockpostadd/GetStudentForPrintArts`, body)
+          .then((res) => {
+            console.log("From Drop Down", res)
+            props.history.push({pathname:'/AgricultureMarksheet','res':res.data[0]})
           })
           .catch((err) => {
 
@@ -893,6 +1172,18 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
       getSubCategoryid3={examtype}
       stream={stream}
       />);
+  }if(stream == "agriculture"){
+
+
+    props.changeView(<UAgriculture
+      history={props.history}
+      changeView={props.changeView}
+      getSubCategoryid2={id}
+      getSubCategoryid={Sclass}
+      getSubCategoryid1={medium}
+      getSubCategoryid3={examtype}
+      stream={stream}
+      />);
   }
 }
 
@@ -912,7 +1203,7 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
   const show = (item) => (
     <Card className={classes.card} style={item.tc ? {  "background-color": "#FFB6C1"} :{  "background-color": "#FFFFFF"}}>
       <CardContent>
-        <Grid container >
+        <Grid container>
           <Grid item xs={12} sm={2}>
             <Grid
               style={{
@@ -923,293 +1214,175 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
             >
               <img
                 src={`${BaseUrl}/images/${item.photo}`}
-                style={{ width: 150, height: 150 }}
+                className={classes.photoWrap}
               />
             </Grid>
           </Grid>
 
+          <Grid item xs={12} sm={5}>
+            <Typography className={classes.studentName}>{item.name}</Typography>
+            <div className={classes.chipRow}>
+              <span className={classes.chip}>Roll {item.rollno}</span>
+              <span className={classes.chip}>Class {item.class}</span>
+              <span className={classes.chip}>{item.subject}</span>
+              {item.optionalsubject ? (
+                <span className={classes.chip}>{item.optionalsubject}</span>
+              ) : null}
+            </div>
 
-
-          <Grid item xs={12} sm={5} >
-
-
-            <Typography
-              variant="h7"
-              component="h5"
-            >
-              Roll No. :
-              <b style={{ color: "#2BB573" }}>{item.rollno}</b>
-            </Typography>
-
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              Class :
-              <b style={{ color: "#2BB573" }}> {item.class}</b>
-            </Typography>
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              Stream :
-              <b style={{ color: "#2BB573" }}> {item.subject}</b>
-            </Typography>
-
-            {item.optionalsubject ? (
-              <Typography
-                variant="h7"
-                component="h5"
-              >
-                Optional Subject :
-                <b style={{ color: "#2BB573" }}> {item.optionalsubject}</b>
-              </Typography>
-            ) : null}
-
-
-            <Typography
-              variant="h7"
-              component="h5"
-            >
-              Name :
-              <b style={{ color: "#2BB573", flexWrap: "wrap" }}>{item.name}</b>
-            </Typography>
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              Father :
-              <b style={{ color: "#2BB573", flexWrap: "wrap" }}>{item.fathername}</b>
-            </Typography>
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              Mother :
-              <b style={{ color: "#2BB573", flexWrap: "wrap" }}> {item.mothername}</b>
-            </Typography>
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              DOB :
-              <b style={{ color: "#2BB573" }}> {item.dob}</b>
-            </Typography>
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              Mobile No. :
-              <b style={{ color: "#2BB573" }}>{item.mobileno}</b>
-            </Typography>
+            <InfoRow classes={classes} label="Father" value={item.fathername} />
+            <InfoRow classes={classes} label="Mother" value={item.mothername} />
+            <InfoRow classes={classes} label="DOB" value={item.dob} />
+            <InfoRow classes={classes} label="Mobile No." value={item.mobileno} />
           </Grid>
 
+          <Grid item xs={12} sm={5}>
+            <InfoRow classes={classes} label="Medium" value={item.medium} />
+            <InfoRow classes={classes} label="Adhar No." value={item.adharno} />
+            <InfoRow classes={classes} label="SSSM-ID No." value={item.sssmidno} />
+            <InfoRow classes={classes} label="Enrollment No." value={item.enrollment} />
+            <InfoRow classes={classes} label="Admission No." value={item.admissionno} />
 
+            <div style={{ marginTop: 10 }}>
+            <div className={classes.examRow}>
+              <span className={classes.examLabel}>Quarterly</span>
+              {item.quarterly ? (
+                <>
+                  <span className={classes.statusDone}>✓ Done</span>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<EditIcon fontSize="small" />}
+                    onClick={() => handleSubmitEdit(item.id ,item.class,item.medium,"quarterly",item.subject)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<PrintIcon fontSize="small" />}
+                    onClick={() => handleSubmitPrint(item.id ,item.class,item.medium,"quarterly",item.subject,item.quarterly_id)}
+                  >
+                    Print
+                  </Button>
+                </>
+              ) : (
+                <span className={classes.statusPending}>Pending</span>
+              )}
+            </div>
 
+            <div className={classes.examRow}>
+              <span className={classes.examLabel}>Halfyearly</span>
+              {item.halfyearly ? (
+                <>
+                  <span className={classes.statusDone}>✓ Done</span>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<EditIcon fontSize="small" />}
+                    onClick={() => handleSubmitEdit(item.id ,item.class,item.medium,"halfyearly",item.subject)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<PrintIcon fontSize="small" />}
+                    onClick={() => handleSubmitPrint(item.id ,item.class,item.medium,"halfyearly",item.subject,item.halfyearly_id)}
+                  >
+                    Print
+                  </Button>
+                </>
+              ) : (
+                <span className={classes.statusPending}>Pending</span>
+              )}
+            </div>
 
-          <Grid item xs={12} sm={5} >
+            <div className={classes.examRow}>
+              <span className={classes.examLabel}>Annually</span>
+              {item.annually ? (
+                <>
+                  <span className={classes.statusDone}>✓ Done</span>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<EditIcon fontSize="small" />}
+                    onClick={() => handleSubmitEdit(item.id ,item.class,item.medium,"annually",item.subject)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<PrintIcon fontSize="small" />}
+                    onClick={() => handleSubmitPrint(item.id ,item.class,item.medium,"annually",item.subject,item.annually_id)}
+                  >
+                    Print
+                  </Button>
+                </>
+              ) : (
+                <span className={classes.statusPending}>Pending</span>
+              )}
+            </div>
 
+            <div className={classes.examRow}>
+              <span className={classes.examLabel}>TC</span>
+              {item.tc ? (
+                <>
+                  <span className={classes.statusDone}>✓ Done</span>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<EditIcon fontSize="small" />}
+                    onClick={() => handleEditTc(item.id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<PrintIcon fontSize="small" />}
+                    onClick={() => handleSubmitTc(item.id ,item.class,item.medium,"annually",item.subject,item.annually_id)}
+                  >
+                    Print
+                  </Button>
+                </>
+              ) : (
+                <span className={classes.statusPending}>Not Generated</span>
+              )}
+            </div>
 
-          <Typography
-              variant="h7"
-              component="h5"
-            >
-              Medium :
-              <b style={{ color: "#2BB573" }}>{item.medium}</b>
-            </Typography>
+            <div className={classes.examRow}>
+              <span className={classes.examLabel}>Character Certificate</span>
+              {item.charactercertificate ? (
+                <>
+                  <span className={classes.statusDone}>✓ Done</span>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<EditIcon fontSize="small" />}
+                    onClick={() => handleEditCharacterCertificate(item.id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className={classes.examActionBtn}
+                    startIcon={<PrintIcon fontSize="small" />}
+                    onClick={() => handleSubmitCharacterCertificate(item.id)}
+                  >
+                    Print
+                  </Button>
+                </>
+              ) : (
+                <span className={classes.statusPending}>Not Generated</span>
+              )}
+            </div>
 
-
-            <Typography
-              variant="h7"
-              component="h5"
-            >
-              Adhar No. :
-              <b style={{ color: "#2BB573" }}>{item.adharno}</b>
-            </Typography>
-
-
-            <Typography
-              variant="h7"
-              component="h5"
-            >
-              SSSM-ID No. :
-              <b style={{ color: "#2BB573" }}> {item.sssmidno}</b>
-            </Typography>
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              Enrollment No. :
-              <b style={{ color: "#2BB573" }}> {item.enrollment}</b>
-            </Typography>
-
-            <Typography
-
-              variant="h7"
-              component="h5"
-
-            >
-              Admissionno :
-              <b style={{ color: "#2BB573" }}> {item.admissionno}</b>
-            </Typography>
-
-
-
-            
-
-          
-             
-
-              <div style={{ whiteSpace: "nowrap" ,display: "flex" }}>
-              <div  style={{ display: "inline", whiteSpace: "nowrap" }}>
-                <Typography variant="h7" component="h5" > 
-                Quarterly : 
-                </Typography>
-              </div>
-              <div id="image" style={{ display: "inline" }}>
-                {item.quarterly ? ( 
-                
-                <div   style={{  whiteSpace: "nowrap" ,display: "flex" }} >
-                  <img src="./images/right.png" />                
-                <Button
-            color="Default"
-            className={classes.buttonred}
-            startIcon={<EditIcon />}
-            onClick={() => handleSubmitEdit(item.id ,item.class,item.medium,"quarterly",item.subject)}
-          >
-            Edit
-          </Button>
-          <Button
-            color="Default"
-            className={classes.buttonred}
-            startIcon={<PrintIcon />}
-            onClick={() => handleSubmitPrint(item.id ,item.class,item.medium,"quarterly",item.subject,item.quarterly_id)}
-          >
-            Print
-          </Button>
-          </div>
-                
-                
-                )  :( <img  src="./images/wrong.png" /> )}
-             </div>
-             </div>
-
-
-
-
-             <div style={{ whiteSpace: "nowrap" ,display: "flex" }}>
-              <div  style={{ display: "inline", whiteSpace: "nowrap" }}>
-                <Typography variant="h7" component="h5" > 
-                Halfyearly : 
-                </Typography>
-              </div>
-              <div id="image" style={{ display: "inline" }}>
-                {item.halfyearly ? (    <div   style={{  whiteSpace: "nowrap" ,display: "flex" }} >
-                  <img src="./images/right.png" />                
-                <Button
-            color="Default"
-            className={classes.buttonred}
-            startIcon={<EditIcon />}
-            onClick={() => handleSubmitEdit(item.id ,item.class,item.medium,"halfyearly",item.subject)}
-          >
-            Edit
-          </Button>
-          <Button
-            color="Default"
-            className={classes.buttonred}
-            startIcon={<PrintIcon />}
-            onClick={() => handleSubmitPrint(item.id ,item.class,item.medium,"halfyearly",item.subject,item.halfyearly_id)}
-          >
-            Print
-          </Button>
-          </div>
-             ):( <img  src="./images/wrong.png" /> )}
-             </div>
-             </div>
-              
-            
-
-
-              <div style={{ whiteSpace: "nowrap" ,display: "flex" }}>
-              <div  style={{ display: "inline", whiteSpace: "nowrap" }}>
-                <Typography variant="h7" component="h5" > 
-                Annually : 
-                </Typography>
-              </div>
-              <div id="image" style={{ display: "inline" }}>
-                {item.annually ? (    <div   style={{  whiteSpace: "nowrap" ,display: "flex" }} >
-                  <img src="./images/right.png" />                
-                <Button
-            color="Default"
-            className={classes.buttonred}
-            startIcon={<EditIcon />}
-            onClick={() => handleSubmitEdit(item.id ,item.class,item.medium,"annually",item.subject)}
-          >
-            Edit
-          </Button>
-
-          <Button
-            color="Default"
-            className={classes.buttonred}
-            startIcon={<PrintIcon />}
-            onClick={() => handleSubmitPrint(item.id ,item.class,item.medium,"annually",item.subject,item.annually_id)}
-          >
-            Print
-          </Button>
-          </div>
-               ) :( <img  src="./images/wrong.png" /> )}
-             </div>
-            
-             </div>
-
-
-
-
+            </div>
           </Grid>
         </Grid>
 
+        <div className={classes.addressBlock}>
+          Address : <b>{item.address}</b>
+        </div>
 
-
-
-        <Typography
-          className={classes.text}
-          variant="h7"
-          component="h5"
-          color="textSecondary"
-        >
-          Address :
-          <b style={{ color: "#000000" }}> {item.address}</b>
-        </Typography>
-
-
-
-        <hr style={{ color: "black" }} />
+        <hr className={classes.cardDivider} />
 
         <Grid container xs={12} style={{ justifyContent: "center" }}>
           <Button
-            color="Default"
-            className={classes.button1}
+            variant="outlined"
+            className={classes.editBtn}
             startIcon={<EditIcon />}
             onClick={() =>
               handleClick(
@@ -1225,42 +1398,13 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
           </Button>
 
           <Button
-            color="Default"
-            className={classes.buttonred}
+            variant="outlined"
+            className={classes.deleteBtn}
             startIcon={<DeleteIcon />}
             onClick={() => handleSubmitDelete(item.id ,item.name)}
           >
             Delete
           </Button>
-          {item.tc ? (<Button
-            color="Primary"
-            className={classes.soldbutton}
-            startIcon={<VisibilityIcon />}
-          onClick={() =>
-            handleSubmitTc(item.id ,item.class,item.medium,"annually",item.subject,item.annually_id)
-          }
-          >View</Button>) :(<Button
-            color="Primary"
-            className={classes.soldbutton}
-            startIcon={<VisibilityIcon />}
-          onClick={() =>
-            alert("Tc Not Genrated")
-          }
-          >View</Button>)}
-
-
-
-
-
-{item.tc ? (<Button
-            color="Primary"
-            className={classes.soldbutton}
-            startIcon={<VisibilityIcon />}
-          onClick={() =>
-            handleEditTc(item.id)
-          }
-          >Edit TC</Button>) :(<></>)}
-        
         </Grid>
       </CardContent>
     </Card>
@@ -1530,55 +1674,27 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
 
 
   return (
-    <Container style={{ paddingLeft: 5, paddingRight: 5, maxWidth: "100%", }}>
-      <Paper className={classes.root}>
+      <div className={classes.page}>
 
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<PeopleIcon className={classes.sectionIcon} />} title="Filter Students" />
 
-
-        <React.Fragment>
-          <Grid container xs={12} spacing={1} style={{ paddingLeft: 0, paddingRight: 0 }}>
-
-
-
-          <Grid item xs={3}>
-              <Typography
-                variant="button"
-                display="block"
-                gutterBottom
-                style={{ color: "blue" }}
-              >
-            <h2>Select Session</h2>
-          </Typography>
-          
-         
-              
-                <Select
-                  value={getSubCategorySession}
-                  name="Category"
-                  options={getSession}
-                  onChange={(e) => onSubCategorySessionChange(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-             
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Session</InputLabel>
+              <Select
+                value={getSubCategorySession}
+                name="Category"
+                options={getSession}
+                onChange={(e) => onSubCategorySessionChange(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          
 
-
-
-
-
-
-            <Grid item xs={3}>
-              <Typography
-                variant="button"
-                display="block"
-                gutterBottom
-                style={{ color: "blue" }}
-              >
-                <h2>Select Class</h2>
-              </Typography>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Class</InputLabel>
               <Select
                 value={getSubCategory}
                 name="Category"
@@ -1590,17 +1706,8 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
               />
             </Grid>
 
-
-
-
-            <Grid item xs={3}>
-              <Typography
-                variant="button"
-                display="block"
-                gutterBottom
-                style={{ color: "blue" }} >
-                <h2>Select Medium</h2>
-              </Typography>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Medium</InputLabel>
               <Select
                 value={getSubCategory1}
                 name="Category"
@@ -1612,17 +1719,8 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
               />
             </Grid>
 
-
-            <Grid item xs={3}>
-              <Typography
-                variant="button"
-                display="block"
-                gutterBottom
-                style={{ color: "blue" }}
-              >
-                <h2>Select Stream</h2>
-              </Typography>
-
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Stream</InputLabel>
               <Select
                 value={getSubCategory2}
                 name="Category"
@@ -1633,42 +1731,78 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
                 isClearable={true}
                 isDisabled={getSubject ? true : null}
               />
-
-
-
-
             </Grid>
 
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Search (Name / Roll / Admission No.)</InputLabel>
+              <TextField
+                variant="outlined"
+                margin="dense"
+                placeholder="Type to search..."
+                value={getSearchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                fullWidth
+              />
+            </Grid>
 
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Gender</InputLabel>
+              <Select
+                value={genderFilterOptions.find((o) => o.value === getGenderFilter) || null}
+                name="GenderFilter"
+                options={genderFilterOptions}
+                onChange={(e) => setGenderFilter(e ? e.value : "")}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
+            </Grid>
 
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>TC / Character Certificate</InputLabel>
+              <Select
+                value={tcCcFilterOptions.find((o) => o.value === getTcCcFilter) || null}
+                name="TcCcFilter"
+                options={tcCcFilterOptions}
+                onChange={(e) => setTcCcFilter(e ? e.value : "")}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
+            </Grid>
 
-
-
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Exam Marks Status</InputLabel>
+              <Select
+                value={marksFilterOptions.find((o) => o.value === getMarksFilter) || null}
+                name="MarksFilter"
+                options={marksFilterOptions}
+                onChange={(e) => setMarksFilter(e ? e.value : "")}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
+            </Grid>
           </Grid>
-        </React.Fragment>
-
-
-
-
+        </Paper>
 
         {getDataList == "" ? (
           <center>
             <img src="/images/nodata.jpg" />
           </center>
+        ) : getFilteredDataList().length === 0 ? (
+          <Paper className={classes.sectionCard} style={{ textAlign: "center", color: "#78909c" }}>
+            No students match the selected filters.
+          </Paper>
         ) : (
           <Pagination
-            data={getDataList}
+            data={getFilteredDataList()}
             Show={show}
             displayNumber="15"
             previousText="Prev"
             nextText="Next"
           />
         )}
-
-
-
-
-
 
         {/* { getResultpcm ? <Pcm history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} /> : null }
   { getResultpcb ? <Pcb  history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} /> : null }
@@ -1706,8 +1840,7 @@ if(Sclass == "nur" ||Sclass == "lkg" || Sclass == "ukg" || Sclass == "1" || Scla
           {ProgresDialog()}
           <Typography>{/* {getMessage} */}</Typography>
         </Grid>
-      </Paper>
-    </Container>
+      </div>
   );
 }
 

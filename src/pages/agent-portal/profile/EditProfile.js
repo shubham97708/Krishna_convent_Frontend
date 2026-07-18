@@ -20,20 +20,39 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import swal from 'sweetalert';
+import PersonIcon from '@material-ui/icons/Person';
 
 const useStyles = makeStyles(theme => ({
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
   root: {
     background:'#fff',
-    padding: '20px',
-    // marginLeft:'75px',
-    // marginRight:'75px',
+    padding: '24px',
     marginTop:'10px',
-    // border:"0.5px solid blue",
+    borderRadius: 16,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    
+    marginTop: "6px",
   },
   dense: {
     marginTop: 19,
@@ -42,8 +61,20 @@ const useStyles = makeStyles(theme => ({
     width: 200,
   },
   button: {
-    margin: theme.spacing(1),
-    backgroundColor:'blue'
+    marginTop: "1%",
+    minWidth: 220,
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    fontSize: "1rem",
+    background: "linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(21, 101, 192, 0.35)",
+    "&:hover": {
+      background: "linear-gradient(90deg, #0d47a1 0%, #1565c0 100%)",
+    },
   },
   input: {
     display: 'none',
@@ -55,6 +86,15 @@ const useStyles = makeStyles(theme => ({
     marginBottom:'20px'
   },
 }));
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 export default function EditProfile(props)
 {  
@@ -211,19 +251,17 @@ const handleClickClose = async () => {
 const mylistdata =()=>{
   return(
     <Paper className={classes.root}>
-    <Typography variant="button" display="block" align='center' gutterBottom>
-    <h2>School Admin Profile</h2>
-    </Typography>
+    <SectionHeader classes={classes} icon={<PersonIcon className={classes.sectionIcon} />} title="School Admin Profile" />
     <React.Fragment>
 
-    <Grid container spacing={3}>
- 
+    <Grid container spacing={2}>
+
     <Grid item xs={12} sm={6}>
       <TextField
       id="outlined-dense"
       label="First-Name"
 
-      className={clsx(classes.textField, classes.dense)}
+      className={classes.textField}
       margin="normal"
       variant="outlined"
       value={getFirstName}
@@ -236,8 +274,8 @@ const mylistdata =()=>{
       <TextField
       id="outlined-dense"
       label="Last-Name"
-    
-      className={clsx(classes.textField, classes.dense)}
+
+      className={classes.textField}
       margin="normal"
       variant="outlined"
       value={getLastName}
@@ -251,10 +289,10 @@ const mylistdata =()=>{
       <TextField
       id="outlined-dense"
       label="Email"
-      className={clsx(classes.textField, classes.dense)}
+      className={classes.textField}
       margin="normal"
       variant="outlined"
-     
+
       value={getEmailId}
       onChange={(event)=>setEmailId(event.target.value)}
       fullWidth
@@ -298,7 +336,7 @@ const mylistdata =()=>{
       id="outlined-dense"
       label="New Password"
       type="password"
-      className={clsx(classes.textField, classes.dense)}
+      className={classes.textField}
       margin="normal"
       variant="outlined"
       value={getPassword}
@@ -311,7 +349,7 @@ const mylistdata =()=>{
      id="outlined-dense"
       label="Confirm New Password"
       type="password"
-      className={clsx(classes.textField, classes.dense)}
+      className={classes.textField}
       margin="normal"
       variant="outlined"
       value={getConfirmPassword}
@@ -321,10 +359,10 @@ const mylistdata =()=>{
    {getStatus}
     </Grid>
 
-     
-  <Grid item xs={12}>
-  <Button onClick={handleSubmitEdit} variant="contained" color="primary" >
-  SUBMIT
+
+  <Grid item xs={12} align="center" style={{ marginTop: 12 }}>
+  <Button onClick={handleSubmitEdit} variant="contained" className={classes.button}>
+  Submit
   </Button>
     </Grid>
 
@@ -342,7 +380,7 @@ const mylistdata =()=>{
 }
 
 
-return(<div>     
+return(<div className={classes.page}>
 {mylistdata()}
 
 

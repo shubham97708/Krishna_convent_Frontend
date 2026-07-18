@@ -9,6 +9,7 @@ import BaseUrl from "../../../../services/BaseUrl";
 import { getData, postData } from "../../../../services/FetchServices";
 
 import { isUndefined } from "@syncfusion/ej2-base";
+import { setPrintDocumentTitle } from "./printDocumentTitle";
 import PrintBackButton from "./PrintBackButton";
 const axios = require("axios");
 
@@ -95,6 +96,7 @@ function Pcm_Marksheet(props) {
 
 	const readAllRecords = () => {
 		if (!isUndefined(props.location.res)) {
+		setPrintDocumentTitle(props.location.res.name, props.location.res.class);
 
 
 
@@ -903,11 +905,19 @@ function Pcm_Marksheet(props) {
 						)}
 
 						{hasBio && (
-							<div className="stl_01" style={{ left: "5.682em", top: "40.8402em" }}>
+							<div className="stl_01" style={{ left: "6.65em", top: "40.8402em" }}>
 								<span className="stl_52 stl_11 stl_53">
 									BIO &nbsp;
 								</span>
 							</div>
+						)}
+
+						{hasBio && (
+							<img
+								alt=""
+								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+								style={{ position: "absolute", left: "3.5014em", top: "42.17em", width: "42.7052em", height: "0.0625em" }}
+							/>
 						)}
 
 						<div className="stl_01" style={{ left: "40.8083em", top: `${42.2952 + rowShift}em` }}>
@@ -941,7 +951,7 @@ function Pcm_Marksheet(props) {
 
 
 
-						<div className="stl_01" style={{ left: "6.182em", top: `${42.297 + rowShift}em` }}>
+						<div className="stl_01" style={{ left: `${hasBio ? 6.4 : 6.182}em`, top: `${42.297 + rowShift}em` }}>
 							<span className="stl_52 stl_11 stl_56" style={{ "word-spacing": "0.0028em" }}>
 								Total
 							</span>

@@ -8,9 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import { getData, postData } from "../../../../services/FetchServices";
 import TextField from "@material-ui/core/TextField";
 import BaseUrl from "../../../../services/BaseUrl";
-import Activities from "../Activities";
 import swal from "sweetalert";
 import ShowStudents from "../showStudent/ShowStudents";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 
 
 const axios = require("axios");
@@ -33,10 +33,7 @@ const useStyles = makeStyles((theme) => ({
     // },
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    // marginBottom:'-10px',
-    marginTop: "10px",
+    marginTop: "6px",
   },
   dense: {
     marginTop: 19,
@@ -55,16 +52,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "-10px",
   },
   button: {
-    // margin: theme.spacing(1),
     marginTop: "2%",
-    width: "100%",
-    backgroundColor: "blue",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "2vh",
+    minWidth: 220,
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    fontSize: "1rem",
+    background: "linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(21, 101, 192, 0.35)",
     "&:hover": {
-      color: "black",
-      fontStyle: "bold",
+      background: "linear-gradient(90deg, #0d47a1 0%, #1565c0 100%)",
     },
   },
 
@@ -105,8 +105,43 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
   img: { width: 145, height: 130, padding: 5 },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: 24,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
+  },
 }));
 
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 
 function Commerce(props) {
@@ -224,24 +259,17 @@ function Commerce(props) {
 
 
   return (
-    <div>
-    <Typography
-              variant="button"
-              display="block"
-              gutterBottom
-              style={{ color: "blue" }}
-            >
-              <h2>Enter Commerce Marks</h2>
-            </Typography>
+    <div className={classes.page}>
+    <Paper className={classes.sectionCard}>
+    <SectionHeader classes={classes} icon={<AssignmentIcon className={classes.sectionIcon} />} title={<>Enter Commerce Marks</>} />
   
-            <Grid container xs={12} spacing={3}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-dense"
                   placeholder="Business-Studies-Theory"
                   label="Business-Studies-Theory"
-                  style={{ marginLeft: -10 }}
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
                   variant="outlined"
                   value={getBusinessStudiesTheory}
@@ -251,14 +279,13 @@ function Commerce(props) {
               </Grid>
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Business-Studies-Practical"
                   label="Business-Studies-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getBusinessStudiesPractical}
                   variant="outlined"
                   onChange={(event) => setBusinessStudiesPractical(event.target.value)}
@@ -266,14 +293,13 @@ function Commerce(props) {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Accountancy-Theory"
                   label="Accountancy-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getAccountancyTheory}
                   variant="outlined"
                   onChange={(event) => setAccountancyTheory(event.target.value)}
@@ -282,14 +308,13 @@ function Commerce(props) {
               </Grid>
       
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Accountancy-Practical"
                   label="Accountancy-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getAccountancyPractical}
                   variant="outlined"
                   onChange={(event) => setAccountancyPractical(event.target.value)}
@@ -297,14 +322,13 @@ function Commerce(props) {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Economics-Theory"
                   label="Economics-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getEconomicsTheory}
                   variant="outlined"
                   onChange={(event) => setEconomicsTheory(event.target.value)}
@@ -313,14 +337,13 @@ function Commerce(props) {
               </Grid>
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Economics-Practical"
                   label="Economics-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getEconomicsPractical}
                   variant="outlined"
                   onChange={(event) => setEconomicsPractical(event.target.value)}
@@ -329,14 +352,13 @@ function Commerce(props) {
               </Grid>    
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Hindi-Theory"
                   label="Hindi-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getHindiTheory}
                   variant="outlined"
                   onChange={(event) => setHindiTheory(event.target.value)}
@@ -345,14 +367,13 @@ function Commerce(props) {
               </Grid>
   
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="Hindi-Practical"
                   label="Hindi-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getHindiPractical}
                   variant="outlined"
                   onChange={(event) => setHindiPractical(event.target.value)}
@@ -360,14 +381,13 @@ function Commerce(props) {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Theory"
                   label="English-Theory"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getEnglishTheory}
                   variant="outlined"
                   onChange={(event) => setEnglishTheory(event.target.value)}
@@ -375,14 +395,13 @@ function Commerce(props) {
                 />
               </Grid>
   
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="outlined-basic"
                   placeholder="English-Practical"
                   label="English-Practical"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={classes.textField}
                   margin="dense"
-                  style={{ marginLeft: -10 }}
                   value={getEnglishPractical}
                   variant="outlined"
                   onChange={(event) => setEnglishPractical(event.target.value)}
@@ -392,14 +411,13 @@ function Commerce(props) {
               </Grid>
 
               {hasIt && (
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     id="outlined-basic"
                     placeholder="IT-Theory (max 70)"
                     label="IT-Theory (max 70)"
-                    className={clsx(classes.textField, classes.dense)}
+                    className={classes.textField}
                     margin="dense"
-                    style={{ marginLeft: -10 }}
                     value={getItTheory}
                     variant="outlined"
                     onChange={onTheoryChange(setItTheory)}
@@ -409,14 +427,13 @@ function Commerce(props) {
               )}
 
               {hasIt && (
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     id="outlined-basic"
                     placeholder="IT-Practical (max 30)"
                     label="IT-Practical (max 30)"
-                    className={clsx(classes.textField, classes.dense)}
+                    className={classes.textField}
                     margin="dense"
-                    style={{ marginLeft: -10 }}
                     value={getItPractical}
                     variant="outlined"
                     onChange={onPracticalChange(setItPractical)}
@@ -430,7 +447,7 @@ function Commerce(props) {
             </Grid>
             <div style={{ marginTop: 10 }} />
     
-            <Grid item xs={12} align="center">
+            <Grid item xs={12} align="center" style={{ marginTop: 24 }}>
               <Button
                 variant="contained"
                 component="span"
@@ -440,7 +457,8 @@ function Commerce(props) {
                 Submit 
               </Button>
             </Grid>
-            </div>
+            </Paper>
+    </div>
   )
   }
 export default Commerce;

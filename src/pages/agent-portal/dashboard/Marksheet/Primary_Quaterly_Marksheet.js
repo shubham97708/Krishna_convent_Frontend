@@ -8,6 +8,7 @@ import BaseUrl from "../../../../services/BaseUrl";
 import logo1 from './img/logo1.png'
 import { getData, postData } from "../../../../services/FetchServices";
 import { isUndefined } from "@syncfusion/ej2-base";
+import { setPrintDocumentTitle } from "./printDocumentTitle";
 import PrintBackButton from "./PrintBackButton";
 
 
@@ -62,6 +63,7 @@ function Primary_Quaterly_Marksheet(props) {
 
 	const readAllRecords = () => {
 		if( !isUndefined(props.location.res)){
+		setPrintDocumentTitle(props.location.res.name, props.location.res.class);
 
 		
 

@@ -2,31 +2,17 @@ import React from "react";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 
 import ListSelfRegister from "../pages/agent-portal/ListSelfRegister";
-import UserProfile from "../pages/agent-portal/UserProfile";
-import Activities from "../pages/agent-portal/dashboard/Activities";
-import AddContact from "../pages/agent-portal/dashboard/AddContact";
-import AddHomework from "../pages/agent-portal/dashboard/AddHomework";
 import AddTask from "../pages/agent-portal/dashboard/AddTask";
-import ClientPortfolio from "../pages/agent-portal/dashboard/ClientPortfolio";
 import Dashboard from "../pages/agent-portal/dashboard/Dashboard";
-import Diary from "../pages/agent-portal/dashboard/Diary";
-import DisplayAddContact from "../pages/agent-portal/dashboard/DisplayAddContact";
-import DisplayAddHomework from "../pages/agent-portal/dashboard/DisplayAddHomework";
 import MainListItems from "../pages/agent-portal/dashboard/MainListItems";
 import PostAdd from "../pages/agent-portal/dashboard/PostAdd";
-import DisplayPostAdd from "../pages/agent-portal/dashboard/DisplayPostAdd";
-import EditPostAdd from "../pages/agent-portal/dashboard/EditPostAdd";
 import Explore from "../pages/agent-portal/dashboard/Explore/Explore";
 import Map from "../pages/agent-portal/dashboard/Map/index"; //it is use for Map (mapview)
 import Userview from "../pages/agent-portal/dashboard/Userview"; //it is use for Map (mapview)
 import index from "../pages/agent-portal/dashboard/Map/index"; //it is use for Map (mapview)
-import GotoEnd from "../pages/agent-portal/dashboard/GotoEnd";
-import ChatList from "../pages/agent-portal/dashboard/ChatList";
 import EditProfile from "../pages/agent-portal/profile/EditProfile";
 import AgentSignIn from "../pages/agent-portal/AgentSignIn";
 import AgentEmailVerfied from "../pages/agent-portal/AgentEmailVerfied";
-import MultipalImages from "../pages/agent-portal/MultipalImages";
-import ClientViewList from "../pages/agent-portal/dashboard/ClientViewList";
 
 import Cer from "../pages/agent-portal/dashboard/Certificate/Cer";
 
@@ -37,6 +23,7 @@ import Pcm_Marksheet from "../pages/agent-portal/dashboard/Marksheet/Pcm_Markshe
 import Pcb_Marksheet from "../pages/agent-portal/dashboard/Marksheet/Pcb_Marksheet";
 import Commerce_Marksheet from "../pages/agent-portal/dashboard/Marksheet/Commerce_Marksheet";
 import Arts_Marksheet from "../pages/agent-portal/dashboard/Marksheet/Arts_Marksheet";
+import Agriculture_Marksheet from "../pages/agent-portal/dashboard/Marksheet/Agriculture_Marksheet";
 
 import Tc from "../pages/agent-portal/dashboard/Tc/Tc.js";
 
@@ -48,14 +35,9 @@ import PcmTC from "../pages/agent-portal/dashboard/Tc/PcmTC";
 import PcbTC from "../pages/agent-portal/dashboard/Tc/PcbTC";
 import CommerceTC from "../pages/agent-portal/dashboard/Tc/CommerceTC";
 
-import ShowStudents from "../pages/agent-portal/dashboard/showStudent/ShowStudents";
+import CharacterCertificate from "../pages/agent-portal/dashboard/CharacterCertificate/CharacterCertificate";
 
-import Active from "../pages/student-records/Active";
-import Cancel from "../pages/student-records/Cancel";
-import Completed from "../pages/student-records/Completed";
-import Refunded from "../pages/student-records/Refunded";
-import BookingDetails from "../pages/student-records/BookingDetails";
-import BookingRefund from "../pages/student-records/BookingRefund";
+import ShowStudents from "../pages/agent-portal/dashboard/showStudent/ShowStudents";
 
 import PrivacyPolicy from "../pages/agent-portal/dashboard/PrivacyPolicy";
 
@@ -88,43 +70,8 @@ function ProjectRouter(props) {
         ></Route>
         <Route
           history={props.history}
-          path="/UserProfile"
-          component={UserProfile}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/Activities"
-          component={Activities}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/AddContact"
-          component={AddContact}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/AddHomework"
-          component={AddHomework}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
           path="/AddTask"
           component={AddTask}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/ClientPortfolio"
-          component={ClientPortfolio}
           strict
           exact
         ></Route>
@@ -137,27 +84,6 @@ function ProjectRouter(props) {
         ></Route>
         <Route
           history={props.history}
-          path="/Diary"
-          component={Diary}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/DisplayAddContact"
-          component={DisplayAddContact}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/DisplayAddHomework"
-          component={DisplayAddHomework}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
           path="/MainListItems"
           component={MainListItems}
           strict
@@ -165,22 +91,8 @@ function ProjectRouter(props) {
         ></Route>
         <Route
           history={props.history}
-          path="/EditPostAdd "
-          component={EditPostAdd}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
           path="/PostAdd"
           component={PostAdd}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/DisplayPostAdd"
-          component={DisplayPostAdd}
           strict
           exact
         ></Route>
@@ -214,20 +126,6 @@ function ProjectRouter(props) {
         ></Route>
         <Route
           history={props.history}
-          path="/GotoEnd"
-          component={GotoEnd}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/ChatList"
-          component={ChatList}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
           path="/EditProfile"
           component={EditProfile}
           strict
@@ -240,67 +138,11 @@ function ProjectRouter(props) {
           strict
           exact
         ></Route>
-        <Route
-          history={props.history}
-          path="/MultipalImages"
-          component={MultipalImages}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/ClientViewList"
-          component={ClientViewList}
-          strict
-          exact
-        ></Route>
 
-        <Route
-          history={props.history}
-          path="/Active"
-          component={Active}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/Cancel"
-          component={Cancel}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/Refunded"
-          component={Refunded}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/Completed"
-          component={Completed}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/BookingDetails"
-          component={BookingDetails}
-          strict
-          exact
-        ></Route>
         <Route
           history={props.history}
           path="/PrivacyPolicy"
           component={PrivacyPolicy}
-          strict
-          exact
-        ></Route>
-        <Route
-          history={props.history}
-          path="/BookingRefund"
-          component={BookingRefund}
           strict
           exact
         ></Route>
@@ -354,6 +196,13 @@ function ProjectRouter(props) {
           strict
           exact
         ></Route>
+        <Route
+          history={props.history}
+          path="/AgricultureMarksheet"
+          component={Agriculture_Marksheet}
+          strict
+          exact
+        ></Route>
 
         <Route
           history={props.history}
@@ -402,6 +251,14 @@ function ProjectRouter(props) {
           history={props.history}
           path="/CommerceTC"
           component={CommerceTC}
+          strict
+          exact
+        ></Route>
+
+        <Route
+          history={props.history}
+          path="/CharacterCertificate"
+          component={CharacterCertificate}
           strict
           exact
         ></Route>

@@ -39,6 +39,9 @@ import "react-sweet-progress/lib/style.css";
 import { AutoComplete } from "@progress/kendo-react-dropdowns";
 import { Card } from "@material-ui/core";
 import BaseUrl from "../../../../services/BaseUrl";
+import SchoolIcon from "@material-ui/icons/School";
+import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 const axios = require("axios");
 
 //import Map from './Map';
@@ -131,7 +134,51 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
   img: { width: 145, height: 130, padding: 5 },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: 24,
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 24,
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: 10,
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
+  },
+  photoPreview: {
+    width: 110,
+    height: 110,
+    borderRadius: 14,
+    objectFit: "cover",
+    border: "2px solid #e3ecfb",
+    backgroundColor: "#f4f6fa",
+  },
 }));
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 function EditStudent(props) {
   const classes = useStyles();
@@ -263,6 +310,10 @@ function EditStudent(props) {
     {
       value: "arts",
       label: "Arts",
+    },
+    {
+      value: "agriculture",
+      label: "Agriculture",
     }
 
   ]);
@@ -657,151 +708,81 @@ function EditStudent(props) {
 
 
   return (
-    <Container style={{ paddingLeft: 5, paddingRight: 5, maxWidth: "100%" }}>
-      <Paper className={classes.root}>
+      <div className={classes.page}>
 
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<SchoolIcon className={classes.sectionIcon} />} title="Academic Details (Read-only)" />
 
-
-
-
-        <React.Fragment>
-          <Grid
-            container
-            xs={24}
-            spacing={1}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
-            <Grid item xs={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
               <TextField
                 id="outlined-dense"
                 placeholder="Class"
                 label="Class"
-                style={{ marginLeft: -10 }}
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
                 variant="outlined"
                 value={getSubCategory}
-                // onChange={(event) => setTitle(event.target.value)}
-                isDisabled={true}
+                disabled
                 fullWidth
               />
             </Grid>
-          </Grid>
-        </React.Fragment>
 
-
-        <div style={{ marginTop: 10 }} />
-        <div style={{ marginTop: 10 }} />
-
-
-
-        <React.Fragment>
-          <Grid
-            container
-            xs={24}
-            spacing={1}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
-            <Grid item xs={12}>
-
+            <Grid item xs={12} sm={6} md={3}>
               <TextField
                 id="outlined-dense"
                 placeholder="Stream"
                 label="Stream"
-                style={{ marginLeft: -10 }}
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
                 variant="outlined"
                 value={getSubCategory2}
-                //onChange={(event) => setSubCategory2(event.target.value)}
-                isDisabled={true}
+                disabled
                 fullWidth
               />
             </Grid>
-          </Grid>
-        </React.Fragment>
 
-        {getOptionalSubject ? (
-          <React.Fragment>
-            <div style={{ marginTop: 10 }} />
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <TextField
-                  id="outlined-dense"
-                  placeholder="Optional Subject"
-                  label="Optional Subject"
-                  style={{ marginLeft: -10 }}
-                  className={clsx(classes.textField, classes.dense)}
-                  margin="dense"
-                  variant="outlined"
-                  value={getOptionalSubject}
-                  isDisabled={true}
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-          </React.Fragment>
-        ) : null}
-
-
-        <div style={{ marginTop: 10 }} />
-        <div style={{ marginTop: 10 }} />
-
-
-
-        <React.Fragment>
-          <Grid
-            container
-            xs={24}
-            spacing={1}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
-            <Grid item xs={12}>
-
-
+            <Grid item xs={12} sm={6} md={3}>
               <TextField
                 id="outlined-dense"
                 placeholder="Medium"
                 label="Medium"
-                style={{ marginLeft: -10 }}
-                className={clsx(classes.textField, classes.dense)}
+                className={classes.textField}
                 margin="dense"
                 variant="outlined"
                 value={getSubCategory1}
-                //onChange={(event) => setSubCategory2(event.target.value)}
-                isDisabled={true}
+                disabled
                 fullWidth
               />
             </Grid>
+
+            {getOptionalSubject ? (
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  id="outlined-dense"
+                  placeholder="Optional Subject"
+                  label="Optional Subject"
+                  className={classes.textField}
+                  margin="dense"
+                  variant="outlined"
+                  value={getOptionalSubject}
+                  disabled
+                  fullWidth
+                />
+              </Grid>
+            ) : null}
           </Grid>
-        </React.Fragment>
+        </Paper>
 
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<PhotoCameraIcon className={classes.sectionIcon} />} title="Student Photo" />
 
-
-
-        <div style={{ marginTop: 10 }} />
-
-
-
-        <Typography
-          variant="button"
-          display="block"
-          gutterBottom
-          style={{ color: "blue" }}
-        >
-          <h2>Add Student Picture</h2>
-        </Typography>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} style={{ marginLeft: -10 }}>
-            <div className={classes.root}>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item>
+              <img src={getsingleimage.icon} alt={""} className={classes.photoPreview} />
+            </Grid>
+            <Grid item>
               <input
-                // accept="image/*"
                 accept="image/x-png,image/jpeg,image/jpg"
                 className={classes.input1}
                 id="contained-button-file1"
@@ -823,254 +804,198 @@ function EditStudent(props) {
                   Upload
                 </Button>
               </label>
-            </div>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <GridList cellHeight={160} className={classes.gridList} cols={3}>
-              <GridListTile key={1} cols={1}>
-                <img src={getsingleimage.icon} alt={""} />
-              </GridListTile>
-            </GridList>
-          </Grid>
-        </Grid>
+        </Paper>
 
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<AssignmentIndIcon className={classes.sectionIcon} />} title="Student Details" />
 
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-dense"
+                placeholder="Student-Name"
+                label="Student-Name"
+                className={classes.textField}
+                margin="dense"
+                variant="outlined"
+                value={getTitle}
+                onChange={(event) => setTitle(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Father Name"
+                label="Father Name"
+                className={classes.textField}
+                margin="dense"
+                value={getaddressm}
+                variant="outlined"
+                onChange={(event) => setaddressm(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Mother Name"
+                label="Mother Name"
+                className={classes.textField}
+                margin="dense"
+                value={getMothername}
+                variant="outlined"
+                onChange={(event) => setMothername(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
-        <div style={{ marginTop: 10 }} />
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Roll No."
+                label="Roll No."
+                className={classes.textField}
+                margin="dense"
+                value={getRollno}
+                variant="outlined"
+                onChange={(event) => setRollno(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
-        <Typography
-          variant="button"
-          display="block"
-          gutterBottom
-          style={{ color: "blue" }}
-        >
-          <h2>Detail's</h2>
-        </Typography>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Admission No."
+                label="Admission No."
+                className={classes.textField}
+                margin="dense"
+                value={geAdmissionno}
+                variant="outlined"
+                onChange={(event) => seAdmissionno(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
-        <Grid container xs={12} spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-dense"
-              placeholder="Student-Name"
-              label="Student-Name"
-              style={{ marginLeft: -10 }}
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              variant="outlined"
-              value={getTitle}
-              onChange={(event) => setTitle(event.target.value)}
-              fullWidth
-            />
-          </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="DOB"
+                label="DOB"
+                className={classes.textField}
+                margin="dense"
+                value={getDob}
+                variant="outlined"
+                onChange={(event) => setDob(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Adhar No."
+                label="Adhar No."
+                className={classes.textField}
+                margin="dense"
+                value={getAdharno}
+                variant="outlined"
+                onChange={(event) => setAdharno(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Father Name"
-              label="Father Name"
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getaddressm}
-              variant="outlined"
-              onChange={(event) => setaddressm(event.target.value)}
-              fullWidth
-            />
-          </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="SSSM-ID No."
+                label="SSSM-ID No."
+                className={classes.textField}
+                margin="dense"
+                value={getSssmidno}
+                variant="outlined"
+                onChange={(event) => setSssmidno(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Mother Name"
-              label="Mother Name"
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getMothername}
-              variant="outlined"
-              onChange={(event) => setMothername(event.target.value)}
-              fullWidth
-            />
-          </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Enrollment"
+                label="Enrollment"
+                className={classes.textField}
+                margin="dense"
+                value={getEnrollment}
+                variant="outlined"
+                onChange={(event) => setEnrollment(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Mobile No"
+                label="Mobile No"
+                className={classes.textField}
+                margin="dense"
+                value={getMobileno}
+                variant="outlined"
+                onChange={(event) => setMobileno(event.target.value)}
+                fullWidth
+              />
+            </Grid>
 
-
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Roll No."
-              label="Roll No."
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getRollno}
-              variant="outlined"
-              onChange={(event) => setRollno(event.target.value)}
-              fullWidth
-            />
-          </Grid>
-
-
-
-
-
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Admission No."
-              label="Admission No."
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={geAdmissionno}
-              variant="outlined"
-              onChange={(event) => seAdmissionno(event.target.value)}
-              fullWidth
-            />
-          </Grid>
-
-
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="DOB"
-              label="DOB"
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getDob}
-              variant="outlined"
-              onChange={(event) => setDob(event.target.value)}
-              fullWidth
-            />
-          </Grid>
-
-
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Adhar No."
-              label="Adhar No."
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getAdharno}
-              variant="outlined"
-              onChange={(event) => setAdharno(event.target.value)}
-              fullWidth
-            />
-          </Grid>
-
-
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="SSSM-ID No."
-              label="SSSM-ID No."
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getSssmidno}
-              variant="outlined"
-              onChange={(event) => setSssmidno(event.target.value)}
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Enrollment"
-              label="Enrollment"
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getEnrollment}
-              variant="outlined"
-              onChange={(event) => setEnrollment(event.target.value)}
-              fullWidth
-            />
+            <Grid item xs={12}>
+              <TextField
+                id="outlined-basic"
+                placeholder="Address"
+                label="Address"
+                className={classes.textField}
+                margin="dense"
+                value={getAddress}
+                variant="outlined"
+                onChange={(event) => setAddress(event.target.value)}
+                fullWidth
+              />
+            </Grid>
           </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Mobile No"
-              label="Mobile No"
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getMobileno}
-              variant="outlined"
-              onChange={(event) => setMobileno(event.target.value)}
-              fullWidth
-            />
+          <Grid item xs={12} align="center" style={{ marginTop: 24 }}>
+            <Button
+              variant="contained"
+              component="span"
+              className={classes.button}
+              onClick={(event) => handleSubmit(event)}
+            >
+              Submit
+            </Button>
           </Grid>
 
+          {gif ? (
+            <Grid item xs={12} align="center">
+              <img
+                src="./images/upload.gif"
+                style={{ width: "10%", height: "10%" }}
+              />
+            </Grid>
+          ) : (
+            <React.Fragment></React.Fragment>
+          )}
 
           <Grid item xs={12}>
-            <TextField
-              id="outlined-basic"
-              placeholder="Address"
-              label="Address"
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              style={{ marginLeft: -10 }}
-              value={getAddress}
-              variant="outlined"
-              onChange={(event) => setAddress(event.target.value)}
-              fullWidth
-            />
+            {ProgresDialog()}
+            <Typography>{/* {getMessage} */}</Typography>
           </Grid>
-
-
-
-
-
-
-        </Grid>
-
-
-
-
-
-        <div style={{ marginTop: 10 }} />
-
-
-
-
-        <Grid item xs={12} align="center">
-          <Button
-            variant="contained"
-            component="span"
-            className={classes.button}
-            onClick={(event) => handleSubmit(event)}
-          >
-            Submit
-          </Button>
-        </Grid>
-
-
-        {gif ? (
-          <Grid item xs={12} align="center">
-            <img
-              src="./images/upload.gif"
-              style={{ width: "10%", height: "10%" }}
-            />
-          </Grid>
-        ) : (
-          <React.Fragment></React.Fragment>
-        )}
-
-        <Grid item xs={12}>
-          {ProgresDialog()}
-          <Typography>{/* {getMessage} */}</Typography>
-        </Grid>
-      </Paper>
-    </Container>
+        </Paper>
+      </div>
   );
 }
+
 export default EditStudent;

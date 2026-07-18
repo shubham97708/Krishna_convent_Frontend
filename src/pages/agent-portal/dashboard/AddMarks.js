@@ -20,7 +20,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Container from "@material-ui/core/Container";
-import Activities from "./Activities";
 import PostAddd from "./PostAdd";
 import Checkbox from "@material-ui/core/Checkbox";
 import Gmap from "./Map/index";
@@ -35,6 +34,7 @@ import Pcm from "./marks/Pcm"
 import Pcb from "./marks/Pcb"
 import Commerce from "./marks/Commerce"
 import Arts from "./marks/Arts"
+import Agriculture from "./marks/Agriculture"
 import Primary from "./marks/Primary"
 import Secondary from "./marks/Secondary"
 import SrSecondary from "./marks/SrSecondary"
@@ -47,6 +47,7 @@ import "react-sweet-progress/lib/style.css";
 import { AutoComplete } from "@progress/kendo-react-dropdowns";
 import { Card } from "@material-ui/core";
 import BaseUrl from "../../../services/BaseUrl";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 const axios = require("axios");
 
 //import Map from './Map/index';
@@ -139,7 +140,43 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
   img: { width: 145, height: 130, padding: 5 },
+  page: {
+    backgroundColor: "#f4f6fa",
+    minHeight: "100%",
+    padding: theme.spacing(3),
+  },
+  sectionCard: {
+    borderRadius: 16,
+    padding: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    boxShadow: "0 4px 20px rgba(20, 40, 90, 0.08)",
+  },
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing(2.5),
+    paddingBottom: theme.spacing(1.2),
+    borderBottom: "2px solid #e3ecfb",
+  },
+  sectionIcon: {
+    color: "#1565c0",
+    marginRight: theme.spacing(1.2),
+  },
+  sectionTitle: {
+    fontWeight: 700,
+    color: "#0d1b4c",
+    fontSize: "1.05rem",
+  },
 }));
+
+function SectionHeader({ classes, icon, title }) {
+  return (
+    <div className={classes.sectionHeader}>
+      {icon}
+      <Typography className={classes.sectionTitle}>{title}</Typography>
+    </div>
+  );
+}
 
 function AddMarks(props) {
   const classes = useStyles();
@@ -149,6 +186,7 @@ function AddMarks(props) {
   const [getResultpcb, setResultpcb] = React.useState(false)
   const [getResultcommerce, setResultcommerce] = React.useState(false)
   const [getResultarts, setResultarts] = React.useState(false)
+  const [getResultagriculture, setResultagriculture] = React.useState(false)
   const [getResultprimary, setResultprimary] = React.useState(false)
   const [getResultsecondary, setResultsecondary] = React.useState(false)
   const [getResultsrsecondary, setResultsrsecondary] = React.useState(false)
@@ -387,26 +425,6 @@ function AddMarks(props) {
     );
   };
 
-  const callalert = (data, status) => {
-    console.log("Data From Axios then......", data);
-    console.log("Data From status ......", status);
-    console.log("Data From data.status ......", data.status);
-
-    //   alert("hello")
-    if (status == "then") {
-      if (data.status == 200) {
-        setOpen(false);
-        swal("School", "Student Added", "success");
-        props.changeView(
-          <Activities history={props.history} changeView={props.changeView} />
-        );
-      }
-    } else if (status == "catch") {
-      setOpen(false);
-      swal("Hotel", "There Is Error In Server", "error");
-      //props.changeView(<PostAddd/>)
-    }
-  };
 
 
 
@@ -540,6 +558,7 @@ const onSubCategorySessionChange = (event) => {
         setResultpcb(false)
         setResultcommerce(false)
         setResultarts(false)
+        setResultagriculture(false)
         setResultsecondary(false)
         setResultsrsecondary(false)
       }
@@ -550,6 +569,7 @@ const onSubCategorySessionChange = (event) => {
         setResultpcb(false)
         setResultcommerce(false)
         setResultarts(false)
+        setResultagriculture(false)
         setResultsecondary(true)
         setResultsrsecondary(false)
       }
@@ -560,6 +580,7 @@ const onSubCategorySessionChange = (event) => {
         setResultpcb(false)
         setResultcommerce(false)
         setResultarts(false)
+        setResultagriculture(false)
         setResultsecondary(false)
         setResultsrsecondary(true)
       }
@@ -569,6 +590,7 @@ const onSubCategorySessionChange = (event) => {
         setResultpcb(true)
         setResultcommerce(false)
         setResultarts(false)
+        setResultagriculture(false)
         setResultsecondary(false)
         setResultsrsecondary(false)
       }
@@ -579,6 +601,7 @@ const onSubCategorySessionChange = (event) => {
         setResultpcb(false)
         setResultcommerce(true)
         setResultarts(false)
+        setResultagriculture(false)
         setResultsecondary(false)
         setResultsrsecondary(false)
       }
@@ -589,6 +612,7 @@ const onSubCategorySessionChange = (event) => {
         setResultpcb(false)
         setResultcommerce(false)
         setResultarts(false)
+        setResultagriculture(false)
         setResultsecondary(false)
         setResultsrsecondary(false)
       }
@@ -599,6 +623,18 @@ const onSubCategorySessionChange = (event) => {
         setResultpcb(false)
         setResultcommerce(false)
         setResultarts(true)
+        setResultagriculture(false)
+        setResultsecondary(false)
+        setResultsrsecondary(false)
+      }
+
+      else if( getStudentSubject == "agriculture" ){
+        setResultprimary(false)
+        setResultpcm(false)
+        setResultpcb(false)
+        setResultcommerce(false)
+        setResultarts(false)
+        setResultagriculture(true)
         setResultsecondary(false)
         setResultsrsecondary(false)
       }
@@ -774,197 +810,87 @@ const onSubCategorySessionChange = (event) => {
 
 
   return (
-      <Container style={{ paddingLeft: 5, paddingRight: 5, maxWidth: "100%" }}>
-        <Paper className={classes.root}>
-         
-          
+      <div className={classes.page}>
 
-        <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Session</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategorySession}
-                  name="Category"
-                  options={getSession}
-                  onChange={(e) => onSubCategorySessionChange(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-              </Grid>
+        <Paper className={classes.sectionCard}>
+          <SectionHeader classes={classes} icon={<AssignmentIcon className={classes.sectionIcon} />} title="Select Student & Exam" />
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={2}>
+              <InputLabel shrink>Session</InputLabel>
+              <Select
+                value={getSubCategorySession}
+                name="Category"
+                options={getSession}
+                onChange={(e) => onSubCategorySessionChange(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
-          
-          
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Class</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategory}
-                  name="Category"
-                  options={getSCList}
-                  onChange={(e) => onSubCategoryChange(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-              </Grid>
+
+            <Grid item xs={12} sm={6} md={2}>
+              <InputLabel shrink>Class</InputLabel>
+              <Select
+                value={getSubCategory}
+                name="Category"
+                options={getSCList}
+                onChange={(e) => onSubCategoryChange(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
 
-
-          <div style={{ marginTop: 30 }} />
-
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Medium</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategory1}
-                  name="Category"
-                  options={getSCList1}
-                  onChange={(e) => onSubCategoryChange1(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-              </Grid>
+            <Grid item xs={12} sm={6} md={2}>
+              <InputLabel shrink>Medium</InputLabel>
+              <Select
+                value={getSubCategory1}
+                name="Category"
+                options={getSCList1}
+                onChange={(e) => onSubCategoryChange1(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
 
-
-          <div style={{ marginTop: 30 }} />
-
-
-          <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Student</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategory2}
-                  name="Category"
-                  options={getSCList2}
-                  onChange={(e) => onSubCategoryChange2(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                  
-                />
-              </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Student</InputLabel>
+              <Select
+                value={getSubCategory2}
+                name="Category"
+                options={getSCList2}
+                onChange={(e) => onSubCategoryChange2(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
 
-
-          <div style={{ marginTop: 30 }} />
-         
-
-  <Typography
-            variant="button"
-            display="block"
-            gutterBottom
-            style={{ color: "blue" }}
-          >
-            <h2>Select Exam</h2>
-          </Typography>
-          <React.Fragment>
-            <Grid
-              container
-              xs={24}
-              spacing={1}
-              style={{ paddingLeft: 0, paddingRight: 0 }}
-            >
-              <Grid item xs={12}>
-                <Select
-                  value={getSubCategory3}
-                  name="Category"
-                  options={getSCList3}
-                  onChange={(e) => onSubCategoryChange3(e)}
-                  className="basic-multi-select"
-                  classNamePrefix="Sub-Category"
-                  isClearable={true}
-                />
-              </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <InputLabel shrink>Exam</InputLabel>
+              <Select
+                value={getSubCategory3}
+                name="Category"
+                options={getSCList3}
+                onChange={(e) => onSubCategoryChange3(e)}
+                className="basic-multi-select"
+                classNamePrefix="Sub-Category"
+                isClearable={true}
+              />
             </Grid>
-          </React.Fragment>
-
-
-          <div style={{ marginTop: 30 }} />
-        
-     
-
-
+          </Grid>
+        </Paper>
 
   { getResultpcm ? <Pcm history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} optionalsubject={getStudentOptionalSubject} /> : null }
   { getResultpcb ? <Pcb  history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} optionalsubject={getStudentOptionalSubject} /> : null }
   { getResultcommerce ? <Commerce history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} optionalsubject={getStudentOptionalSubject} /> : null }
   { getResultarts ? <Arts history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} optionalsubject={getStudentOptionalSubject} /> : null }
+  { getResultagriculture ? <Agriculture history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} /> : null }
   { getResultprimary ? <Primary history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} /> : null }
   { getResultsecondary ? <Secondary history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} /> : null }
   { getResultsrsecondary ? <SrSecondary history={props.history} changeView={props.changeView} getSubCategoryid2={getSubCategoryid2}  getSubCategoryid={getSubCategoryid}  getSubCategoryid1={getSubCategoryid1} getSubCategoryid3={getSubCategoryid3} session={getSubCategoryidSession} /> : null }
-
-
-
-          
-   
-
-       
-
-
-
-
-          <div style={{ marginBottom: 100 }} />
-      
-    
 
           {gif ? (
             <Grid item xs={12} align="center">
@@ -977,12 +903,8 @@ const onSubCategorySessionChange = (event) => {
             <React.Fragment></React.Fragment>
           )}
 
-          <Grid item xs={12}>
-            {ProgresDialog()}
-            <Typography>{/* {getMessage} */}</Typography>
-          </Grid>
-        </Paper>
-      </Container>
+          {ProgresDialog()}
+      </div>
   );
 }
 

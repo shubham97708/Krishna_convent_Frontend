@@ -14,8 +14,6 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ContactMailIcon from "@material-ui/icons/ContactMail";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import ApproveReqList1 from "./ApproveReqList1";
-import ConfirmReqList from "./ConfirmReqList";
 import List from "@material-ui/core/List";
 import { makeStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
@@ -26,28 +24,18 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import HighlightIcon from "@material-ui/icons/Highlight";
 // Components
-import ClientPortfolio from "./ClientPortfolio";
-import UserProfile from "../UserProfile";
-import FirstScreen from "./FirstScreen";
 import EditProfile from "../profile/EditProfile";
-import Diary from "./Diary";
-import DisplayPostAdd from "./DisplayPostAdd";
-import Activities from "./Activities";
-import SoldList from "./SoldList";
 import PostAdd from "./PostAdd";
 import AddMarks from "./AddMarks";
 import ShowStudents from "./showStudent/ShowStudents";
 
 import GenrateTc from "./GenrateTc";
 
-import DeactivateList from "./DeactivateList";
+import GenrateCharacterCertificate from "./GenrateCharacterCertificate";
+
 
 import PrivacyPolicy from "./PrivacyPolicy";
 
-import Active from "../../student-records/Active";
-import Cancel from "../../student-records/Cancel";
-import Completed from "../../student-records/Completed";
-import Refunded from "../../student-records/Refunded";
 
 import HotelIcon from "@material-ui/icons/Hotel";
 import BusinessIcon from "@material-ui/icons/Business";
@@ -69,6 +57,23 @@ const useStyles = makeStyles((theme) => ({
   },
   nested: {
     paddingLeft: theme.spacing(2),
+  },
+  item: {
+    margin: theme.spacing(0.5, 1.2),
+    borderRadius: 10,
+    width: "auto",
+    transition: "background-color 0.15s ease",
+    "&:hover": {
+      backgroundColor: "rgba(255,255,255,0.12)",
+    },
+  },
+  itemIcon: {
+    minWidth: 40,
+  },
+  divider: {
+    backgroundColor: "rgba(255,255,255,0.1)",
+    width: "80%",
+    marginLeft: "10%",
   },
 }));
 
@@ -137,17 +142,13 @@ export default function MainListItems(props) {
               />,
             )
           }
-          className={classes.nested}
+          className={classes.item}
         >
-          <ListItemIcon>
+          <ListItemIcon className={classes.itemIcon}>
             <HotelIcon style={{ color: "white" }} />
           </ListItemIcon>
           <ListItemText primary="Show Students" style={{ color: "white" }} />
         </ListItem>
-
-        <Divider
-          style={{ backgroundColor: "white", width: "80%", marginLeft: "10%" }}
-        />
 
         <ListItem
           button
@@ -156,17 +157,13 @@ export default function MainListItems(props) {
               <PostAdd history={props.history} changeView={props.changeView} />,
             )
           }
-          className={classes.nested}
+          className={classes.item}
         >
-          <ListItemIcon>
+          <ListItemIcon className={classes.itemIcon}>
             <BusinessIcon style={{ color: "white" }} />
           </ListItemIcon>
           <ListItemText primary="Add Student" style={{ color: "white" }} />
         </ListItem>
-
-        <Divider
-          style={{ backgroundColor: "white", width: "80%", marginLeft: "10%" }}
-        />
 
         <ListItem
           button
@@ -178,54 +175,57 @@ export default function MainListItems(props) {
               />,
             )
           }
-          className={classes.nested}
+          className={classes.item}
         >
-          <ListItemIcon>
+          <ListItemIcon className={classes.itemIcon}>
             <BusinessIcon style={{ color: "white" }} />
           </ListItemIcon>
           <ListItemText primary="Add Marks" style={{ color: "white" }} />
         </ListItem>
-
-        <Divider
-          style={{ backgroundColor: "white", width: "80%", marginLeft: "10%" }}
-        />
 
         <ListItem
           button
           onClick={() =>
             handleClick(<GenrateTc changeView={props.changeView} />)
           }
-          className={classes.nested}
+          className={classes.item}
         >
-          <ListItemIcon>
+          <ListItemIcon className={classes.itemIcon}>
             <EditIcon style={{ color: "white" }} />
           </ListItemIcon>
           <ListItemText primary="Genrate Tc" style={{ color: "white" }} />
         </ListItem>
 
-        <Divider
-          style={{ backgroundColor: "white", width: "80%", marginLeft: "10%" }}
-        />
+        <ListItem
+          button
+          onClick={() =>
+            handleClick(<GenrateCharacterCertificate changeView={props.changeView} />)
+          }
+          className={classes.item}
+        >
+          <ListItemIcon className={classes.itemIcon}>
+            <EditIcon style={{ color: "white" }} />
+          </ListItemIcon>
+          <ListItemText primary="Genrate Character Certificate" style={{ color: "white" }} />
+        </ListItem>
 
         <ListItem
           button
           onClick={() =>
             handleClick(<EditProfile changeView={props.changeView} />)
           }
-          className={classes.nested}
+          className={classes.item}
         >
-          <ListItemIcon>
+          <ListItemIcon className={classes.itemIcon}>
             <EditIcon style={{ color: "white" }} />
           </ListItemIcon>
           <ListItemText primary="Edit Profile" style={{ color: "white" }} />
         </ListItem>
 
-        <Divider
-          style={{ backgroundColor: "white", width: "80%", marginLeft: "10%" }}
-        />
+        <Divider className={classes.divider} style={{ marginTop: 8, marginBottom: 8 }} />
 
-        <ListItem button onClick={() => handleClick6("Logout")}>
-          <ListItemIcon>
+        <ListItem button onClick={() => handleClick6("Logout")} className={classes.item}>
+          <ListItemIcon className={classes.itemIcon}>
             <VpnKeyIcon style={{ color: "white" }} />
           </ListItemIcon>
           <ListItemText primary="LogOut" style={{ color: "white" }} />

@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import {Link,Grid, Divider} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import {postData} from '../../services/FetchServices';
 import Card from '@material-ui/core/Card';
 import swal from 'sweetalert';
@@ -19,17 +19,11 @@ import axios from 'axios';
 import OTP from 'otp-client'
 import BaseUrl from '../../services/BaseUrl'
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { Paper} from '@material-ui/core'
 
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-
-
-
-
+import schoolLogo from './dashboard/Marksheet/img/logo.png'
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -37,38 +31,67 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.common.white,
     },
   },
-  paper: {
-    marginTop: theme.spacing(8),
+  page: {
+    minHeight: '100vh',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor:'blue',
-    
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-    backgroundColor:'blue',
+    justifyContent: 'center',
+    background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 45%, #1e88e5 100%)',
+    padding: theme.spacing(2),
   },
   card: {
-    padding:20,
-    border:'0.5px solid blue',
-    margin:30,
-    marginTop:40
-
-   },
-   forgetpassword:{
-     fontSize:'1.2vh',
-
-   },
-
-
+    width: '100%',
+    maxWidth: 380,
+    borderRadius: 20,
+    padding: theme.spacing(5, 4, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    boxShadow: '0 20px 50px rgba(13, 30, 77, 0.35)',
+  },
+  avatar: {
+    width: 76,
+    height: 76,
+    backgroundColor: '#ffffff',
+    border: '3px solid #1565c0',
+  },
+  avatarImg: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
+    padding: 6,
+  },
+  title: {
+    marginTop: theme.spacing(2),
+    fontWeight: 700,
+    textAlign: 'center',
+    color: '#1a237e',
+  },
+  subtitle: {
+    marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(3),
+    color: '#78909c',
+    textAlign: 'center',
+  },
+  form: {
+    width: '100%',
+  },
+  textField: {
+    marginBottom: theme.spacing(2.5),
+  },
+  submit: {
+    marginTop: theme.spacing(1),
+    height: 48,
+    borderRadius: 10,
+    fontWeight: 700,
+    letterSpacing: 0.5,
+    textTransform: 'none',
+    fontSize: '1rem',
+    background: 'linear-gradient(90deg, #1565c0 0%, #1e88e5 100%)',
+    boxShadow: '0 8px 20px rgba(21, 101, 192, 0.4)',
+  },
    card1: {
     maxHeight: '100%',
     display: 'flex',
@@ -84,23 +107,23 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '20%', // 16:9
     maxHeight:'20%',
     maxWidth:'20%',
-    //marginLeft:'8%'
-   
     marginLeft:'40%',
     marginRight:'40%'
    },
 
    dialogsubmit:{
     backgroundColor:'blue',
-   }
+   },
+
+  credit: {
+    marginTop: theme.spacing(3),
+    textAlign: 'center',
+    color: 'rgba(255, 255, 255, 0.85)',
+  },
 
 }));
 
 export default function AgentSignIn(props) {
-
-  const paperStyle={padding :20,height:'70vh',width:280, margin:"20px auto"}
-    const avatarStyle={backgroundColor:'#1bbd7e'}
-    const btnstyle={margin:'8px 0'}
 
   const classes = useStyles();
   const [emailid,setEmailId]=React.useState('')
@@ -124,33 +147,33 @@ export default function AgentSignIn(props) {
     }else if(agent){
       localStorage.removeItem("CLIENT");
       localStorage.removeItem("ADMIN");
-      props.history.replace({pathname:'/Dashboard'}) 
+      props.history.replace({pathname:'/Dashboard'})
 
     }else if(admin){
       localStorage.removeItem("CLIENT");
       localStorage.removeItem("AGENT");
-      props.history.push({pathname:'/AdminDashboard'}) 
+      props.history.push({pathname:'/AdminDashboard'})
     }
 }
 
-  
+
   useEffect(()=>{
     LoginPage();
   },[])
-   
-const checksignin = async ()   =>  {   
+
+const checksignin = async ()   =>  {
 
   setSpinner(true)
 
 
     if(emailid!='' && password!='' ) {
-      
+
   let body={
             'emailid':emailid,
             'password':password
            }
    let result = await  postData('selfregister/checkagentsignin',body)
-   
+
   if (result.RESULT)
   {
     setSpinner(false)
@@ -185,7 +208,7 @@ const handleClickCloseDialog = ()=>{
  }
 
 
-  const forgot=()=>{  
+  const forgot=()=>{
     closeDialog(true)
   }
 
@@ -216,7 +239,7 @@ const veryfyEmail = async () => {
           'number':result[0].number
         }
 
-      
+
 
           let resultss = await postData('selfregister/updateAgentOtp', bdy)
           console.log("Result From UPDATE ", resultss)
@@ -233,26 +256,26 @@ const veryfyEmail = async () => {
           } else {
             swal("Agente", "Error In Server", "error");
           }
-        
 
 
-     
+
+
 
       }
-      
-      
-      
+
+
+
       else {
-        
+
         swal("OTP", "Account Does Not Exist", "error");
         props.history.push({
           pathname: '/AgentSignIn'
         })
       }
-    } 
-    
-    
-    
+    }
+
+
+
     else {
       swal("OTP", "Please Fill Email", "error");
     }
@@ -260,184 +283,94 @@ const veryfyEmail = async () => {
 
 
   return (
-
-
-    <div >
-
-
-<nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
-	<div class="container-fluid">
-    <div class="navbar-wrapper">
-
-			{/* <a class="navbar-brand" href="/">Login Page</a> */}
-		</div>
-
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-bar navbar-kebab"></span>
-			<span class="navbar-toggler-bar navbar-kebab"></span>
-			<span class="navbar-toggler-bar navbar-kebab"></span>
-		</button>
-
-	    <div class="collapse navbar-collapse justify-content-end" id="navigation">
-
-
-          <ul class="navbar-nav">
- 
-    {/* <li class= "nav-item  active ">
-        <a href="/" class="nav-link">
-            <i class="now-ui-icons users_circle-08"></i>
-            Login
-        </a>
-    </li> */}
-
- 
-</ul>
-
-
-
-
-
-	    </div>
-	</div>
-</nav>
-        <div class="wrapper wrapper-full-page ">
-
-    <div class="full-page login-page section-image" filter-color="black" style={{backgroundImage: "url(" + "../login/bg.jpg" + ")",}}>
-        <div class="content">
-            <div class="container" style={{height:'auto'}}>
-                <div class="col-md-4 ml-auto mr-auto">
-                    <form class="form" method="" action="">
-
-
-
-<div class="card card-login card-plain">
-
-    <div class="card-header ">
-    <div class="logo-container">
-   {/* <h3 style={{color:'#FFF'}}><i class="fas fa-hotel">  </i>Krishna Convent School</h3>  */}
-    {/* <img src="../../assets/img/now-logo.png" alt=""/> */}
-    </div>
-    </div>
-
-    {/* <div class="card-body ">
-
-
-            <div class="input-group no-border form-control-lg">
-                                <span class="input-group-prepend">
-                                  <div class="input-group-text">
-                                    <i class="fas fa-user-circle"></i>
-                                  </div>
-                                </span>
-                                <input type="text" class="form-control" placeholder="Email"
-                                 required
-                                 fullWidth
-                                 id="email"
-                                 value={emailid}
-                                 label="Email Id"
-                                 name="email"
-                                 autoComplete="email"
-                                 autoFocus
-                                 onChange={(event)=>setEmailId(event.target.value)}
-                                />
-                              </div>
-
-                              <div class="input-group no-border form-control-lg">
-                                <div class="input-group-prepend">
-                                  <div class="input-group-text">
-                                    <i class="fas fa-key"></i>
-                                  </div>
-                                </div>
-                                <input type="text" placeholder="Password" class="form-control"
-                                 required
-                                 fullWidth
-                                 value={password}
-                                 onChange={(event)=>setPassword(event.target.value)}
-                                 name="password"
-                                 label="Password"
-                                 type="password"
-                                 id="password"
-                                 autoComplete="current-password"
-                                 onKeyDown={handleEnter}
-                                />
-                              </div>
-
-
-
-    </div> */}
-
-
-
-    <div class="card-footer ">
-
-      {  getSpinner==false?
-           <a style={{fontSize:15,color:'#FFF'}} type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={checksignin} class="btn btn-primary btn-round btn-lg btn-block mb-3">
-            <i class="fas fa-unlock"></i> Login</a>
-              :
-             <div> 
-            <a 
-            style={{fontSize:15,color:'#FFF'}} type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            class="btn btn-primary btn-round btn-lg btn-block mb-3">
-            <i class="fas fa-unlock"></i> Login</a>
-              
-            <CircularProgress color="secondary"  />
-            </div>
-      }     
-                       
-        {/* <div class="pull-center" style={{justifyContent:'center',display:'flex'}}>
-                            <h6><a  fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={forgot} class="link footer-link">Forget</a></h6>
-                        </div> */}
-
-                        {/* <div class="pull-right">
-                           <h6><a href="#pablo" class="link footer-link">Need Help?</a></h6>
-                        </div> */}
-    </div>
-
-</div>
-
-
-                    </form>
-                </div>
-            </div>
-        </div>
-       
-
-    </div>
-
-
-        </div>
-
+    <div className={classes.page}>
       <CssBaseline />
 
-      <Dialog   
+      <Card className={classes.card}>
+        <Avatar className={classes.avatar}>
+          <img src={schoolLogo} alt="Krishna Convent School" className={classes.avatarImg} />
+        </Avatar>
+
+        <Typography variant="h5" className={classes.title}>
+          Krishna Convent Hr. Sec. School
+        </Typography>
+        <Typography variant="body2" className={classes.subtitle}>
+          Sign in to the Agent Portal
+        </Typography>
+
+        <div className={classes.form}>
+          <TextField
+            label='Username'
+            placeholder='Enter username'
+            variant="outlined"
+            fullWidth
+            required
+            className={classes.textField}
+            value={emailid}
+            onChange={(event)=>setEmailId(event.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PersonOutlineIcon color="disabled" />
+                </InputAdornment>
+              ),
+            }}
+            />
+          <TextField
+            label='Password'
+            placeholder='Enter password'
+            type='password'
+            variant="outlined"
+            fullWidth
+            required
+            className={classes.textField}
+            value={password}
+            onChange={(event)=>setPassword(event.target.value)}
+            onKeyDown={handleEnter}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlinedIcon color="disabled" />
+                </InputAdornment>
+              ),
+            }}
+            />
+
+          <Button
+            type='submit'
+            color='primary'
+            variant="contained"
+            className={classes.submit}
+            onClick={()=>checksignin()}
+            disabled={getSpinner}
+            fullWidth
+          >
+            { getSpinner ? <CircularProgress size={24} style={{color:'#fff'}} /> : 'Sign In' }
+          </Button>
+        </div>
+      </Card>
+
+      <Typography variant="body2" className={classes.credit}>
+        Developed by Shubham Soni &middot; 9770856257
+      </Typography>
+
+      <Dialog
               open={openDialog}
               onClose={handleClickCloseDialog}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
-             >      
-              
+             >
+
               <Grid item  xs={12} >
 
-                <Card className={classes.card1}>                  
+                <Card className={classes.card1}>
                   <CardContent className={classes.cardContent1}>
                   <CardMedia
                     className={classes.cardMedia1}
                    image='./images/User.png'
                     title="Image title"
-                  /> 
-                 
+                  />
+
                   </CardContent>
 
 
@@ -456,8 +389,8 @@ const veryfyEmail = async () => {
                       autoComplete="email"
                           autoFocus
                     onChange={(event)=>setEmailId(event.target.value)}
-                    
-                   
+
+
                  />
                  </div>
 
@@ -466,56 +399,14 @@ const veryfyEmail = async () => {
                     Send Otp
                   </Button>
                   </div>
-                
+
               </Grid>
-              
+
                   </CardActions>
                 </Card>
               </Grid>
-             
-             </Dialog> 
 
-
-
-
-
-      <Grid>
-        <Paper elevation={10} style={paperStyle}>
-          <Grid align='center'>
-            <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
-            <h2>Sign In</h2>
-          </Grid>
-          <TextField
-            label='Username'
-            placeholder='Enter username'
-            variant="outlined"
-            fullWidth required 
-            value={emailid}
-            onChange={(event)=>setEmailId(event.target.value)}
-            />
-          <TextField
-            label='Password'
-            placeholder='Enter password'
-            type='password'
-            variant="outlined"
-            fullWidth 
-
-            value={password}
-            onChange={(event)=>setPassword(event.target.value)}
-            required 
-            />
-         
-          <Button type='submit' color='primary' variant="contained" style={btnstyle} onClick={()=>checksignin()} fullWidth>Sign in</Button>
-
-        </Paper>
-      </Grid>
-
-
-
-
-
-
-
+             </Dialog>
     </div>
   );
 }
